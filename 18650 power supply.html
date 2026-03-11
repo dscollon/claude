@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>18650 Power Supply — Circuit Reference</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0c10;
+    color: #c8d0e0;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,150,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,150,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid #1e2530;
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #00c896;
+    background: rgba(0,200,150,0.08);
+    border: 1px solid rgba(0,200,150,0.25);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 700;
+    color: #eef2ff;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  h1 span { color: #00c896; }
+  .subtitle {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #5a6680;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #3a4560;
+    margin: 40px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #1a2030;
+  }
+
+  /* ── BLOCK DIAGRAM ── */
+  .block-diagram {
+    background: #0d1018;
+    border: 1px solid #1a2030;
+    border-radius: 6px;
+    padding: 32px 24px;
+    overflow-x: auto;
+  }
+
+  .bd-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 700px;
+  }
+
+  .bd-block {
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .bd-block-inner {
+    background: #141820;
+    border: 1px solid #2a3348;
+    border-radius: 4px;
+    padding: 14px 16px;
+    text-align: center;
+    min-width: 110px;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .bd-block:hover .bd-block-inner,
+  .bd-block.active .bd-block-inner {
+    border-color: #00c896;
+    background: rgba(0,200,150,0.06);
+    box-shadow: 0 0 20px rgba(0,200,150,0.1);
+  }
+
+  .bd-block-name {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #00c896;
+  }
+  .bd-block-part {
+    font-size: 10px;
+    color: #4a5570;
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .bd-arrow {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+  }
+  .bd-arrow-line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #1e2c3a, #00c896, #1e2c3a);
+    position: relative;
+  }
+  .bd-arrow-label {
+    font-size: 9px;
+    color: #3a5050;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+    white-space: nowrap;
+  }
+  .bd-arrow-line::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border-left: 8px solid #00c896;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+
+  /* LED branch */
+  .bd-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-left: 16px;
+  }
+  .bd-branch-line {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(180deg, #00c896, #1a2c2a);
+  }
+  .bd-branch-block {
+    background: #141820;
+    border: 1px solid #2a3348;
+    border-radius: 4px;
+    padding: 8px 12px;
+    text-align: center;
+    font-size: 10px;
+    color: #c0a050;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── DETAIL PANEL ── */
+  #detail-panel {
+    margin-top: 20px;
+    min-height: 60px;
+    transition: all 0.2s;
+  }
+
+  .detail-card {
+    background: #0d1018;
+    border: 1px solid #1e3040;
+    border-left: 3px solid #00c896;
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: none;
+  }
+
+  .detail-card.show { display: block; }
+
+  .detail-card h3 {
+    font-size: 14px;
+    color: #eef2ff;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .detail-item label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3a5570;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .detail-item span {
+    font-size: 12px;
+    color: #a0c8a0;
+  }
+  .detail-desc {
+    font-size: 11px;
+    color: #5a6e80;
+    margin-top: 12px;
+    line-height: 1.7;
+    border-top: 1px solid #1a2030;
+    padding-top: 12px;
+  }
+
+  /* ── SCHEMATIC SVG ── */
+  .schematic-wrap {
+    background: #0d1018;
+    border: 1px solid #1a2030;
+    border-radius: 6px;
+    padding: 24px;
+    overflow-x: auto;
+  }
+
+  svg.schematic {
+    display: block;
+    min-width: 700px;
+    width: 100%;
+  }
+
+  /* ── BOM TABLE ── */
+  .bom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .bom-table th {
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3a4560;
+    padding: 8px 12px;
+    border-bottom: 1px solid #1a2030;
+  }
+
+  .bom-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #111620;
+    vertical-align: top;
+  }
+
+  .bom-table tr:hover td { background: rgba(0,200,150,0.03); }
+
+  .ref { color: #00c896; font-weight: 700; font-size: 11px; }
+  .part { color: #dde8ff; }
+  .pkg { color: #3a5070; }
+  .notes { color: #5a6878; }
+  .val { color: #a080c0; }
+
+  /* ── DESIGN NOTES ── */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .note-card {
+    background: #0d1018;
+    border: 1px solid #1a2030;
+    border-radius: 4px;
+    padding: 18px 20px;
+  }
+
+  .note-card h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #00c896;
+    margin-bottom: 10px;
+  }
+
+  .note-card p {
+    font-size: 11px;
+    line-height: 1.75;
+    color: #5a6878;
+  }
+
+  .note-card p strong { color: #8ab0a0; }
+
+  /* ── POWER CALC ── */
+  .calc-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .calc-item {
+    background: #0d1018;
+    border: 1px solid #1a2030;
+    border-radius: 4px;
+    padding: 14px 18px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .calc-item label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3a4560;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .calc-item .val-big {
+    font-size: 22px;
+    font-weight: 700;
+    color: #eef2ff;
+  }
+
+  .calc-item .val-unit {
+    font-size: 11px;
+    color: #3a5570;
+    margin-left: 2px;
+  }
+
+  .progress-bar-wrap {
+    margin-top: 8px;
+    height: 3px;
+    background: #1a2030;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #00c896, #00a070);
+  }
+
+  /* ── VOLT SLIDER ── */
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    flex: 1;
+    height: 4px;
+    background: #1a2030;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #00c896;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0,200,150,0.4);
+  }
+
+  .slider-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: #00c896;
+    width: 52px;
+    text-align: right;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  .dot-ok { background: #00c896; box-shadow: 0 0 6px #00c896; }
+  .dot-warn { background: #e0a030; box-shadow: 0 0 6px #e0a030; }
+  .dot-err { background: #e04040; box-shadow: 0 0 6px #e04040; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="header-badge">Circuit Design Reference</div>
+    <h1>18650 <span>Power Supply</span></h1>
+    <div class="subtitle">USB-C Input · Charge Management · Cell Protection · 3.3V / 600mA LDO Output</div>
+  </header>
+
+  <!-- BLOCK DIAGRAM -->
+  <div class="section-label">Architecture</div>
+  <div class="block-diagram">
+    <div class="bd-row">
+      <div class="bd-block" data-block="usbc" onclick="showDetail('usbc')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">USB-C</div>
+          <div class="bd-block-part">5V Input</div>
+        </div>
+      </div>
+
+      <div class="bd-arrow">
+        <div class="bd-arrow-line"></div>
+        <div class="bd-arrow-label">5V</div>
+      </div>
+
+      <div class="bd-block" data-block="charger" onclick="showDetail('charger')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">Charger</div>
+          <div class="bd-block-part">TP4056</div>
+        </div>
+      </div>
+
+      <div class="bd-arrow">
+        <div class="bd-arrow-line"></div>
+        <div class="bd-arrow-label">CC/CV</div>
+      </div>
+
+      <div class="bd-block" data-block="cell" onclick="showDetail('cell')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">18650 Cell</div>
+          <div class="bd-block-part">3.0–4.2V</div>
+        </div>
+      </div>
+
+      <div class="bd-arrow">
+        <div class="bd-arrow-line"></div>
+        <div class="bd-arrow-label">3.7V nom</div>
+      </div>
+
+      <div class="bd-block" data-block="prot" onclick="showDetail('prot')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">Protection</div>
+          <div class="bd-block-part">DW01A</div>
+        </div>
+      </div>
+
+      <div class="bd-arrow">
+        <div class="bd-arrow-line"></div>
+        <div class="bd-arrow-label">≥3.0V</div>
+      </div>
+
+      <div class="bd-block" data-block="ldo" onclick="showDetail('ldo')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">LDO</div>
+          <div class="bd-block-part">AP2112K</div>
+        </div>
+      </div>
+
+      <div class="bd-arrow">
+        <div class="bd-arrow-line"></div>
+        <div class="bd-arrow-label">3.3V</div>
+      </div>
+
+      <div class="bd-block" data-block="out" onclick="showDetail('out')">
+        <div class="bd-block-inner">
+          <div class="bd-block-name">Output</div>
+          <div class="bd-block-part">500mA burst</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LED branch from charger -->
+    <div style="display:flex; margin-top:0; padding-top:16px; gap:32px; padding-left:175px;">
+      <div class="bd-branch">
+        <div class="bd-branch-line"></div>
+        <div class="bd-branch-block" style="color:#e05050;">● RED LED<br><span style="font-size:9px;color:#3a4050;">CHRG pin</span></div>
+      </div>
+      <div class="bd-branch" style="margin-left:8px;">
+        <div class="bd-branch-line"></div>
+        <div class="bd-branch-block" style="color:#50c050;">● GREEN LED<br><span style="font-size:9px;color:#3a4050;">STDBY pin</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detail-panel">
+    <div class="detail-card" id="detail-usbc">
+      <h3>USB-C Input Stage</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Input Voltage</label><span>5V (USB Standard)</span></div>
+        <div class="detail-item"><label>Max Current</label><span>up to 3A (negotiated)</span></div>
+        <div class="detail-item"><label>CC Resistors</label><span>5.1kΩ × 2 to GND</span></div>
+        <div class="detail-item"><label>Protection</label><span>500mA polyfuse on VBUS</span></div>
+      </div>
+      <div class="detail-desc">The two 5.1kΩ pull-down resistors on CC1 and CC2 are mandatory — they tell the USB-C source this is a "Sink" device wanting 5V. Without them, many USB-C chargers will not supply power. Bulk decoupling: 10µF + 100nF ceramic on VBUS.</div>
+    </div>
+    <div class="detail-card" id="detail-charger">
+      <h3>TP4056 — Li-Ion Charger IC</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Topology</label><span>Linear CC/CV</span></div>
+        <div class="detail-item"><label>Charge Voltage</label><span>4.20V ± 1%</span></div>
+        <div class="detail-item"><label>Charge Current</label><span>1000mA (R_PROG=1.2kΩ)</span></div>
+        <div class="detail-item"><label>Termination</label><span>C/10 (≈100mA)</span></div>
+        <div class="detail-item"><label>CHRG Pin</label><span>Active-low open drain</span></div>
+        <div class="detail-item"><label>STDBY Pin</label><span>Active-low, charge complete</span></div>
+      </div>
+      <div class="detail-desc">R_PROG sets charge current: I = 1200/R_PROG (mA). For 1A use 1.2kΩ. For 500mA use 2.4kΩ. The TEMP pin should be tied to VCC via 10kΩ if no NTC thermistor is fitted (disables thermal monitoring). CHRG and STDBY are open-drain outputs — pull high to VCC via 1kΩ LED + resistor combos.</div>
+    </div>
+    <div class="detail-card" id="detail-cell">
+      <h3>18650 Cell</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Chemistry</label><span>Li-Ion (LiCoO₂ typical)</span></div>
+        <div class="detail-item"><label>Nominal Voltage</label><span>3.6V – 3.7V</span></div>
+        <div class="detail-item"><label>Charged Voltage</label><span>4.20V</span></div>
+        <div class="detail-item"><label>Depleted Cutoff</label><span>2.5V – 3.0V</span></div>
+        <div class="detail-item"><label>Typical Capacity</label><span>2500–3500mAh</span></div>
+        <div class="detail-item"><label>Max Discharge</label><span>2C–10C depending on cell</span></div>
+      </div>
+      <div class="detail-desc">Use a quality cell (Samsung 25R, LG HG2, Sony VTC5). At 500mA load the LDO needs ~750mA from the cell (accounting for its efficiency). This is well within any 18650's rating. Runtime at 500mA continuous would be roughly 3–5 hours depending on cell.</div>
+    </div>
+    <div class="detail-card" id="detail-prot">
+      <h3>DW01A + FS8205A — Cell Protection</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Overcharge Trip</label><span>4.28V</span></div>
+        <div class="detail-item"><label>Overdischarge Trip</label><span>2.4V</span></div>
+        <div class="detail-item"><label>Overcurrent Trip</label><span>~3A (sense resistor)</span></div>
+        <div class="detail-item"><label>Sense Resistor</label><span>10mΩ in negative rail</span></div>
+        <div class="detail-item"><label>FET Package</label><span>FS8205A SO-8 dual FET</span></div>
+        <div class="detail-item"><label>Topology</label><span>Back-to-back N-ch in GND rail</span></div>
+      </div>
+      <div class="detail-desc">The DW01A monitors cell voltage and current. It drives the gate of two back-to-back N-channel MOSFETs (FS8205A) in the negative battery rail. One FET controls the charge path, the other the discharge path — preventing both overcharge and over-discharge independently. This is the standard protection circuit used in most commercial 18650 packs.</div>
+    </div>
+    <div class="detail-card" id="detail-ldo">
+      <h3>AP2112K-3.3 — Low Dropout Regulator</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Output Voltage</label><span>3.3V fixed</span></div>
+        <div class="detail-item"><label>Max Output Current</label><span>600mA</span></div>
+        <div class="detail-item"><label>Dropout Voltage</label><span>~250mV @ 600mA</span></div>
+        <div class="detail-item"><label>Min Input Voltage</label><span>3.55V (3.3 + 0.25)</span></div>
+        <div class="detail-item"><label>PSRR</label><span>65dB @ 1kHz</span></div>
+        <div class="detail-item"><label>Package</label><span>SOT-25 (5-pin)</span></div>
+      </div>
+      <div class="detail-desc">The AP2112K is a good choice for this design — 600mA headroom above your 500mA burst, low dropout means it works until the protection IC trips at 2.4V cell voltage (well above the 3.55V needed). Add 10µF on the output specifically to handle 500mA burst transitions without voltage dip. Enable pin can be tied to VIN for always-on.</div>
+    </div>
+    <div class="detail-card" id="detail-out">
+      <h3>3.3V Output</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Output Voltage</label><span>3.3V ± 1.5%</span></div>
+        <div class="detail-item"><label>Cont. Current</label><span>600mA max</span></div>
+        <div class="detail-item"><label>Burst Current</label><span>500mA / 15s ✓</span></div>
+        <div class="detail-item"><label>Output Cap</label><span>10µF ceramic</span></div>
+      </div>
+      <div class="detail-desc">The 10µF output capacitor provides local charge reservoir for fast load steps. For even better transient response, parallel a 100nF cap. If driving highly inductive loads, a Schottky diode (e.g. BAT54) in anti-parallel at the output connector is good practice.</div>
+    </div>
+  </div>
+
+  <!-- SCHEMATIC SVG -->
+  <div class="section-label">Schematic</div>
+  <div class="schematic-wrap">
+    <svg class="schematic" viewBox="0 0 900 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#00c896"/>
+        </marker>
+        <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#4a5060"/>
+        </marker>
+      </defs>
+
+      <!-- GND rail -->
+      <line x1="20" y1="390" x2="880" y2="390" stroke="#1a2030" stroke-width="1.5" stroke-dasharray="4,4"/>
+      <text x="22" y="386" fill="#2a3040" font-size="9" font-family="Courier New">GND</text>
+
+      <!-- === USB-C BLOCK === -->
+      <rect x="20" y="60" width="100" height="80" rx="3" fill="#0d1018" stroke="#2a3550"/>
+      <text x="70" y="84" fill="#4a9070" font-size="9" font-family="Courier New" text-anchor="middle" font-weight="bold">USB-C</text>
+      <text x="70" y="98" fill="#3a4050" font-size="8" font-family="Courier New" text-anchor="middle">J1</text>
+      <!-- CC pins -->
+      <line x1="70" y1="108" x2="70" y2="130" stroke="#4a5060" stroke-width="1"/>
+      <text x="70" y="125" fill="#2a3545" font-size="7.5" font-family="Courier New" text-anchor="middle">CC 5.1k×2</text>
+      <line x1="70" y1="130" x2="70" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+      <!-- VBUS out -->
+      <line x1="120" y1="90" x2="160" y2="90" stroke="#00c896" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="133" y="83" fill="#006040" font-size="8" font-family="Courier New">5V</text>
+      <!-- Polyfuse -->
+      <rect x="143" y="82" width="24" height="16" rx="2" fill="#0d1018" stroke="#2a4030"/>
+      <text x="155" y="93" fill="#3a6050" font-size="7.5" font-family="Courier New" text-anchor="middle">F1</text>
+
+      <!-- === TP4056 BLOCK === -->
+      <rect x="190" y="40" width="120" height="120" rx="3" fill="#0d1018" stroke="#005a40"/>
+      <text x="250" y="62" fill="#00c896" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">TP4056</text>
+      <text x="250" y="74" fill="#2a4030" font-size="8" font-family="Courier New" text-anchor="middle">U1 · SOP-8</text>
+      <!-- Pins labels -->
+      <text x="198" y="92" fill="#3a5040" font-size="7.5" font-family="Courier New">VCC</text>
+      <text x="198" y="106" fill="#3a5040" font-size="7.5" font-family="Courier New">PROG</text>
+      <text x="198" y="120" fill="#3a5040" font-size="7.5" font-family="Courier New">TEMP</text>
+      <text x="290" y="92" fill="#3a5040" font-size="7.5" font-family="Courier New">BAT</text>
+      <text x="290" y="106" fill="#3a5040" font-size="7.5" font-family="Courier New">CHRG</text>
+      <text x="290" y="120" fill="#3a5040" font-size="7.5" font-family="Courier New">STBY</text>
+      <!-- PROG resistor to GND -->
+      <line x1="190" y1="103" x2="173" y2="103" stroke="#4a5060" stroke-width="1"/>
+      <rect x="158" y="97" width="15" height="12" rx="1" fill="#0d1018" stroke="#2a3040"/>
+      <text x="165" y="106" fill="#3a4050" font-size="7" font-family="Courier New" text-anchor="middle">1k2</text>
+      <line x1="158" y1="103" x2="148" y2="103" stroke="#4a5060" stroke-width="1"/>
+      <line x1="148" y1="103" x2="148" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+      <!-- VCC line from VBUS -->
+      <line x1="167" y1="90" x2="190" y2="90" stroke="#00c896" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- BAT out -->
+      <line x1="310" y1="90" x2="390" y2="90" stroke="#e0a030" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="338" y="83" fill="#a06010" font-size="8" font-family="Courier New">BAT+</text>
+      <!-- CHRG LED branch down -->
+      <line x1="310" y1="103" x2="340" y2="103" stroke="#4a5060" stroke-width="1"/>
+      <line x1="340" y1="103" x2="340" y2="200" stroke="#4a5060" stroke-width="1"/>
+      <rect x="330" y="200" width="20" height="12" rx="1" fill="#0d1018" stroke="#2a3040"/>
+      <text x="340" y="209" fill="#3a4050" font-size="7" font-family="Courier New" text-anchor="middle">1kΩ</text>
+      <line x1="340" y1="212" x2="340" y2="228" stroke="#e05050" stroke-width="1.5"/>
+      <!-- Red LED symbol -->
+      <polygon points="330,228 350,228 340,244" fill="none" stroke="#e05050" stroke-width="1.5"/>
+      <line x1="330" y1="244" x2="350" y2="244" stroke="#e05050" stroke-width="1.5"/>
+      <text x="358" y="238" fill="#e05050" font-size="8" font-family="Courier New">RED</text>
+      <text x="358" y="248" fill="#3a4050" font-size="7" font-family="Courier New">LED1</text>
+      <line x1="340" y1="244" x2="340" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- STBY LED branch -->
+      <line x1="310" y1="117" x2="380" y2="117" stroke="#4a5060" stroke-width="1"/>
+      <line x1="380" y1="117" x2="380" y2="200" stroke="#4a5060" stroke-width="1"/>
+      <rect x="370" y="200" width="20" height="12" rx="1" fill="#0d1018" stroke="#2a3040"/>
+      <text x="380" y="209" fill="#3a4050" font-size="7" font-family="Courier New" text-anchor="middle">1kΩ</text>
+      <line x1="380" y1="212" x2="380" y2="228" stroke="#50c050" stroke-width="1.5"/>
+      <!-- Green LED symbol -->
+      <polygon points="370,228 390,228 380,244" fill="none" stroke="#50c050" stroke-width="1.5"/>
+      <line x1="370" y1="244" x2="390" y2="244" stroke="#50c050" stroke-width="1.5"/>
+      <text x="398" y="238" fill="#50c050" font-size="8" font-family="Courier New">GRN</text>
+      <text x="398" y="248" fill="#3a4050" font-size="7" font-family="Courier New">LED2</text>
+      <line x1="380" y1="244" x2="380" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- === DW01A BLOCK === -->
+      <rect x="420" y="55" width="110" height="90" rx="3" fill="#0d1018" stroke="#005060"/>
+      <text x="475" y="77" fill="#4090a0" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">DW01A</text>
+      <text x="475" y="89" fill="#2a3848" font-size="8" font-family="Courier New" text-anchor="middle">U2 + FS8205A</text>
+      <text x="475" y="105" fill="#2a4050" font-size="7.5" font-family="Courier New" text-anchor="middle">OVP: 4.28V</text>
+      <text x="475" y="116" fill="#2a4050" font-size="7.5" font-family="Courier New" text-anchor="middle">UVP: 2.4V</text>
+      <text x="475" y="127" fill="#2a4050" font-size="7.5" font-family="Courier New" text-anchor="middle">OCP: ~3A</text>
+      <!-- in from BAT -->
+      <line x1="420" y1="90" x2="390" y2="90" stroke="#e0a030" stroke-width="1.5"/>
+      <!-- out to LDO -->
+      <line x1="530" y1="90" x2="600" y2="90" stroke="#e0a030" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="548" y="83" fill="#a06010" font-size="8" font-family="Courier New">VBAT</text>
+      <!-- sense resistor to GND -->
+      <line x1="475" y1="145" x2="475" y2="170" stroke="#4a5060" stroke-width="1"/>
+      <rect x="462" y="170" width="26" height="12" rx="1" fill="#0d1018" stroke="#2a3040"/>
+      <text x="475" y="179" fill="#3a4050" font-size="7" font-family="Courier New" text-anchor="middle">10mΩ</text>
+      <line x1="475" y1="182" x2="475" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- === 18650 CELL === -->
+      <rect x="420" y="265" width="110" height="70" rx="3" fill="#0d1018" stroke="#504010"/>
+      <text x="475" y="292" fill="#c0a040" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">18650</text>
+      <text x="475" y="304" fill="#6a5020" font-size="8" font-family="Courier New" text-anchor="middle">3.0V – 4.2V</text>
+      <text x="475" y="318" fill="#4a3810" font-size="7.5" font-family="Courier New" text-anchor="middle">BT1</text>
+      <!-- Cell positive connects to DW01A -->
+      <line x1="475" y1="265" x2="475" y2="145" stroke="#e0a030" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <!-- === AP2112K BLOCK === -->
+      <rect x="620" y="55" width="110" height="90" rx="3" fill="#0d1018" stroke="#2a0060"/>
+      <text x="675" y="77" fill="#9060e0" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">AP2112K</text>
+      <text x="675" y="89" fill="#3a2848" font-size="8" font-family="Courier New" text-anchor="middle">U3 · SOT-25</text>
+      <text x="675" y="105" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Vout: 3.3V</text>
+      <text x="675" y="116" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Imax: 600mA</text>
+      <text x="675" y="127" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Vdrop: 250mV</text>
+      <!-- Caps on input -->
+      <line x1="620" y1="90" x2="600" y2="90" stroke="#e0a030" stroke-width="1.5"/>
+      <rect x="592" y="83" width="8" height="14" rx="1" fill="#e0a030" opacity="0.3" stroke="#e0a030" stroke-width="0.5"/>
+      <text x="596" y="78" fill="#5a4020" font-size="7" font-family="Courier New" text-anchor="middle">1µ</text>
+      <!-- Cap to GND -->
+      <line x1="596" y1="97" x2="596" y2="170" stroke="#4a5060" stroke-width="1"/>
+      <line x1="596" y1="170" x2="596" y2="390" stroke="#4a5060" stroke-width="0.75" marker-end="url(#arr2)"/>
+      <!-- Output line -->
+      <line x1="730" y1="90" x2="800" y2="90" stroke="#9060e0" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="748" y="83" fill="#6040a0" font-size="8" font-family="Courier New">3.3V</text>
+      <!-- Output cap -->
+      <line x1="770" y1="90" x2="770" y2="108" stroke="#4a5060" stroke-width="1"/>
+      <rect x="762" y="108" width="16" height="12" rx="1" fill="#9060e0" opacity="0.2" stroke="#9060e0" stroke-width="0.5"/>
+      <text x="770" y="117" fill="#5a4080" font-size="7" font-family="Courier New" text-anchor="middle">10µ</text>
+      <line x1="770" y1="120" x2="770" y2="390" stroke="#4a5060" stroke-width="0.75" marker-end="url(#arr2)"/>
+      <!-- GND of LDO -->
+      <line x1="675" y1="145" x2="675" y2="390" stroke="#4a5060" stroke-width="1" marker-end="url(#arr2)"/>
+
+      <!-- === OUTPUT CONNECTOR === -->
+      <rect x="820" y="70" width="60" height="50" rx="3" fill="#0d1018" stroke="#3a2060"/>
+      <text x="850" y="91" fill="#7050c0" font-size="8.5" font-family="Courier New" text-anchor="middle" font-weight="bold">OUTPUT</text>
+      <text x="850" y="103" fill="#3a2848" font-size="8" font-family="Courier New" text-anchor="middle">3.3V</text>
+      <text x="850" y="113" fill="#3a2848" font-size="8" font-family="Courier New" text-anchor="middle">500mA</text>
+      <line x1="820" y1="95" x2="800" y2="90" stroke="#9060e0" stroke-width="1.5"/>
+
+      <!-- Key voltage annotations -->
+      <text x="250" y="170" fill="#1a3020" font-size="9" font-family="Courier New">Charge: CC at 1A → CV at 4.20V</text>
+      <text x="430" y="250" fill="#1a2838" font-size="9" font-family="Courier New">Protection in negative rail</text>
+
+      <!-- Power flow arrow annotation -->
+      <text x="20" y="30" fill="#00c896" font-size="9" font-family="Courier New" opacity="0.5">Power flow: USB-C → Charger → Cell ↔ Protection → LDO → 3.3V Out</text>
+    </svg>
+  </div>
+
+  <!-- POWER CALCULATIONS -->
+  <div class="section-label">Power Budget</div>
+  <div style="background:#0d1018; border:1px solid #1a2030; border-radius:6px; padding:24px;">
+    <div style="font-size:11px; color:#3a4560; margin-bottom:16px; letter-spacing:0.08em;">Adjust cell voltage to see operating status</div>
+
+    <div class="slider-wrap" style="margin-bottom:24px;">
+      <span style="font-size:10px; color:#3a4560; letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap;">Cell Voltage</span>
+      <input type="range" min="2.4" max="4.2" step="0.05" value="3.7" id="voltSlider" oninput="updateCalc(this.value)">
+      <div class="slider-val" id="voltDisplay">3.70V</div>
+    </div>
+
+    <div class="calc-row" id="calcRow">
+      <!-- filled by JS -->
+    </div>
+
+    <div id="statusLine" style="font-size:12px; margin-top:8px; padding:10px 14px; background:#080a10; border-radius:3px; border-left:3px solid #00c896;">
+    </div>
+  </div>
+
+  <!-- BOM TABLE -->
+  <div class="section-label">Bill of Materials</div>
+  <div style="background:#0d1018; border:1px solid #1a2030; border-radius:6px; overflow:hidden;">
+    <table class="bom-table">
+      <thead>
+        <tr>
+          <th>Ref</th>
+          <th>Part</th>
+          <th>Package</th>
+          <th>Value / Notes</th>
+        </tr>
+      </thead>
+      <tbody id="bomBody"></tbody>
+    </table>
+  </div>
+
+  <!-- DESIGN NOTES -->
+  <div class="section-label">Design Notes</div>
+  <div class="notes-grid">
+    <div class="note-card">
+      <h4>⚡ Charging Topology</h4>
+      <p>The TP4056 is a linear charger — it dissipates (Vin − Vbat) × Icharge as heat. At 1A charge current and early in the charge cycle (Vbat = 3.0V), that's <strong>2W of heat</strong> in the IC. Ensure adequate copper pour under the exposed pad or reduce charge current to 500mA (R_PROG = 2.4kΩ) if thermals are tight.</p>
+    </div>
+    <div class="note-card">
+      <h4>🛡 Protection Topology</h4>
+      <p>The DW01A + FS8205A sit in the <strong>negative battery rail</strong>. Both the charge and discharge paths run through the back-to-back FETs. This allows the IC to independently block charging (OVP), discharging (UVP), or both (OCP). The 10mΩ sense resistor causes only 5mV drop at 500mA — negligible.</p>
+    </div>
+    <div class="note-card">
+      <h4>🔋 LDO Dropout</h4>
+      <p>The AP2112K needs <strong>Vin ≥ 3.55V</strong> to maintain 3.3V output at 600mA. The cell's protection cutoff is 2.4V — so the LDO will droop before the protection trips. Consider adding a low-battery indicator (comparator) at ~3.6V if reliable regulation to discharge is important.</p>
+    </div>
+    <div class="note-card">
+      <h4>🔌 USB-C CC Resistors</h4>
+      <p>The <strong>5.1kΩ pull-downs on CC1 and CC2 are not optional</strong>. USB-C PD sources use these to detect the load type. Without them, compliant chargers may refuse to supply current or limit to 100mA. Use 1% tolerance resistors placed close to the USB-C connector.</p>
+    </div>
+    <div class="note-card">
+      <h4>🌡 Thermal Management</h4>
+      <p>Place the TP4056 <strong>away from the battery holder</strong>. Maximum ambient for safe Li-Ion charging is typically 45°C. If the board will operate in warm environments, add the optional NTC thermistor on the TEMP pin — the TP4056 will automatically throttle charge current when hot.</p>
+    </div>
+    <div class="note-card">
+      <h4>📐 PCB Layout Tips</h4>
+      <p>Keep the <strong>charge current path</strong> (USB-C → TP4056 → Battery) with wide traces (≥1mm). The LDO output 500mA path also needs ≥0.5mm traces. Place decoupling caps within 1mm of their IC's power pins. Separate analog ground (LDO, protection) from the high-current charge ground if possible.</p>
+    </div>
+  </div>
+
+  <!-- DATASHEETS -->
+  <div class="section-label">IC Datasheets</div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:14px;">
+
+    <a href="https://datasheet.lcsc.com/lcsc/1809261820_TOPPOWER-Nanjing-Extension-Microelectronics-TP4056-42-ESOP8_C16581.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div style="background:#0d1018; border:1px solid #1a2030; border-radius:4px; padding:18px 20px; transition:border-color 0.15s; display:flex; flex-direction:column; gap:6px;" onmouseover="this.style.borderColor='#00c896'" onmouseout="this.style.borderColor='#1a2030'">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:13px; font-weight:700; color:#00c896; font-family:'Courier New',monospace; letter-spacing:0.04em;">TP4056</span>
+          <span style="font-size:9px; color:#2a4030; background:rgba(0,200,150,0.06); border:1px solid rgba(0,200,150,0.15); padding:2px 8px; border-radius:2px; letter-spacing:0.1em;">PDF ↗</span>
+        </div>
+        <div style="font-size:11px; color:#4a6050; font-family:'Courier New',monospace;">1A Linear Li-Ion Charger</div>
+        <div style="font-size:10px; color:#2a3540; margin-top:2px;">NanJing Top Power · SOP-8</div>
+        <div style="margin-top:8px; height:1px; background:#111820;"></div>
+        <div style="font-size:10px; color:#2a4030; margin-top:4px;">via LCSC / NanJing Top Power</div>
+      </div>
+    </a>
+
+    <a href="https://datasheet.lcsc.com/lcsc/1912111437_PUOLOP-DW01A_C351410.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div style="background:#0d1018; border:1px solid #1a2030; border-radius:4px; padding:18px 20px; transition:border-color 0.15s; display:flex; flex-direction:column; gap:6px;" onmouseover="this.style.borderColor='#4090a0'" onmouseout="this.style.borderColor='#1a2030'">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:13px; font-weight:700; color:#4090a0; font-family:'Courier New',monospace; letter-spacing:0.04em;">DW01A</span>
+          <span style="font-size:9px; color:#1a3840; background:rgba(64,144,160,0.06); border:1px solid rgba(64,144,160,0.15); padding:2px 8px; border-radius:2px; letter-spacing:0.1em;">PDF ↗</span>
+        </div>
+        <div style="font-size:11px; color:#2a5060; font-family:'Courier New',monospace;">Cell Protection IC</div>
+        <div style="font-size:10px; color:#2a3540; margin-top:2px;">PUOLOP · SOT-23-6</div>
+        <div style="margin-top:8px; height:1px; background:#111820;"></div>
+        <div style="font-size:10px; color:#1a3040; margin-top:4px;">via LCSC / PUOLOP</div>
+      </div>
+    </a>
+
+    <a href="https://www.ic-fortune.com/upload/Download/FS8205A-DS-17_EN.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div style="background:#0d1018; border:1px solid #1a2030; border-radius:4px; padding:18px 20px; transition:border-color 0.15s; display:flex; flex-direction:column; gap:6px;" onmouseover="this.style.borderColor='#4090a0'" onmouseout="this.style.borderColor='#1a2030'">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:13px; font-weight:700; color:#4090a0; font-family:'Courier New',monospace; letter-spacing:0.04em;">FS8205A</span>
+          <span style="font-size:9px; color:#1a3840; background:rgba(64,144,160,0.06); border:1px solid rgba(64,144,160,0.15); padding:2px 8px; border-radius:2px; letter-spacing:0.1em;">PDF ↗</span>
+        </div>
+        <div style="font-size:11px; color:#2a5060; font-family:'Courier New',monospace;">Dual N-Ch Enhancement MOSFET</div>
+        <div style="font-size:10px; color:#2a3540; margin-top:2px;">Fortune Semiconductor · SO-8</div>
+        <div style="margin-top:8px; height:1px; background:#111820;"></div>
+        <div style="font-size:10px; color:#1a3040; margin-top:4px;">via Fortune Semiconductor (official)</div>
+      </div>
+    </a>
+
+    <a href="https://www.diodes.com/assets/Datasheets/AP2112.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div style="background:#0d1018; border:1px solid #1a2030; border-radius:4px; padding:18px 20px; transition:border-color 0.15s; display:flex; flex-direction:column; gap:6px;" onmouseover="this.style.borderColor='#9060e0'" onmouseout="this.style.borderColor='#1a2030'">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:13px; font-weight:700; color:#9060e0; font-family:'Courier New',monospace; letter-spacing:0.04em;">AP2112K-3.3</span>
+          <span style="font-size:9px; color:#2a1840; background:rgba(144,96,224,0.06); border:1px solid rgba(144,96,224,0.15); padding:2px 8px; border-radius:2px; letter-spacing:0.1em;">PDF ↗</span>
+        </div>
+        <div style="font-size:11px; color:#4a3070; font-family:'Courier New',monospace;">600mA CMOS LDO with Enable</div>
+        <div style="font-size:10px; color:#2a3540; margin-top:2px;">Diodes Inc. · SOT-25</div>
+        <div style="margin-top:8px; height:1px; background:#111820;"></div>
+        <div style="font-size:10px; color:#2a1840; margin-top:4px;">via Diodes Incorporated (official)</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="margin-top:48px; padding-top:20px; border-top:1px solid #111820; font-size:10px; color:#2a3040; letter-spacing:0.08em; text-align:center;">
+    18650 POWER SUPPLY REFERENCE — ALWAYS VERIFY AGAINST CURRENT DATASHEETS BEFORE MANUFACTURING
+  </div>
+
+</div>
+
+<script>
+const bom = [
+  { ref:'U1', part:'TP4056', pkg:'SOP-8', val:'Li-Ion charger IC — 1A, 4.20V CV' },
+  { ref:'U2', part:'DW01A', pkg:'SOT-23-6', val:'Cell protection IC — OVP/UVP/OCP' },
+  { ref:'U3', part:'FS8205A', pkg:'SO-8', val:'Dual N-ch MOSFET for DW01A' },
+  { ref:'U4', part:'AP2112K-3.3', pkg:'SOT-25', val:'3.3V LDO, 600mA, low dropout' },
+  { ref:'J1', part:'USB-C Receptacle', pkg:'SMD', val:'With CC1/CC2 pins accessible' },
+  { ref:'BT1', part:'18650 Holder', pkg:'THT', val:'Single cell, with tabs or solder pins' },
+  { ref:'R1,R2', part:'5.1kΩ', pkg:'0402', val:'CC1 & CC2 pull-downs (1% tolerance)' },
+  { ref:'R3', part:'1.2kΩ', pkg:'0402', val:'PROG pin — sets 1A charge current' },
+  { ref:'R4', part:'10kΩ', pkg:'0402', val:'TEMP tie-off (or NTC thermistor)' },
+  { ref:'R5,R6', part:'1kΩ', pkg:'0402', val:'LED current limiters (CHRG/STDBY)' },
+  { ref:'R7', part:'10mΩ', pkg:'0402 / 1206', val:'Current sense for DW01A' },
+  { ref:'C1', part:'10µF MLCC', pkg:'0805', val:'VBUS bulk decoupling' },
+  { ref:'C2', part:'100nF MLCC', pkg:'0402', val:'VBUS high-freq bypass' },
+  { ref:'C3', part:'10µF MLCC', pkg:'0805', val:'BAT pin output cap (TP4056)' },
+  { ref:'C4', part:'1µF MLCC', pkg:'0402', val:'LDO input cap' },
+  { ref:'C5', part:'10µF MLCC', pkg:'0805', val:'LDO output cap — burst support' },
+  { ref:'F1', part:'500mA Polyfuse', pkg:'1206', val:'VBUS resettable fuse' },
+  { ref:'LED1', part:'Red LED', pkg:'0402', val:'Charging indicator (active when charging)' },
+  { ref:'LED2', part:'Green LED', pkg:'0402', val:'Charge complete indicator' },
+];
+
+const tbody = document.getElementById('bomBody');
+bom.forEach(item => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td class="ref">${item.ref}</td><td class="part">${item.part}</td><td class="pkg">${item.pkg}</td><td class="notes">${item.val}</td>`;
+  tbody.appendChild(tr);
+});
+
+function showDetail(id) {
+  document.querySelectorAll('.detail-card').forEach(c => c.classList.remove('show'));
+  document.querySelectorAll('.bd-block').forEach(b => b.classList.remove('active'));
+  const card = document.getElementById('detail-' + id);
+  if (card) card.classList.add('show');
+  document.querySelector('[data-block="' + id + '"]')?.classList.add('active');
+}
+
+function updateCalc(v) {
+  v = parseFloat(v);
+  document.getElementById('voltDisplay').textContent = v.toFixed(2) + 'V';
+
+  const ldoDropout = 0.25;
+  const ldoHeadroom = v - 3.3 - ldoDropout;
+  const ldoOk = v >= (3.3 + ldoDropout);
+  const protOk = v >= 2.4;
+  const chargeNeeded = v < 4.0;
+
+  const iLoad = 0.5;
+  const iCell = iLoad * 1.05; // ~5% LDO quiescent overhead
+  const runtime = 2500 / (iCell * 1000); // hrs, assuming 2500mAh cell
+
+  const calcRow = document.getElementById('calcRow');
+  calcRow.innerHTML = `
+    <div class="calc-item">
+      <label>Cell Voltage</label>
+      <span class="val-big">${v.toFixed(2)}<span class="val-unit">V</span></span>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${((v-2.4)/(4.2-2.4)*100).toFixed(1)}%"></div></div>
+    </div>
+    <div class="calc-item">
+      <label>LDO Input Headroom</label>
+      <span class="val-big" style="color:${ldoOk?'#eef2ff':'#e04040'}">${(v-3.3).toFixed(2)}<span class="val-unit">V</span></span>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${Math.min(100,(v-3.3)/0.9*100).toFixed(1)}%; background:${ldoOk?'#00c896':'#e04040'}"></div></div>
+    </div>
+    <div class="calc-item">
+      <label>LDO Power Dissipation</label>
+      <span class="val-big">${ldoOk ? ((v-3.3)*iLoad).toFixed(2) : '—'}<span class="val-unit">W</span></span>
+    </div>
+    <div class="calc-item">
+      <label>Est. Runtime @ 500mA</label>
+      <span class="val-big">${protOk ? runtime.toFixed(1) : '—'}<span class="val-unit">h</span></span>
+    </div>
+  `;
+
+  const statusLine = document.getElementById('statusLine');
+  let dotClass, msg, borderCol;
+  if (!protOk) {
+    dotClass = 'dot-err'; msg = 'Cell below 2.4V — DW01A has tripped. Discharge path disconnected. No output.'; borderCol = '#e04040';
+  } else if (!ldoOk) {
+    dotClass = 'dot-warn'; msg = `Cell voltage (${v.toFixed(2)}V) below LDO dropout threshold (3.55V). Output voltage will droop below 3.3V.`; borderCol = '#e0a030';
+  } else {
+    dotClass = 'dot-ok'; msg = `System nominal. LDO outputting 3.3V with ${(v-3.3).toFixed(2)}V headroom. ${chargeNeeded ? 'Cell should be on charge.' : 'Cell fully charged.'}`; borderCol = '#00c896';
+  }
+  statusLine.style.borderLeftColor = borderCol;
+  statusLine.innerHTML = `<span class="status-dot ${dotClass}"></span>${msg}`;
+}
+
+// Init
+showDetail('charger');
+updateCalc(3.7);
+</script>
+
+</body>
+</html>
