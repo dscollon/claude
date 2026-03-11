@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product Design for Makers — Beginner Syllabus</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:        #0e0f13;
@@ -18,7 +17,14 @@
     --text:      #d8dce8;
     --muted:     #7a8099;
     --heading:   #eef0f7;
-  }
+
+```
+--font-serif: Georgia, 'Times New Roman', serif;
+--font-mono:  'Courier New', Courier, monospace;
+--font-sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+```
+
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -27,7 +33,7 @@ html { scroll-behavior: smooth; }
 body {
 background: var(–bg);
 color: var(–text);
-font-family: ‘Epilogue’, sans-serif;
+font-family: var(–font-sans);
 font-weight: 400;
 font-size: 16px;
 line-height: 1.75;
@@ -62,7 +68,7 @@ animation: fadeUp 0.7s ease both;
 }
 
 .hero-label {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 11px;
 letter-spacing: 0.18em;
 text-transform: uppercase;
@@ -71,7 +77,7 @@ margin-bottom: 20px;
 }
 
 .hero h1 {
-font-family: ‘DM Serif Display’, serif;
+font-family: var(–font-serif);
 font-size: clamp(38px, 6vw, 62px);
 color: var(–heading);
 line-height: 1.1;
@@ -101,7 +107,7 @@ flex-wrap: wrap;
 display: flex;
 align-items: center;
 gap: 8px;
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 12px;
 color: var(–muted);
 }
@@ -121,7 +127,7 @@ animation: fadeUp 0.7s 0.1s ease both;
 }
 
 .section-label {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.2em;
 text-transform: uppercase;
@@ -138,7 +144,7 @@ font-size: 14px;
 .overview-table th {
 text-align: left;
 padding: 10px 14px;
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.15em;
 text-transform: uppercase;
@@ -155,7 +161,7 @@ vertical-align: top;
 .overview-table tr:hover td { background: #191c26; }
 
 .mod-num {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 color: var(–accent);
 font-size: 13px;
 white-space: nowrap;
@@ -164,7 +170,7 @@ white-space: nowrap;
 .mod-title-cell { color: var(–heading); font-weight: 500; }
 
 .dur-cell {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 12px;
 color: var(–gold);
 white-space: nowrap;
@@ -188,7 +194,7 @@ border-bottom: 1px solid var(–border);
 }
 
 .module-number {
-font-family: ‘DM Serif Display’, serif;
+font-family: var(–font-serif);
 font-size: 52px;
 color: var(–border);
 line-height: 1;
@@ -199,7 +205,7 @@ user-select: none;
 .module-title-block { flex: 1; }
 
 .module-tag {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.18em;
 text-transform: uppercase;
@@ -208,7 +214,7 @@ margin-bottom: 6px;
 }
 
 .module-title {
-font-family: ‘DM Serif Display’, serif;
+font-family: var(–font-serif);
 font-size: 26px;
 color: var(–heading);
 line-height: 1.2;
@@ -216,7 +222,7 @@ margin-bottom: 8px;
 }
 
 .module-duration {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 12px;
 color: var(–gold);
 }
@@ -232,7 +238,7 @@ font-weight: 300;
 .sub-section { margin-bottom: 32px; }
 
 .sub-label {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.18em;
 text-transform: uppercase;
@@ -268,7 +274,7 @@ color: var(–text);
 .learn-list li::before {
 content: ‘→’;
 color: var(–accent);
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 12px;
 flex-shrink: 0;
 }
@@ -290,14 +296,14 @@ border-left-color: var(–accent2);
 }
 
 .book-card-title {
-font-family: ‘DM Serif Display’, serif;
+font-family: var(–font-serif);
 font-size: 17px;
 color: var(–heading);
 margin-bottom: 3px;
 }
 
 .book-card-author {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 11px;
 color: var(–gold);
 margin-bottom: 10px;
@@ -347,7 +353,7 @@ padding: 11px 14px;
 
 .video-icon {
 color: var(–accent2);
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 11px;
 flex-shrink: 0;
 opacity: 0.9;
@@ -378,7 +384,7 @@ padding: 18px 22px;
 }
 
 .exercise-label {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.18em;
 text-transform: uppercase;
@@ -404,7 +410,7 @@ font-size: 13.5px;
 .ref-table th {
 text-align: left;
 padding: 10px 14px;
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 10px;
 letter-spacing: 0.15em;
 text-transform: uppercase;
@@ -423,7 +429,7 @@ vertical-align: top;
 
 .ref-table td:first-child { color: var(–heading); font-weight: 500; }
 .ref-table td:nth-child(2) { color: var(–muted); font-size: 13px; }
-.ref-table td:nth-child(3) { font-family: ‘DM Mono’, monospace; font-size: 12px; color: var(–gold); }
+.ref-table td:nth-child(3) { font-family: var(–font-mono); font-size: 12px; color: var(–gold); }
 .ref-table td:nth-child(4) { color: var(–muted); font-size: 13px; }
 
 /* ── CLOSING ── */
@@ -436,7 +442,7 @@ margin-bottom: 72px;
 }
 
 .closing h2 {
-font-family: ‘DM Serif Display’, serif;
+font-family: var(–font-serif);
 font-size: 24px;
 color: var(–heading);
 margin-bottom: 16px;
@@ -466,7 +472,7 @@ gap: 12px;
 }
 
 .footer-text {
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 11px;
 color: var(–muted);
 }
@@ -476,7 +482,7 @@ background: rgba(91,141,238,0.1);
 border: 1px solid rgba(91,141,238,0.25);
 border-radius: 20px;
 padding: 6px 16px;
-font-family: ‘DM Mono’, monospace;
+font-family: var(–font-mono);
 font-size: 11px;
 color: var(–accent);
 }
@@ -910,7 +916,7 @@ to   { opacity: 1; transform: translateY(0); }
 <div class="sub-section">
   <p class="sub-label">📚 Books</p>
   <div class="book-card">
-    <div class="book-card-title">Obviously Awesome <span style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace">(revisited)</span></div>
+    <div class="book-card-title">Obviously Awesome <span style="color:var(--muted);font-size:13px;font-family:var(--font-mono)">(revisited)</span></div>
     <div class="book-card-author">April Dunford · 2019</div>
     <p class="book-card-summary">Referenced in Module 2, but worth revisiting here for its insights on communicating value. Dunford's positioning framework directly informs how you write product descriptions, choose photos, and set prices in your shop.</p>
     <p class="book-card-relevance"><strong>Why it matters for you:</strong> Re-read with a focus on the chapters about value and competitive alternatives. You'll see your listings quite differently.</p>
