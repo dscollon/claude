@@ -423,7 +423,7 @@
   <header>
     <div class="header-badge">Circuit Design Reference</div>
     <h1>18650 <span>Power Supply</span></h1>
-    <div class="subtitle">USB-C Input · Charge Management · Cell Protection · 3.3V / 600mA LDO Output</div>
+    <div class="subtitle">USB-C Input · Charge Management · Cell Protection · 3.3V / 700mA LDO Output</div>
   </header>
 
   <!-- BLOCK DIAGRAM -->
@@ -481,7 +481,7 @@
       <div class="bd-block" data-block="ldo" onclick="showDetail('ldo')">
         <div class="bd-block-inner">
           <div class="bd-block-name">LDO</div>
-          <div class="bd-block-part">AP2112K</div>
+          <div class="bd-block-part">XC6220B</div>
         </div>
       </div>
 
@@ -559,22 +559,22 @@
       <div class="detail-desc">The DW01A monitors cell voltage and current. It drives the gate of two back-to-back N-channel MOSFETs (FS8205A) in the negative battery rail. One FET controls the charge path, the other the discharge path — preventing both overcharge and over-discharge independently. This is the standard protection circuit used in most commercial 18650 packs.</div>
     </div>
     <div class="detail-card" id="detail-ldo">
-      <h3>AP2112K-3.3 — Low Dropout Regulator</h3>
+      <h3>XC6220B331MR-G — Low Dropout Regulator</h3>
       <div class="detail-grid">
-        <div class="detail-item"><label>Output Voltage</label><span>3.3V fixed</span></div>
-        <div class="detail-item"><label>Max Output Current</label><span>600mA</span></div>
-        <div class="detail-item"><label>Dropout Voltage</label><span>~250mV @ 600mA</span></div>
-        <div class="detail-item"><label>Min Input Voltage</label><span>3.55V (3.3 + 0.25)</span></div>
-        <div class="detail-item"><label>PSRR</label><span>65dB @ 1kHz</span></div>
+        <div class="detail-item"><label>Output Voltage</label><span>3.3V fixed (±1.0%)</span></div>
+        <div class="detail-item"><label>Max Output Current</label><span>700mA</span></div>
+        <div class="detail-item"><label>Dropout Voltage</label><span>~200mV @ 700mA</span></div>
+        <div class="detail-item"><label>Min Input Voltage</label><span>3.50V (3.3 + 0.2)</span></div>
+        <div class="detail-item"><label>PSRR</label><span>50dB @ 1kHz</span></div>
         <div class="detail-item"><label>Package</label><span>SOT-25 (5-pin)</span></div>
       </div>
-      <div class="detail-desc">The AP2112K is a good choice for this design — 600mA headroom above your 500mA burst, low dropout means it works until the protection IC trips at 2.4V cell voltage (well above the 3.55V needed). Add 10µF on the output specifically to handle 500mA burst transitions without voltage dip. Enable pin can be tied to VIN for always-on.</div>
+      <div class="detail-desc">The XC6220B331MR-G offers 700mA continuous output — 200mA headroom over the 500mA burst requirement. Its 200mV dropout means it stays in regulation down to ~3.50V cell voltage. The "GreenOperation" mode automatically switches between high-speed and power-save modes based on load current, reducing quiescent draw at light loads. CE pin must be tied to VIN for always-on operation (not left floating). Add 10µF on the output for burst transient support.</div>
     </div>
     <div class="detail-card" id="detail-out">
       <h3>3.3V Output</h3>
       <div class="detail-grid">
         <div class="detail-item"><label>Output Voltage</label><span>3.3V ± 1.5%</span></div>
-        <div class="detail-item"><label>Cont. Current</label><span>600mA max</span></div>
+        <div class="detail-item"><label>Cont. Current</label><span>700mA max</span></div>
         <div class="detail-item"><label>Burst Current</label><span>500mA / 15s ✓</span></div>
         <div class="detail-item"><label>Output Cap</label><span>10µF ceramic</span></div>
       </div>
@@ -688,13 +688,13 @@
       <!-- Cell positive connects to DW01A -->
       <line x1="475" y1="265" x2="475" y2="145" stroke="#e0a030" stroke-width="1" stroke-dasharray="3,3"/>
 
-      <!-- === AP2112K BLOCK === -->
+      <!-- === XC6220B BLOCK === -->
       <rect x="620" y="55" width="110" height="90" rx="3" fill="#0d1018" stroke="#2a0060"/>
-      <text x="675" y="77" fill="#9060e0" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">AP2112K</text>
+      <text x="675" y="77" fill="#9060e0" font-size="10" font-family="Courier New" text-anchor="middle" font-weight="bold">XC6220B</text>
       <text x="675" y="89" fill="#3a2848" font-size="8" font-family="Courier New" text-anchor="middle">U3 · SOT-25</text>
       <text x="675" y="105" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Vout: 3.3V</text>
-      <text x="675" y="116" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Imax: 600mA</text>
-      <text x="675" y="127" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Vdrop: 250mV</text>
+      <text x="675" y="116" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Imax: 700mA</text>
+      <text x="675" y="127" fill="#5a3880" font-size="7.5" font-family="Courier New" text-anchor="middle">Vdrop: 200mV</text>
       <!-- Caps on input -->
       <line x1="620" y1="90" x2="600" y2="90" stroke="#e0a030" stroke-width="1.5"/>
       <rect x="592" y="83" width="8" height="14" rx="1" fill="#e0a030" opacity="0.3" stroke="#e0a030" stroke-width="0.5"/>
@@ -777,7 +777,7 @@
     </div>
     <div class="note-card">
       <h4>🔋 LDO Dropout</h4>
-      <p>The AP2112K needs <strong>Vin ≥ 3.55V</strong> to maintain 3.3V output at 600mA. The cell's protection cutoff is 2.4V — so the LDO will droop before the protection trips. Consider adding a low-battery indicator (comparator) at ~3.6V if reliable regulation to discharge is important.</p>
+      <p>The XC6220B needs <strong>Vin ≥ 3.50V</strong> to maintain 3.3V output at 700mA. The cell's protection cutoff is 2.4V — so the LDO will droop before the protection trips. Consider adding a low-battery indicator (comparator) at ~3.6V if reliable regulation to full discharge is important. The XC6220B's CE pin <strong>must not be left floating</strong> — tie it to VIN for always-on operation.</p>
     </div>
     <div class="note-card">
       <h4>🔌 USB-C CC Resistors</h4>
@@ -836,16 +836,16 @@
       </div>
     </a>
 
-    <a href="https://www.diodes.com/assets/Datasheets/AP2112.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
+    <a href="https://www.torexsemi.com/file/xc6220/XC6220.pdf" target="_blank" rel="noopener" style="text-decoration:none;">
       <div style="background:#0d1018; border:1px solid #1a2030; border-radius:4px; padding:18px 20px; transition:border-color 0.15s; display:flex; flex-direction:column; gap:6px;" onmouseover="this.style.borderColor='#9060e0'" onmouseout="this.style.borderColor='#1a2030'">
         <div style="display:flex; align-items:center; justify-content:space-between;">
-          <span style="font-size:13px; font-weight:700; color:#9060e0; font-family:'Courier New',monospace; letter-spacing:0.04em;">AP2112K-3.3</span>
+          <span style="font-size:13px; font-weight:700; color:#9060e0; font-family:'Courier New',monospace; letter-spacing:0.04em;">XC6220B331MR-G</span>
           <span style="font-size:9px; color:#2a1840; background:rgba(144,96,224,0.06); border:1px solid rgba(144,96,224,0.15); padding:2px 8px; border-radius:2px; letter-spacing:0.1em;">PDF ↗</span>
         </div>
-        <div style="font-size:11px; color:#4a3070; font-family:'Courier New',monospace;">600mA CMOS LDO with Enable</div>
-        <div style="font-size:10px; color:#2a3540; margin-top:2px;">Diodes Inc. · SOT-25</div>
+        <div style="font-size:11px; color:#4a3070; font-family:'Courier New',monospace;">700mA LDO with GreenOperation</div>
+        <div style="font-size:10px; color:#2a3540; margin-top:2px;">Torex Semiconductor · SOT-25</div>
         <div style="margin-top:8px; height:1px; background:#111820;"></div>
-        <div style="font-size:10px; color:#2a1840; margin-top:4px;">via Diodes Incorporated (official)</div>
+        <div style="font-size:10px; color:#2a1840; margin-top:4px;">via Torex Semiconductor (official)</div>
       </div>
     </a>
 
@@ -862,7 +862,7 @@ const bom = [
   { ref:'U1', part:'TP4056', pkg:'SOP-8', val:'Li-Ion charger IC — 1A, 4.20V CV' },
   { ref:'U2', part:'DW01A', pkg:'SOT-23-6', val:'Cell protection IC — OVP/UVP/OCP' },
   { ref:'U3', part:'FS8205A', pkg:'SO-8', val:'Dual N-ch MOSFET for DW01A' },
-  { ref:'U4', part:'AP2112K-3.3', pkg:'SOT-25', val:'3.3V LDO, 600mA, low dropout' },
+  { ref:'U4', part:'XC6220B331MR-G', pkg:'SOT-25', val:'3.3V LDO, 700mA, GreenOperation, Torex' },
   { ref:'J1', part:'USB-C Receptacle', pkg:'SMD', val:'With CC1/CC2 pins accessible' },
   { ref:'BT1', part:'18650 Holder', pkg:'THT', val:'Single cell, with tabs or solder pins' },
   { ref:'R1,R2', part:'5.1kΩ', pkg:'0402', val:'CC1 & CC2 pull-downs (1% tolerance)' },
@@ -899,7 +899,7 @@ function updateCalc(v) {
   v = parseFloat(v);
   document.getElementById('voltDisplay').textContent = v.toFixed(2) + 'V';
 
-  const ldoDropout = 0.25;
+  const ldoDropout = 0.20;
   const ldoHeadroom = v - 3.3 - ldoDropout;
   const ldoOk = v >= (3.3 + ldoDropout);
   const protOk = v >= 2.4;
@@ -936,7 +936,7 @@ function updateCalc(v) {
   if (!protOk) {
     dotClass = 'dot-err'; msg = 'Cell below 2.4V — DW01A has tripped. Discharge path disconnected. No output.'; borderCol = '#e04040';
   } else if (!ldoOk) {
-    dotClass = 'dot-warn'; msg = `Cell voltage (${v.toFixed(2)}V) below LDO dropout threshold (3.55V). Output voltage will droop below 3.3V.`; borderCol = '#e0a030';
+    dotClass = 'dot-warn'; msg = `Cell voltage (${v.toFixed(2)}V) below LDO dropout threshold (3.50V). Output voltage will droop below 3.3V.`; borderCol = '#e0a030';
   } else {
     dotClass = 'dot-ok'; msg = `System nominal. LDO outputting 3.3V with ${(v-3.3).toFixed(2)}V headroom. ${chargeNeeded ? 'Cell should be on charge.' : 'Cell fully charged.'}`; borderCol = '#00c896';
   }
