@@ -270,35 +270,99 @@
     border: 1px solid #2a2e3d;
     border-left: 3px solid #5b8dee;
     border-radius: 4px;
-    padding: 20px 22px;
     margin-bottom: 12px;
     transition: border-color 0.2s, background 0.2s;
   }
 
   .book-card:hover {
     background: #1f2230;
+  }
+
+  .book-card[open] {
     border-left-color: #e07b4f;
   }
 
+  .book-card summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .book-card summary::-webkit-details-marker { display: none; }
+
+  .book-card-toggle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #2a2e3d;
+    background: #15171e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #5b8dee;
+    transition: transform 0.2s, background 0.2s;
+    font-family: 'Courier New', monospace;
+    line-height: 1;
+  }
+
+  .book-card[open] .book-card-toggle {
+    transform: rotate(45deg);
+    background: rgba(91,141,238,0.12);
+  }
+
+  .book-card-header { flex: 1; min-width: 0; }
+
   .book-card-title {
     font-family: Georgia, serif;
-    font-size: 17px;
+    font-size: 16px;
     color: #eef0f7;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
+  }
+
+  .book-title-link {
+    color: #eef0f7;
+    text-decoration: none;
+    border-bottom: 1px solid #5b8dee;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .book-title-link:hover {
+    color: #5b8dee;
+    border-bottom-color: #5b8dee;
   }
 
   .book-card-author {
     font-family: 'Courier New', monospace;
     font-size: 11px;
     color: #c9a84c;
-    margin-bottom: 10px;
+  }
+
+  .book-card-body {
+    padding: 0 20px 16px 54px;
+    border-top: 1px solid #2a2e3d;
+    padding-top: 14px;
   }
 
   .book-card-summary {
     font-size: 14px;
     color: #7a8099;
-    line-height: 1.65;
+    line-height: 1.72;
     margin-bottom: 10px;
+  }
+
+  .book-card-summary + .book-card-summary {
+    margin-top: 6px;
+  }
+
+  .book-card-summary strong {
+    color: #a8b0c8;
+    font-weight: 600;
   }
 
   .book-card-relevance {
@@ -309,6 +373,7 @@
     padding: 8px 12px;
     border-radius: 0 3px 3px 0;
     font-style: italic;
+    margin-top: 12px;
   }
 
   .book-card-relevance strong {
@@ -595,26 +660,47 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">The Design of Everyday Things</div>
-        <div class="book-card-author">Don Norman · 2013 revised edition</div>
-        <p class="book-card-summary">The classic foundation of human-centred design. Norman explains why some products feel intuitive and others cause frustration — using everyday objects as examples. Introduces affordances, signifiers, feedback loops, and mental models.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Reading this changes how you look at every object around you. You'll start seeing why certain 3D-printed items feel satisfying and others get put in a drawer.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">When Coffee and Kale Compete</div>
-        <div class="book-card-author">Alan Klement · 2018 (free online)</div>
-        <p class="book-card-summary">A practical guide to Jobs-to-be-Done (JTBD) theory from the ground up. Reframes product thinking around the 'job' a customer is trying to accomplish in their life, not the features of the thing they buy.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Instead of thinking "I'll print a phone stand," you think: "What job is someone hiring a phone stand to do?" Shifts guessing to purposeful design. Available free online.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Design-Everyday-Things-Revised-Expanded/dp/0465050654" target="_blank" class="book-title-link">The Design of Everyday Things</a></div>
+            <div class="book-card-author">Don Norman · 2013 revised edition</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Norman's central argument is simple but profound: when a product is hard to use, the fault lies with the design, not the user. He builds this case through a set of core concepts that every designer needs to understand.</p>
+        <p class="book-card-summary"><strong>Affordances</strong> are the possible actions an object suggests — a door handle affords pulling, a flat plate affords pushing. When affordances are well designed, you know what to do without thinking. <strong>Signifiers</strong> are the signals that communicate where and how to act — a label saying "push here," a visible slot, a raised button. Good design makes signifiers obvious; bad design hides them or sends the wrong signals entirely.</p>
+        <p class="book-card-summary"><strong>Feedback</strong> is what happens after you take an action — a click, a sound, a visual change. Without feedback, users feel like they're operating in a void. <strong>Mental models</strong> are the internal pictures people form about how something works. Great design matches the product's actual behaviour to the user's mental model. When these diverge — when the product behaves differently from what the user expects — confusion and frustration follow.</p>
+        <p class="book-card-summary">Norman also introduces the concept of <strong>human error</strong> — and argues that most "user errors" are actually design errors. If people consistently misuse something the same way, that's the design's fault, not theirs. He distinguishes between slips (doing the right thing wrong, like pressing the wrong button) and mistakes (doing the wrong thing entirely, based on a flawed mental model). Good design reduces both.</p>
+        <p class="book-card-summary">The book closes with a discussion of design process: the importance of iteration, observation, and testing with real users rather than relying on assumptions about how people will behave.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Reading this changes how you look at every object around you. You'll start seeing why certain 3D-printed items feel satisfying and others get put in a drawer.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/When-Coffee-Kale-Compete-products/dp/1534873066" target="_blank" class="book-title-link">When Coffee and Kale Compete</a></div>
+            <div class="book-card-author">Alan Klement · 2018 (free online)</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Klement's book is built around a single insight: people don't buy products — they hire them to make progress in some part of their life. A person doesn't buy a milkshake because they love milkshakes; they hire it to get through a boring morning commute without feeling hungry or making a mess. Understanding that job — and all the competing options they might hire instead — is what leads to products that genuinely resonate.</p>
+        <p class="book-card-summary">The Jobs-to-be-Done framework has two dimensions. <strong>Functional jobs</strong> are the practical tasks people are trying to accomplish ("I need to store my phone somewhere visible while I cook"). <strong>Emotional jobs</strong> are how people want to feel while accomplishing that task ("I want to feel organised and in control of my kitchen"). Products that address both dimensions outperform those that address only one.</p>
+        <p class="book-card-summary">Klement also introduces the idea of <strong>competing against non-consumption</strong> — your real competition isn't always another product. Sometimes it's the customer's current workaround, or simply doing nothing. If someone's current solution to a problem is an elastic band around their phone, a £30 printed stand needs to be dramatically better to justify switching.</p>
+        <p class="book-card-summary">The book gives practical techniques for uncovering jobs: timeline interviews (asking customers to walk you through exactly what happened before, during, and after they used a product), and struggle mapping (identifying the moments of friction that made them look for a solution in the first place). These are the conversations that reveal what people actually value — which is often quite different from what they say they want.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Instead of thinking "I'll print a phone stand," you think: "What job is someone hiring a phone stand to do?" Shifts guessing to purposeful design. Available free online.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ideou" target="_blank"><span class="video-channel">IDEO</span></a><span class="video-topic"> "Design Thinking" explainer series</span><span class="video-why">— IDEO invented modern design thinking; short, accessible videos on empathy-first design</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ajsmart" target="_blank"><span class="video-channel">AJ&amp;Smart</span></a><span class="video-topic"> "What is Design Thinking?" and Sprint methodology videos</span><span class="video-why">— clear, practical explanations of user research and problem framing</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@DesignPlusMorna" target="_blank"><span class="video-channel">Design Plus Morna</span></a><span class="video-topic"> Videos on designer mindset and principles</span><span class="video-why">— Canadian industrial designer focused on how to think like a designer</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=IDEO+design+thinking+explained+overview" target="_blank"><span class="video-channel">IDEO</span></a><span class="video-topic"> "Design Thinking" — overview &amp; explainer</span><span class="video-why">— IDEO invented modern design thinking; short, accessible videos on empathy-first design</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=AJ+Smart+what+is+design+thinking" target="_blank"><span class="video-channel">AJ&amp;Smart</span></a><span class="video-topic"> "What is Design Thinking?" — introduction</span><span class="video-why">— clear, practical explanations of user research and problem framing</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Design+Plus+Morna+designer+mindset+how+to+think+like+a+designer" target="_blank"><span class="video-channel">Design Plus Morna</span></a><span class="video-topic"> How to think like a designer — mindset &amp; principles</span><span class="video-why">— Canadian industrial designer focused on how to think like a designer</span></span></li>
       </ul>
     </div>
 
@@ -651,26 +737,46 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">Obviously Awesome</div>
-        <div class="book-card-author">April Dunford · 2019</div>
-        <p class="book-card-summary">A no-fluff guide to positioning — the art of making your product obviously the right choice for the right customer. Dunford explains how to find your competitive alternatives, identify what genuinely differentiates you, and match that to the customers who care most.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you stop competing on price and start carving out a niche where you're the obvious answer. Directly applicable to how you describe and position products in your Etsy shop.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">Competing Against Luck</div>
-        <div class="book-card-author">Clayton Christensen et al. · 2016</div>
-        <p class="book-card-summary">Christensen expands Jobs-to-be-Done into a full business framework, with real company case studies showing how understanding the 'job' customers hire products for leads to innovation that sticks.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Ideal companion to Module 1. Helps you see how to systematically look for underserved jobs in your product category.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Obviously-Awesome-Product-Positioning-Customers/dp/1999023005" target="_blank" class="book-title-link">Obviously Awesome</a></div>
+            <div class="book-card-author">April Dunford · 2019</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Positioning is the act of deliberately defining how your product is the best solution for a specific type of customer with a specific problem. Dunford argues that most products fail not because they're bad, but because they're poorly positioned — the right customers can't identify themselves in the description, or the product is being compared to the wrong competitors.</p>
+        <p class="book-card-summary">Her process starts with <strong>competitive alternatives</strong> — not who you think your competitors are, but what a customer would actually do if your product didn't exist. For a premium 3D-printed desk organiser, the alternative might not be another Etsy seller; it might be a cheap plastic tray from a supermarket, or just leaving the desk messy. Understanding that alternative is the baseline everything else is measured against.</p>
+        <p class="book-card-summary">Next comes identifying your <strong>unique attributes</strong> — the specific ways your product is genuinely different from that alternative. Not better in every way, but meaningfully better in at least one dimension that matters. Then, crucially, you identify which customers care most about that specific difference. Not all customers value the same things; the goal is to find the ones for whom your differentiator is a real priority.</p>
+        <p class="book-card-summary">From there, Dunford works through <strong>market category</strong> (what kind of product are you, and what does that category cue in the buyer's mind?) and <strong>relevant trends</strong> (what's happening in the world that makes your product more timely and relevant right now?). The book ends with a practical positioning template that can be adapted directly to product listings, descriptions, and marketing copy.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you stop competing on price and start carving out a niche where you're the obvious answer. Directly applicable to how you describe and position products in your Etsy shop.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Competing-Against-Luck-Innovation-Customer/dp/0062435612" target="_blank" class="book-title-link">Competing Against Luck</a></div>
+            <div class="book-card-author">Clayton Christensen et al. · 2016</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Christensen's central argument is that innovation has been treated as inherently unpredictable — a matter of luck — when in fact it can be made systematic. The key is shifting focus from customer demographics and product attributes to the <strong>job</strong> the customer is trying to get done. Companies that understand the job deeply build products that customers pull into their lives rather than ones that need to be pushed through marketing.</p>
+        <p class="book-card-summary">The book introduces the idea that jobs have <strong>functional, emotional, and social dimensions</strong> — and that overlooking any of them leads to incomplete products. A small safe bought for a home isn't just hired to protect valuables (functional); it's also hired to give the owner peace of mind (emotional) and to signal that they're a responsible adult (social). Products that address only the functional dimension leave the emotional and social jobs unfulfilled, making them vulnerable to displacement.</p>
+        <p class="book-card-summary">Christensen makes a crucial distinction between <strong>the circumstances of the job and the demographic of the customer</strong>. Two people with identical demographics can hire a product for completely different jobs — and two people with very different demographics can share exactly the same job. This is why demographic-based market research so often misleads: it groups customers by who they are rather than by what they're trying to accomplish.</p>
+        <p class="book-card-summary">The book's most practical chapter concerns <strong>data and the job</strong> — why customer data often obscures jobs rather than revealing them, and how to design research that surfaces the real motivations behind purchases. It argues strongly for qualitative, narrative research (talking to customers about their lives) over quantitative surveys, which tend to confirm assumptions rather than challenge them.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Ideal companion to Module 1. Helps you see how to systematically look for underserved jobs in your product category.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@junglescout" target="_blank"><span class="video-channel">Jungle Scout</span></a><span class="video-topic"> Etsy product research and niche-finding tutorials</span><span class="video-why">— practical techniques for reading market data on Etsy and Amazon</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@NichePursuits" target="_blank"><span class="video-channel">Niche Pursuits</span></a><span class="video-topic"> Keyword and demand research tutorials</span><span class="video-why">— finding product niches with real, measurable demand</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/thefuturishere" target="_blank"><span class="video-channel">The Futur</span></a><span class="video-topic"> Videos on finding your creative niche and positioning</span><span class="video-why">— design business channel; great on how to differentiate in a crowded market</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Etsy+product+research+niche+finding+tutorial" target="_blank"><span class="video-channel">Jungle Scout / Etsy research</span></a><span class="video-topic"> Etsy product research &amp; niche-finding — tutorial</span><span class="video-why">— practical techniques for reading market data on Etsy and Amazon</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=niche+product+demand+research+keyword+tutorial" target="_blank"><span class="video-channel">Niche Pursuits</span></a><span class="video-topic"> Keyword &amp; demand research for product niches — tutorial</span><span class="video-why">— finding product niches with real, measurable demand</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=The+Futur+finding+your+niche+positioning+design" target="_blank"><span class="video-channel">The Futur</span></a><span class="video-topic"> Finding your niche &amp; positioning your work — The Futur</span><span class="video-why">— design business channel; great on how to differentiate in a crowded market</span></span></li>
       </ul>
     </div>
 
@@ -707,26 +813,46 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">The Laws of Simplicity</div>
-        <div class="book-card-author">John Maeda · 2006</div>
-        <p class="book-card-summary">A short, elegant book that distils ten laws for simplifying design across products, technology, and business. Maeda argues that great design is about strategic reduction, not addition.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Directly applicable to 3D printing. The tendency in CAD is to add — features, details, complexity. This book teaches you when and how to take away instead.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">100 Things Every Designer Needs to Know About People</div>
-        <div class="book-card-author">Susan Weinschenk · 2011</div>
-        <p class="book-card-summary">Grounded in cognitive and behavioural science, this book explains how people actually see, think, feel, and decide. Covers perception, attention, memory, motivation, and social behaviour — all through the lens of design.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you understand why certain colours, shapes, and forms attract attention or signal quality. Immediately useful for both product design and product photography.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Laws-Simplicity-Design-Technology-Business/dp/145586420X" target="_blank" class="book-title-link">The Laws of Simplicity</a></div>
+            <div class="book-card-author">John Maeda · 2006</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Maeda's book is itself a demonstration of its own argument — it's short, precise, and wastes nothing. The ten laws are principles for thinking about reduction and simplicity, illustrated with examples from product design, technology, and art.</p>
+        <p class="book-card-summary">The first and most important law is <strong>Reduce</strong>: the simplest way to achieve simplicity is through thoughtful reduction — removing features, steps, or visual elements until you reach the point where removing anything more would damage the core function. This is harder than it sounds, because addition feels productive and reduction feels risky. The second law, <strong>Organise</strong>, argues that organising a system well can make complexity feel simpler without removing anything — grouping related things, establishing clear hierarchies, and creating visual order all reduce cognitive load.</p>
+        <p class="book-card-summary"><strong>Time</strong> is the third law: anything that saves time feels simpler, because time spent waiting or struggling is experienced as complexity. <strong>Learn</strong> argues that knowledge removes the perception of complexity — once you understand something, it no longer feels hard. This has implications for product instructions, packaging, and anything that onboards a new user.</p>
+        <p class="book-card-summary">Maeda also articulates a useful paradox: <strong>simplicity and complexity need each other</strong>. A product that is too simple offers nothing; context and contrast make simplicity feel meaningful rather than empty. The goal is not minimalism for its own sake, but the precise amount of complexity needed — and no more. His final law sums it up: "Simplicity is about subtracting the obvious and adding the meaningful."</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Directly applicable to 3D printing. The tendency in CAD is to add — features, details, complexity. This book teaches you when and how to take away instead.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Things-Designer-People-Voices-Matter-ebook/dp/B004X1V1CS" target="_blank" class="book-title-link">100 Things Every Designer Needs to Know About People</a></div>
+            <div class="book-card-author">Susan Weinschenk · 2011</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Weinschenk distils a large body of psychology and neuroscience research into 100 discrete, actionable insights for designers. Each one is short — a page or two — and directly connected to a design implication. The book is less a narrative and more a reference, but read front to back it builds a coherent picture of the gap between how designers assume people behave and how they actually do.</p>
+        <p class="book-card-summary">On <strong>vision and perception</strong>: people don't see the world as it actually is — they see a constructed interpretation based on expectations, contrast, and context. Colour perception changes dramatically depending on surrounding colours. People's eyes are drawn to faces before almost anything else. Objects at the edges of a composition get less attention than those near the centre or along natural reading paths. These insights have immediate implications for product photography and shop presentation.</p>
+        <p class="book-card-summary">On <strong>attention and memory</strong>: people can only hold about four chunks of information in working memory at once. Anything that asks for more than that creates cognitive overload and a sense of effort. Chunking — grouping related information — reduces this burden. People remember stories, emotions, and beginnings and endings far better than they remember details in the middle of an experience.</p>
+        <p class="book-card-summary">On <strong>motivation and decision-making</strong>: people are strongly motivated by progress — even the illusion of progress (like a loyalty card with two stamps already on it) increases follow-through. They overweight losses relative to equivalent gains (loss aversion). They are heavily influenced by what they believe others are doing (social proof). And they make most decisions intuitively and emotionally, then rationalise them afterwards — which means that how a product feels in the hand, or how a listing looks at a glance, matters more than the logical arguments made in the description.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you understand why certain colours, shapes, and forms attract attention or signal quality. Immediately useful for both product design and product photography.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/c/thedesignsketchbook" target="_blank"><span class="video-channel">The Design Sketchbook</span></a><span class="video-topic"> Industrial design principles and sketching fundamentals</span><span class="video-why">— teaches form language and how to think about 3D shapes</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@JohnMaurielloDesign" target="_blank"><span class="video-channel">John Mauriello Design</span></a><span class="video-topic"> Design principles, form language, and product analysis</span><span class="video-why">— industrial design professor; deep dives into why products look and feel the way they do</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@crashcourse" target="_blank"><span class="video-channel">Crash Course Design</span></a><span class="video-topic"> Visual design principles series</span><span class="video-why">— short, accessible introductions to proportion, colour, contrast, and composition</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Design+Sketchbook+industrial+design+principles+form+language+beginner" target="_blank"><span class="video-channel">The Design Sketchbook</span></a><span class="video-topic"> Industrial design principles &amp; form language — beginner</span><span class="video-why">— teaches form language and how to think about 3D shapes</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=John+Mauriello+design+principles+form+language+product" target="_blank"><span class="video-channel">John Mauriello Design</span></a><span class="video-topic"> Design principles &amp; form language — product analysis</span><span class="video-why">— industrial design professor; deep dives into why products look and feel the way they do</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Crash+Course+design+visual+principles+proportion+colour+contrast" target="_blank"><span class="video-channel">Crash Course</span></a><span class="video-topic"> Visual design principles — proportion, colour &amp; contrast</span><span class="video-why">— short, accessible introductions to proportion, colour, contrast, and composition</span></span></li>
       </ul>
     </div>
 
@@ -763,26 +889,46 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">Creative Confidence</div>
-        <div class="book-card-author">Tom &amp; David Kelley · 2013</div>
-        <p class="book-card-summary">Written by the founders of IDEO, this book argues that creativity is a skill anyone can build — not a talent you either have or don't. Provides practical techniques for generating ideas and overcoming the fear of being wrong.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Gives you concrete tools to deliberately generate more and better ideas, and to feel confident experimenting — rather than waiting for inspiration.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">Hooked: How to Build Habit-Forming Products</div>
-        <div class="book-card-author">Nir Eyal · 2014</div>
-        <p class="book-card-summary">Eyal introduces the Hook Model — a four-stage cycle (trigger, action, reward, investment) explaining why some products become indispensable while others are forgotten. Rich with examples from physical and digital products.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you design products people keep using, come back to, and recommend. Useful for thinking about repeat purchases and product ecosystems.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Creative-Confidence-Unleashing-Potential-within/dp/0008139385" target="_blank" class="book-title-link">Creative Confidence</a></div>
+            <div class="book-card-author">Tom &amp; David Kelley · 2013</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">The Kelley brothers' core thesis is that creative confidence — the belief that you can and will come up with good ideas — is something most people lose in childhood and can consciously rebuild as adults. The experience of being told your drawing isn't good, or that your idea is impractical, creates what they call a "creativity scar" that causes people to self-censor before they even begin. The antidote is structured practice and small wins.</p>
+        <p class="book-card-summary">A central technique is <strong>prototyping early and often</strong> — building rough, imperfect versions of ideas specifically to get feedback and learn, not to produce final outputs. The goal of an early prototype isn't to be right; it's to be fast and cheap enough that being wrong costs nothing. This shifts the emotional stakes of creating from "I need this to be good" to "I'm just exploring." Applied to 3D printing, this means deliberately printing quick, low-quality test versions rather than spending hours perfecting a model before anyone has seen it.</p>
+        <p class="book-card-summary">The book introduces the concept of <strong>design thinking as a human-centred process</strong> with five stages: empathise (understand the person you're designing for), define (frame the specific problem worth solving), ideate (generate many possible solutions without judgment), prototype (build quickly and cheaply), and test (get feedback from real people). These stages aren't strictly linear — you move back and forth between them as you learn.</p>
+        <p class="book-card-summary">On ideation specifically, the Kelleys advocate for separating the generation phase from the evaluation phase. During brainstorming, judgment is suspended entirely — the goal is quantity, not quality, because quantity creates the raw material from which good ideas are selected. Premature criticism (including self-criticism) kills generative momentum. Only after a large pool of ideas exists should filtering begin.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Gives you concrete tools to deliberately generate more and better ideas, and to feel confident experimenting — rather than waiting for inspiration.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Hooked-How-Build-Habit-Forming-Products/dp/0241184835" target="_blank" class="book-title-link">Hooked</a>: How to Build Habit-Forming Products</div>
+            <div class="book-card-author">Nir Eyal · 2014</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Eyal's Hook Model describes the mechanism by which products build habits — and understanding it helps designers create things people return to, rather than things they use once and forget. The model has four stages that cycle continuously, each pass deepening the user's attachment.</p>
+        <p class="book-card-summary">The first stage is the <strong>trigger</strong> — the prompt that initiates the behaviour. External triggers are things in the environment: a notification, an advertisement, a friend's recommendation, seeing the product on a desk. Internal triggers are emotions and states that become associated with using the product — boredom, anxiety, a desire to feel organised. The most durable habits are driven by internal triggers, but products almost always start with external ones.</p>
+        <p class="book-card-summary">The second stage is the <strong>action</strong> — the simplest behaviour done in anticipation of a reward. Eyal draws on BJ Fogg's behavioural model here: behaviour happens when motivation, ability, and a trigger converge at the same moment. Reducing friction (making the action easier) is often more effective than trying to increase motivation. For physical products, this might mean making something easier to pick up, store visibly, or incorporate into an existing routine.</p>
+        <p class="book-card-summary">The third stage is the <strong>variable reward</strong> — and the "variable" element is key. Predictable rewards lose their power quickly; variable rewards (where you don't quite know what you'll get) maintain engagement far longer. Eyal identifies three reward types: rewards of the tribe (social connection and approval), rewards of the hunt (resources and information), and rewards of the self (intrinsic satisfaction, mastery, completion). The final stage is <strong>investment</strong> — the user puts something into the product (data, effort, time, social capital) that makes it more valuable to them personally and increases the likelihood they'll return.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Helps you design products people keep using, come back to, and recommend. Useful for thinking about repeat purchases and product ecosystems.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ideou" target="_blank"><span class="video-channel">IDEO</span></a><span class="video-topic"> Ideation and brainstorming technique videos</span><span class="video-why">— the originators of design thinking show you structured ideation methods used by professionals</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ajsmart" target="_blank"><span class="video-channel">AJ&amp;Smart</span></a><span class="video-topic"> Design Sprint process videos — ideation phase</span><span class="video-why">— practical walkthroughs of how teams generate and filter concepts quickly</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ProductDesignOnline" target="_blank"><span class="video-channel">Product Design Online</span></a><span class="video-topic"> Concept development in Fusion 360 for makers</span><span class="video-why">— bridges design thinking and CAD, relevant to 3D printing practitioners</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=IDEO+ideation+brainstorming+techniques+design+thinking" target="_blank"><span class="video-channel">IDEO</span></a><span class="video-topic"> Ideation &amp; brainstorming techniques — design thinking</span><span class="video-why">— the originators of design thinking show you structured ideation methods used by professionals</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=AJ+Smart+design+sprint+ideation+how+might+we" target="_blank"><span class="video-channel">AJ&amp;Smart</span></a><span class="video-topic"> Design Sprint ideation — How Might We &amp; concept development</span><span class="video-why">— practical walkthroughs of how teams generate and filter concepts quickly</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Product+Design+Online+concept+development+Fusion+360+3D+printing" target="_blank"><span class="video-channel">Product Design Online</span></a><span class="video-topic"> Concept development in Fusion 360 for 3D printing makers</span><span class="video-why">— bridges design thinking and CAD, relevant to 3D printing practitioners</span></span></li>
       </ul>
     </div>
 
@@ -819,26 +965,46 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">The Lean Startup</div>
-        <div class="book-card-author">Eric Ries · 2011</div>
-        <p class="book-card-summary">The definitive guide to validated learning — testing your assumptions about what customers want before investing heavily in building it. Built around the Minimum Viable Product concept and the Build-Measure-Learn feedback loop.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> The core principle maps perfectly to 3D printing: print the minimum version that tests your key assumption, get feedback, improve. Stops you building full production runs of things nobody wants.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">Prototyping and Modelmaking for Product Design</div>
-        <div class="book-card-author">Bjarki Hallgrimsson · 2012</div>
-        <p class="book-card-summary">A practical, visual guide to prototyping physical products — covering sketch models, appearance models, functional prototypes, and how to plan a prototyping strategy. Written specifically for industrial and product designers.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> The only book on this list written specifically about physical prototyping. Highly practical for someone with 3D printing capability.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Lean-Startup-Eric-Ries/dp/0307887898" target="_blank" class="book-title-link">The Lean Startup</a></div>
+            <div class="book-card-author">Eric Ries · 2011</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Ries wrote The Lean Startup in response to a pattern he observed repeatedly: talented teams building products with great care and technical skill — only to launch them and discover that nobody wanted them. The problem wasn't execution; it was that they had been executing against the wrong assumptions. The solution is to treat those assumptions as hypotheses and test them as cheaply and quickly as possible before committing to full production.</p>
+        <p class="book-card-summary">The core engine of the book is the <strong>Build-Measure-Learn loop</strong>. Every cycle starts with identifying your most important untested assumption — the thing that, if wrong, would cause the whole idea to fail. You then build the smallest possible thing that tests that assumption (the Minimum Viable Product, or MVP), measure what actually happens when real people encounter it, and use what you learn to decide whether to persevere with the current direction or pivot to a new one.</p>
+        <p class="book-card-summary">The <strong>MVP</strong> is often misunderstood as a rough version of the final product. Ries is clear that it's something different: it's the fastest, cheapest thing that tests a specific hypothesis. Sometimes it's a landing page with no product behind it, just to see if people click "buy." Sometimes it's a manual service delivered by hand before building any automation. For a 3D printing seller, an MVP might be a photo of a product concept posted in a relevant Facebook group before printing a single copy — just to see if people ask where to buy it.</p>
+        <p class="book-card-summary">The book also introduces <strong>innovation accounting</strong> — the idea that startups (and any small creative business) need different metrics than established companies. Rather than measuring revenue (which is a lagging indicator), you measure the assumptions underlying future revenue: Are people finding the product? Are they returning? Are they telling others? Tracking these leading indicators tells you whether you're making real progress or just busy.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> The core principle maps perfectly to 3D printing: print the minimum version that tests your key assumption, get feedback, improve. Stops you building full production runs of things nobody wants.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Prototyping-Modelmaking-Product-Design-Portfolio-ebook/dp/B00JB8I8T2" target="_blank" class="book-title-link">Prototyping and Modelmaking for Product Design</a></div>
+            <div class="book-card-author">Bjarki Hallgrimsson · 2012</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Hallgrimsson's book treats prototyping not as a single activity but as a family of related activities, each serving a different purpose at a different stage of the design process. Understanding which type of prototype to make — and why — is as important as knowing how to make it.</p>
+        <p class="book-card-summary"><strong>Sketch models</strong> are the earliest and roughest form — made quickly from foam, cardboard, or tape to explore the size, proportion, and feel of an idea in three dimensions. Their purpose is not to look good but to get an idea out of your head and into the physical world, where it can be evaluated honestly. A sketch model that takes 20 minutes to make can answer questions about ergonomics and scale that hours of CAD cannot.</p>
+        <p class="book-card-summary"><strong>Appearance models</strong> (sometimes called looks-like prototypes) focus on the aesthetic qualities of a product — surface finish, colour, material feel — without necessarily functioning. They're used to evaluate whether something looks right and to get reactions from potential customers before committing to production tooling. <strong>Functional prototypes</strong> (works-like prototypes) test the mechanical or structural behaviour of a design — whether it clicks, holds weight, fits together, or moves correctly — without necessarily looking finished.</p>
+        <p class="book-card-summary">The book makes a strong argument for prototyping in parallel rather than in sequence — building multiple rough concepts simultaneously rather than perfecting one at a time. This prevents premature attachment to a single idea and keeps options open longer. It also covers <strong>user testing with prototypes</strong>: how to present them to people, what questions to ask, and how to interpret the feedback you get — including how to distinguish between "I wouldn't buy this" feedback (about the concept) and "this part doesn't work well" feedback (about the execution).</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> The only book on this list written specifically about physical prototyping. Highly practical for someone with 3D printing capability.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ycombinator" target="_blank"><span class="video-channel">Y Combinator</span></a><span class="video-topic"> Talks on MVP, user testing, and iteration by founders</span><span class="video-why">— hard-nosed startup thinking on how to test ideas before committing resources</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@ProductDesignOnline" target="_blank"><span class="video-channel">Product Design Online</span></a><span class="video-topic"> Iteration and refinement in Fusion 360</span><span class="video-why">— shows how to build iterative design thinking into your CAD workflow</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@EvanAndKatelyn" target="_blank"><span class="video-channel">Evan &amp; Katelyn</span></a><span class="video-topic"> Making-and-selling process vlogs</span><span class="video-why">— popular maker couple who openly share their product development and testing process</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Y+Combinator+minimum+viable+product+user+testing+iteration" target="_blank"><span class="video-channel">Y Combinator</span></a><span class="video-topic"> Minimum viable product &amp; user testing — founder talks</span><span class="video-why">— hard-nosed startup thinking on how to test ideas before committing resources</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Product+Design+Online+iteration+refinement+Fusion+360" target="_blank"><span class="video-channel">Product Design Online</span></a><span class="video-topic"> Iteration &amp; refinement workflow in Fusion 360</span><span class="video-why">— shows how to build iterative design thinking into your CAD workflow</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Evan+and+Katelyn+making+selling+product+development+process" target="_blank"><span class="video-channel">Evan &amp; Katelyn</span></a><span class="video-topic"> Making &amp; selling — product development process vlogs</span><span class="video-why">— popular maker couple who openly share their product development and testing process</span></span></li>
       </ul>
     </div>
 
@@ -875,26 +1041,46 @@
 
     <div class="sub-section">
       <p class="sub-label">📚 Books</p>
-      <div class="book-card">
-        <div class="book-card-title">Obviously Awesome <span style="color:#7a8099;font-size:13px;font-family:'Courier New', monospace">(revisited)</span></div>
-        <div class="book-card-author">April Dunford · 2019</div>
-        <p class="book-card-summary">Referenced in Module 2, but worth revisiting here for its insights on communicating value. Dunford's positioning framework directly informs how you write product descriptions, choose photos, and set prices in your shop.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Re-read with a focus on the chapters about value and competitive alternatives. You'll see your listings quite differently.</p>
-      </div>
-      <div class="book-card">
-        <div class="book-card-title">Building a StoryBrand</div>
-        <div class="book-card-author">Donald Miller · 2017</div>
-        <p class="book-card-summary">Miller argues that customers don't buy the best product — they buy the product they can understand fastest. Provides a seven-part narrative framework for clarifying your message so buyers immediately grasp what you do and why it matters to them.</p>
-        <p class="book-card-relevance"><strong>Why it matters for you:</strong> Immediately applicable to product titles, descriptions, and your shop's About page. Helps your listings communicate value in seconds rather than paragraphs.</p>
-      </div>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Obviously-Awesome-Product-Positioning-Customers/dp/1999023005" target="_blank" class="book-title-link">Obviously Awesome</a> <span style="color:#7a8099;font-size:13px;font-family:'Courier New', monospace">(revisited)</span></div>
+            <div class="book-card-author">April Dunford · 2019</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">When revisited through the lens of pricing and value communication, Dunford's book reveals a layer that's easy to miss on first reading: positioning doesn't just determine who buys your product — it determines how much they're willing to pay for it.</p>
+        <p class="book-card-summary">The concept of <strong>competitive alternatives</strong> is especially relevant here. Your price is always evaluated relative to the alternative a customer would use if your product didn't exist. If the alternative is a cheap mass-produced version of what you make, your positioning needs to explicitly frame why yours is worth more — through context, story, and specificity. If the alternative is a completely different category of solution (hiring someone, doing without, making their own), you have more pricing freedom because the comparison is harder to make directly.</p>
+        <p class="book-card-summary">Dunford's chapter on <strong>market categories</strong> is the most useful for pricing. The category you position yourself in sets a price expectation before the customer has even looked at your product. A "desk tidy" competes with £5 options from supermarkets; a "handcrafted walnut desk organiser" operates in a different category with different price expectations. Small changes in framing — the words you use, the photos you take, the context you create — can move a product between categories entirely, with significant pricing implications.</p>
+        <p class="book-card-summary">The book also addresses the risk of <strong>under-positioning</strong> — failing to stake out a clear position and trying to appeal to everyone. Products positioned for everyone tend to be chosen by nobody, because they don't speak clearly to anyone's specific situation. Narrowing your positioning feels risky but almost always increases both conversion and the price customers are willing to accept.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Re-read with a focus on the chapters about value and competitive alternatives. You'll see your listings quite differently.</p>
+        </div>
+      </details>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Building-StoryBrand-Miller-Donald/dp/1400201837" target="_blank" class="book-title-link">Building a StoryBrand</a></div>
+            <div class="book-card-author">Donald Miller · 2017</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+        <p class="book-card-summary">Miller's central claim is that most businesses fail to communicate clearly not because their products are bad, but because they position themselves as the hero of the story rather than the guide. Customers don't want to buy from heroes — they want to be the hero themselves, with your product as the tool that helps them succeed. Clarifying this relationship transforms how you describe what you sell.</p>
+        <p class="book-card-summary">The StoryBrand framework has seven elements, drawn from the structure of narrative that appears in stories across cultures. The <strong>character</strong> is the customer — not you, not your product. The <strong>problem</strong> is what the customer is struggling with (which exists at three levels: the external problem they can articulate, the internal frustration they feel because of it, and the philosophical sense that things shouldn't be this way). The <strong>guide</strong> is you — showing up with empathy (you understand their problem) and authority (you've solved it before).</p>
+        <p class="book-card-summary">The guide then presents a <strong>plan</strong> — a simple, clear set of steps that remove the customer's uncertainty about how to proceed. This is followed by a <strong>call to action</strong> — asking the customer to do something specific, directly. Miller is emphatic that vague calls to action ("check us out," "learn more") perform far worse than specific ones ("buy now," "order yours today"). The story arc resolves in two directions: success (what the customer's life looks like after buying) and failure (what remains true if they don't act).</p>
+        <p class="book-card-summary">For Etsy sellers, the most immediately useful application is in <strong>product descriptions and shop copy</strong>. Most product descriptions describe the product ("this stand is made from PETG and measures 12cm wide"). The StoryBrand approach describes the customer's life ("keep your workbench clear and your tools where you can reach them"). The shift from product-centred to customer-centred language consistently increases both engagement and conversion.</p>
+          <p class="book-card-relevance"><strong>Why it matters for you:</strong> Immediately applicable to product titles, descriptions, and your shop's About page. Helps your listings communicate value in seconds rather than paragraphs.</p>
+        </div>
+      </details>
     </div>
 
     <div class="sub-section">
       <p class="sub-label">🎬 Videos</p>
       <ul class="video-list">
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/thefuturishere" target="_blank"><span class="video-channel">The Futur</span></a><span class="video-topic"> Pricing psychology and value-based pricing talks</span><span class="video-why">— excellent explainers on why undercharging is a design problem, not just a business one</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@EtsySeller" target="_blank"><span class="video-channel">Etsy Seller Handbook</span></a><span class="video-topic"> Pricing strategies for handmade product sellers</span><span class="video-why">— platform-specific but grounded in real maker economics</span></span></li>
-        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/@AlexHormozi" target="_blank"><span class="video-channel">Alex Hormozi</span></a><span class="video-topic"> Value creation and offer framing content</span><span class="video-why">— blunt, practical content on how to frame and communicate what you sell</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=The+Futur+pricing+psychology+value+based+pricing+creative" target="_blank"><span class="video-channel">The Futur</span></a><span class="video-topic"> Pricing psychology &amp; value-based pricing — The Futur</span><span class="video-why">— excellent explainers on why undercharging is a design problem, not just a business one</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Etsy+pricing+strategy+handmade+products+how+to+price" target="_blank"><span class="video-channel">Etsy seller advice</span></a><span class="video-topic"> Pricing strategies for handmade products — Etsy seller guide</span><span class="video-why">— platform-specific but grounded in real maker economics</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Alex+Hormozi+value+creation+offer+framing+how+to+sell" target="_blank"><span class="video-channel">Alex Hormozi</span></a><span class="video-topic"> Value creation &amp; offer framing — how to communicate what you sell</span><span class="video-why">— blunt, practical content on how to frame and communicate what you sell</span></span></li>
       </ul>
     </div>
 
