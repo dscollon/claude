@@ -482,7 +482,7 @@
         <div class="detail-item"><label>Overcurrent Trip</label><span>~3A (DW01A + FS8205A)</span></div>
         <div class="detail-item"><label>Battery Terminals</label><span>B+ / B− pads</span></div>
         <div class="detail-item"><label>Output Terminals</label><span>OUT+ / OUT− pads (protected)</span></div>
-        <div class="detail-item"><label>Status LEDs</label><span>Red (charging), Green (full) — on-board</span></div>
+        <div class="detail-item"><label>Status LEDs</label><span>Red (charging), Blue (full) — on-board</span></div>
       </div>
       <div class="detail-desc">Your module contains the full charge and protection circuit. <strong>Always connect the LDO to OUT+/OUT−</strong>, not to B+/B−. The OUT terminals are on the load side of the protection FETs — connecting directly to B+/B− would bypass the overdischarge protection entirely. The module's on-board USB-C socket handles CC resistors and polyfusing internally; no additional input-side components are needed on your PCB.</div>
     </div>
@@ -554,8 +554,8 @@
       <!-- Status LEDs inside module -->
       <circle cx="185" cy="135" r="5" fill="none" stroke="#e05050" stroke-width="1.5"/>
       <text x="193" y="138" fill="#803030" font-size="7" font-family="Courier New">RED</text>
-      <circle cx="225" cy="135" r="5" fill="none" stroke="#50c050" stroke-width="1.5"/>
-      <text x="233" y="138" fill="#306030" font-size="7" font-family="Courier New">GRN</text>
+      <circle cx="225" cy="135" r="5" fill="none" stroke="#5090e0" stroke-width="1.5"/>
+      <text x="233" y="138" fill="#304070" font-size="7" font-family="Courier New">BLU</text>
       <text x="185" y="152" fill="#2a3030" font-size="7" font-family="Courier New">on-board LEDs</text>
 
       <!-- Arrow TP4056 → Cell -->
