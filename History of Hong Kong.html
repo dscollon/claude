@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The History of Hong Kong · A Study Syllabus</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0e0f13;
+    color: #d8dce8;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 28px 80px; }
+
+  /* ── HERO ─────────────────────────────────────────────────────── */
+  .hero {
+    padding: 64px 0 52px;
+    border-bottom: 1px solid #2a2e3d;
+    margin-bottom: 48px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #c9a84c;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .hero-title {
+    font-family: Georgia, serif;
+    font-size: 40px;
+    font-weight: normal;
+    color: #eef0f7;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: #7a8099;
+    margin-bottom: 28px;
+    max-width: 640px;
+    line-height: 1.6;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hero-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #1b1e28;
+    border: 1px solid #2a2e3d;
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 13px;
+    color: #d8dce8;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-pill span {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── OVERVIEW TABLE ──────────────────────────────────────────── */
+  .overview { margin-bottom: 52px; }
+
+  .section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5b8dee;
+    margin-bottom: 14px;
+  }
+
+  .overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .overview-table th {
+    text-align: left;
+    padding: 9px 14px;
+    background: #15171e;
+    color: #7a8099;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2e3d;
+  }
+
+  .overview-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #1f2230;
+    vertical-align: top;
+  }
+
+  .overview-table tr:last-child td { border-bottom: none; }
+  .overview-table tr:hover td { background: #13151d; }
+
+  .mod-num {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #5b8dee;
+    white-space: nowrap;
+    width: 36px;
+  }
+
+  .mod-title-cell a {
+    color: #d8dce8;
+    border-bottom: 1px solid #2a2e3d;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .mod-title-cell a:hover { color: #5b8dee; border-bottom-color: #5b8dee; }
+
+  .dur-cell {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #c9a84c;
+    white-space: nowrap;
+  }
+
+  .skill-cell { color: #7a8099; font-size: 13px; }
+
+  /* ── DIVIDER ─────────────────────────────────────────────────── */
+  .divider {
+    border: none;
+    border-top: 1px solid #2a2e3d;
+    margin: 48px 0;
+  }
+
+  /* ── MODULE ──────────────────────────────────────────────────── */
+  .module { margin-bottom: 12px; }
+
+  .module-header {
+    display: flex;
+    gap: 22px;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+
+  .module-number {
+    font-family: 'Courier New', monospace;
+    font-size: 36px;
+    color: #2a2e3d;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 4px;
+    min-width: 52px;
+  }
+
+  .module-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #5b8dee;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .module-title {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    font-weight: normal;
+    color: #eef0f7;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+
+  .module-desc {
+    color: #7a8099;
+    font-size: 14px;
+    max-width: 620px;
+  }
+
+  .sub-section { margin-bottom: 26px; }
+
+  .sub-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #5b8dee;
+    margin-bottom: 12px;
+  }
+
+  .learn-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .learn-list li {
+    padding: 5px 0 5px 18px;
+    position: relative;
+    color: #d8dce8;
+    font-size: 14px;
+    border-bottom: 1px solid #1f2230;
+  }
+
+  .learn-list li:last-child { border-bottom: none; }
+
+  .learn-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: #5b8dee;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* ── GOVERNOR TABLE ──────────────────────────────────────────── */
+  .gov-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .gov-table th {
+    text-align: left;
+    padding: 7px 12px;
+    background: #15171e;
+    color: #7a8099;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2e3d;
+  }
+
+  .gov-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #1a1c26;
+    vertical-align: top;
+  }
+
+  .gov-table tr:last-child td { border-bottom: none; }
+  .gov-table tr:hover td { background: #13151d; }
+
+  .gov-name { color: #eef0f7; font-weight: 500; }
+  .gov-years { font-family: 'Courier New', monospace; color: #c9a84c; font-size: 12px; white-space: nowrap; }
+  .gov-notes { color: #7a8099; font-size: 13px; line-height: 1.5; }
+  .gov-notes strong { color: #a8b0c8; }
+
+  /* ── BOOK CARDS ──────────────────────────────────────────────── */
+  .book-card {
+    background: #1b1e28;
+    border: 1px solid #2a2e3d;
+    border-left: 3px solid #5b8dee;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .book-card:hover { background: #1f2230; }
+  .book-card[open] { border-left-color: #e07b4f; }
+
+  .book-card summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .book-card summary::-webkit-details-marker { display: none; }
+
+  .book-card-toggle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid #2a2e3d;
+    background: #15171e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #5b8dee;
+    transition: transform 0.2s, background 0.2s;
+    font-family: 'Courier New', monospace;
+    line-height: 1;
+  }
+
+  .book-card[open] .book-card-toggle {
+    transform: rotate(45deg);
+    background: rgba(91,141,238,0.12);
+  }
+
+  .book-card-header { flex: 1; min-width: 0; }
+
+  .book-card-title {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: #eef0f7;
+    margin-bottom: 2px;
+  }
+
+  .book-title-link {
+    color: #eef0f7;
+    text-decoration: none;
+    border-bottom: 1px solid #5b8dee;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .book-title-link:hover { color: #5b8dee; border-bottom-color: #5b8dee; }
+
+  .book-card-author {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #c9a84c;
+  }
+
+  .book-card-body {
+    padding: 0 20px 16px 54px;
+    border-top: 1px solid #2a2e3d;
+    padding-top: 14px;
+  }
+
+  .book-card-summary {
+    font-size: 14px;
+    color: #7a8099;
+    line-height: 1.72;
+    margin-bottom: 10px;
+  }
+
+  .book-card-summary + .book-card-summary { margin-top: 6px; }
+
+  .book-card-summary strong { color: #a8b0c8; font-weight: 600; }
+
+  .book-card-relevance {
+    font-size: 13px;
+    color: #d8dce8;
+    background: rgba(91,141,238,0.07);
+    border-left: 2px solid #5b8dee;
+    padding: 8px 12px;
+    border-radius: 0 3px 3px 0;
+    font-style: italic;
+    margin-top: 12px;
+  }
+
+  .book-card-relevance strong {
+    color: #5b8dee;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ── VIDEO LIST ──────────────────────────────────────────────── */
+  .video-list { list-style: none; padding: 0; }
+
+  .video-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1c26;
+    font-size: 14px;
+  }
+
+  .video-item:last-child { border-bottom: none; }
+
+  .video-icon { color: #e07b4f; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+
+  .yt-link { color: #e07b4f; border-bottom: 1px solid rgba(224,123,79,0.3); transition: border-color 0.15s; }
+  .yt-link:hover { border-bottom-color: #e07b4f; }
+
+  .video-channel { font-weight: 600; }
+  .video-topic { color: #d8dce8; }
+  .video-why { color: #7a8099; }
+
+  /* ── EXERCISE BOX ────────────────────────────────────────────── */
+  .exercise-box {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-left: 3px solid #c9a84c;
+    border-radius: 0 4px 4px 0;
+    padding: 16px 20px;
+  }
+
+  .exercise-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 8px;
+  }
+
+  .exercise-box p { font-size: 14px; color: #d8dce8; line-height: 1.65; }
+
+  /* ── REF TABLE ───────────────────────────────────────────────── */
+  .ref-section { margin-top: 48px; }
+
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .ref-table th {
+    text-align: left;
+    padding: 9px 14px;
+    background: #15171e;
+    color: #7a8099;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2e3d;
+  }
+
+  .ref-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #1a1c26;
+    vertical-align: top;
+  }
+
+  .ref-table tr:last-child td { border-bottom: none; }
+  .ref-table tr:hover td { background: #13151d; }
+
+  /* ── GOVERNORS GLANCE TABLE ──────────────────────────────────── */
+  .gov-glance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .gov-glance-table th {
+    text-align: left;
+    padding: 9px 14px;
+    background: #15171e;
+    color: #7a8099;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2a2e3d;
+  }
+
+  .gov-glance-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #1a1c26;
+    vertical-align: top;
+  }
+
+  .gov-glance-table tr:last-child td { border-bottom: none; }
+  .gov-glance-table tr:hover td { background: #13151d; }
+
+  /* ── CLOSING ─────────────────────────────────────────────────── */
+  .closing {
+    background: #15171e;
+    border: 1px solid #2a2e3d;
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin-top: 48px;
+  }
+
+  .closing h2 {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: normal;
+    color: #eef0f7;
+    margin-bottom: 14px;
+  }
+
+  .closing p {
+    font-size: 14px;
+    color: #7a8099;
+    line-height: 1.72;
+    margin-bottom: 10px;
+  }
+
+  .closing p:last-child { margin-bottom: 0; }
+  .closing strong { color: #a8b0c8; }
+  .closing em { color: #d8dce8; }
+
+  /* ── FOOTER ──────────────────────────────────────────────────── */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0 0;
+    margin-top: 32px;
+    border-top: 1px solid #2a2e3d;
+  }
+
+  .footer-text { font-size: 12px; color: #7a8099; font-family: 'Courier New', monospace; }
+
+  .total-pill {
+    background: #1b1e28;
+    border: 1px solid #2a2e3d;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    color: #5b8dee;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Self-Study Syllabus</p>
+    <h1 class="hero-title">The History of Hong Kong</h1>
+    <p class="hero-subtitle">From the Opium Wars and first British settlement to the 1997 handover — covering politics, administration, culture, society, and every Governor who shaped the colony.</p>
+    <div class="hero-pills">
+      <div class="hero-pill"><span style="background:#5b8dee"></span> 9 Modules</div>
+      <div class="hero-pill"><span style="background:#e07b4f"></span> 28 Governors</div>
+      <div class="hero-pill"><span style="background:#c9a84c"></span> 12 Books</div>
+      <div class="hero-pill"><span style="background:#7a8099"></span> 12–16 weeks · casual pace</div>
+    </div>
+  </header>
+
+  <!-- OVERVIEW TABLE -->
+  <section class="overview">
+    <p class="section-label">Overview</p>
+    <table class="overview-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Module</th>
+          <th>Duration</th>
+          <th>Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mod-num">01</td>
+          <td class="mod-title-cell"><a href="#module-1">Origins &amp; the Opium Wars, 1839–1860</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">Why Britain took Hong Kong and what the first governors found</td>
+        </tr>
+        <tr>
+          <td class="mod-num">02</td>
+          <td class="mod-title-cell"><a href="#module-2">Building the Colony, 1860–1898</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">Early governance, trade, law, and colonial society</td>
+        </tr>
+        <tr>
+          <td class="mod-num">03</td>
+          <td class="mod-title-cell"><a href="#module-3">The New Territories &amp; Edwardian Era, 1898–1919</a></td>
+          <td class="dur-cell">1 wk</td>
+          <td class="skill-cell">Leasing the mainland hinterland and its consequences</td>
+        </tr>
+        <tr>
+          <td class="mod-num">04</td>
+          <td class="mod-title-cell"><a href="#module-4">Strikes, Wars &amp; Occupation, 1919–1945</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">Labour unrest, the fall of Hong Kong, and Japanese rule</td>
+        </tr>
+        <tr>
+          <td class="mod-num">05</td>
+          <td class="mod-title-cell"><a href="#module-5">Post-War Reconstruction &amp; Refugee Crisis, 1945–1960</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">Rebuilding, refugee influx after 1949, and the Cold War context</td>
+        </tr>
+        <tr>
+          <td class="mod-num">06</td>
+          <td class="mod-title-cell"><a href="#module-6">Riots, Reform &amp; Rising Prosperity, 1960–1971</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">The 1967 crisis, identity formation, and economic takeoff</td>
+        </tr>
+        <tr>
+          <td class="mod-num">07</td>
+          <td class="mod-title-cell"><a href="#module-7">The MacLehose Era &amp; the Golden Years, 1971–1982</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">The greatest reforming governor and Hong Kong's transformation</td>
+        </tr>
+        <tr>
+          <td class="mod-num">08</td>
+          <td class="mod-title-cell"><a href="#module-8">The Joint Declaration &amp; Countdown, 1982–1992</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">Sino-British negotiations, Tiananmen, and anxious transition</td>
+        </tr>
+        <tr>
+          <td class="mod-num">09</td>
+          <td class="mod-title-cell"><a href="#module-9">Patten, the Handover &amp; Legacy, 1992–1997</a></td>
+          <td class="dur-cell">1–2 wks</td>
+          <td class="skill-cell">The last governor, democratic reforms, and the midnight ceremony</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 1 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-1">
+    <div class="module-header">
+      <div class="module-number">01</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 01 · 1–2 weeks</p>
+        <h2 class="module-title">Origins &amp; the Opium Wars, 1839–1860</h2>
+        <p class="module-desc">The story of Hong Kong begins not with the island itself but with a trade dispute that became a war. Understanding why Britain wanted Hong Kong — and why China resented giving it up — is the foundation for everything that follows.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>The origins of the opium trade and the Qing dynasty's attempt to suppress it</li>
+        <li>The First Opium War (1839–1842) and the Treaty of Nanking — why Hong Kong Island was ceded "in perpetuity"</li>
+        <li>Why Lord Palmerston dismissed the acquisition as "a barren island with hardly a house upon it"</li>
+        <li>The Second Opium War (1856–1860) and the cession of Kowloon Peninsula</li>
+        <li>The early governors: Pottinger, Davis, Bonham, and Bowring — their characters and their conflicts</li>
+        <li>The founding of Victoria, the Legislative Council, and the colony's first institutions</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">01</td>
+            <td class="gov-name">Sir Henry Pottinger</td>
+            <td class="gov-years">1843–1844</td>
+            <td class="gov-notes">First governor; negotiated the Treaty of Nanking (1842); <strong>established the Legislative Council</strong>; named the capital city Victoria. Recalled after only a year — London considered Hong Kong more trouble than it was worth.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">02</td>
+            <td class="gov-name">Sir John Francis Davis</td>
+            <td class="gov-years">1844–1848</td>
+            <td class="gov-notes">Scholar-sinologist; <strong>introduced land registration and the first jury system</strong>. His attempts to tax the Chinese community and impose registration sparked the colony's first major unrest. Deeply unpopular and resigned.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">03</td>
+            <td class="gov-name">Sir Samuel Bonham</td>
+            <td class="gov-years">1848–1854</td>
+            <td class="gov-notes">Calmer stewardship; <strong>improved relations with Chinese community</strong>; expanded harbour infrastructure. Oversaw Hong Kong's emergence as a significant trading port.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">04</td>
+            <td class="gov-name">Sir John Bowring</td>
+            <td class="gov-years">1854–1859</td>
+            <td class="gov-notes">Polymath linguist and free-trade idealist; his handling of the Arrow incident <strong>precipitated the Second Opium War</strong>. The war ultimately secured the cession of Kowloon (1860) and opened more Chinese ports to trade.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/History-Hong-Kong-Frank-Welsh/dp/000638871X" target="_blank" class="book-title-link">A History of Hong Kong</a></div>
+            <div class="book-card-author">Frank Welsh · 1993 (revised 1997)</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Welsh's book remains the most comprehensive single-volume account of British Hong Kong, written by a former international banker who brings an outsider's eye to the colony's often tangled political and commercial history. It is explicitly written from a British vantage point — Welsh acknowledges this openly — and is richest in its detailed portraits of governors, their personalities, and the relationship between the man on the spot in Hong Kong and an often indifferent or meddling government in London.</p>
+          <p class="book-card-summary">The early chapters are particularly strong on the <strong>origins of the opium trade</strong>, the personalities driving the First and Second Opium Wars, and the somewhat accidental nature of the colony's founding. Welsh shows that Hong Kong was never a grand imperial design but rather a pragmatic solution to a commercial problem — securing a base for British merchants in southern China — that subsequently grew into something far larger than anyone intended.</p>
+          <p class="book-card-summary">At over 600 pages, the book is dense but readable, organised around the governors' tenures. Its primary weakness, noted by reviewers, is its handling of the Chinese community as a largely undifferentiated backdrop rather than as agents in their own right — a limitation Tsang's book corrects.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Start here for Module 1. Welsh is strongest on the colonial government and the Opium War origins. Read alongside Tsang for the Chinese perspective. Ideal for Modules 1–4.</p>
+        </div>
+      </details>
+
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Modern-History-Hong-Kong-1841-1997/dp/1845114191" target="_blank" class="book-title-link">A Modern History of Hong Kong: 1841–1997</a></div>
+            <div class="book-card-author">Steve Tsang · 2004 (2007 paperback)</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Tsang, an Oxford academic who grew up in Hong Kong, wrote the book he felt was missing: a thorough history of the colony that gave equal weight to the British and Chinese sides. It draws on both British archives and Chinese sources — official and private — to trace the emergence of a unique Hong Kong identity within British colonial rule.</p>
+          <p class="book-card-summary">Where Welsh chronicles events through governors, Tsang follows three sustained questions: how and why did Hong Kong become so prosperous? What mark did British rule leave on its ethnic Chinese population? And how did a distinctive Hong Kong identity emerge — separate from both Britain and mainland China? His answers involve the pragmatic adaptation of Confucian governance principles within a British legal framework, creating a system that was neither democratic nor tyrannical but unusually effective.</p>
+          <p class="book-card-summary">Tsang is especially strong on the <strong>post-war period and the transition negotiations of the 1980s and 1990s</strong>, giving much more detail than Welsh on the Sino-British talks, the Tiananmen aftermath, and Patten's final governorship. Chris Patten described the book as "authoritative and well-researched."</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> The essential companion to Welsh throughout the course. Particularly valuable from Module 5 onwards, where it significantly deepens Welsh's account. Keep both books in hand simultaneously.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Opium+Wars+explained+history+China+Britain" target="_blank"><span class="video-channel">Oversimplified / Kings and Generals</span></a><span class="video-topic"> — The Opium Wars explained</span><span class="video-why"> — accessible animated or documentary-style overview of the wars that created Hong Kong</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+history+colonial+origins+documentary" target="_blank"><span class="video-channel">Documentary channels</span></a><span class="video-topic"> — Hong Kong's colonial origins</span><span class="video-why"> — search for BBC or NHK documentaries on early Hong Kong history</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Treaty+of+Nanking+1842+significance+history" target="_blank"><span class="video-channel">History channels</span></a><span class="video-topic"> — The Treaty of Nanking and its significance</span><span class="video-why"> — understanding what "ceded in perpetuity" meant and why it mattered so much to China</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Read the full text of the Treaty of Nanking (1842) — it is short and freely available online. Then read Article III carefully. Consider: from Britain's perspective, what was the purpose of acquiring Hong Kong Island? From China's perspective, what did ceding it "in perpetuity" mean? How does the 1898 New Territories lease — 99 years rather than perpetual — change the equation, and why did that matter in 1997?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 2 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-2">
+    <div class="module-header">
+      <div class="module-number">02</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 02 · 1–2 weeks</p>
+        <h2 class="module-title">Building the Colony, 1860–1898</h2>
+        <p class="module-desc">With Kowloon secured, Hong Kong begins to take shape as a trading entrepôt and colonial society — complete with racial hierarchies, remarkable Chinese merchant families, and governors of very different temperaments.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>How Hong Kong's free port status shaped its economic character from the beginning</li>
+        <li>The racial stratification of colonial society — laws that explicitly restricted Chinese residents</li>
+        <li>The rise of the Chinese merchant elite and institutions like the Tung Wah Hospital</li>
+        <li>Governor Hennessy's controversial effort to improve conditions for Chinese residents</li>
+        <li>The 1894 bubonic plague and its lasting impact on public health policy</li>
+        <li>Governor William Robinson and the leasing of the New Territories (Kowloon extension negotiations)</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">05</td>
+            <td class="gov-name">Sir Hercules Robinson</td>
+            <td class="gov-years">1859–1865</td>
+            <td class="gov-notes">Youngest-ever governor (35); <strong>oversaw formal cession of Kowloon</strong> (1860); improved roads and drainage; established the Peak as the European residential area. Pragmatic administrator respected by both communities.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">06</td>
+            <td class="gov-name">Sir Richard MacDonnell</td>
+            <td class="gov-years">1866–1872</td>
+            <td class="gov-notes">Energetic reformer; <strong>abolished flogging</strong> of Chinese offenders; reformed the police; encouraged Chinese participation in public life. Laid much of the colony's legal infrastructure.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">07</td>
+            <td class="gov-name">Sir Arthur Kennedy</td>
+            <td class="gov-years">1872–1877</td>
+            <td class="gov-notes">Steady hand; focused on <strong>harbour works and public health</strong>; presided over significant growth in trade. Generally popular with both communities.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">08</td>
+            <td class="gov-name">Sir John Pope Hennessy</td>
+            <td class="gov-years">1877–1882</td>
+            <td class="gov-notes">Iconoclast; the only governor with Irish Catholic sympathies for colonial subjects; <strong>advocated strongly for Chinese rights</strong>, appointed Chinese to jury service, and clashed repeatedly with the European merchant community. Deeply controversial but historically significant for humanising colonial policy.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">09</td>
+            <td class="gov-name">Sir George Bowen</td>
+            <td class="gov-years">1883–1885</td>
+            <td class="gov-notes">Brief tenure; consolidated Hennessy's reforms. Focused on education and public works.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">10</td>
+            <td class="gov-name">Sir William Des Voeux</td>
+            <td class="gov-years">1887–1891</td>
+            <td class="gov-notes"><strong>Founded the Hong Kong dollar</strong> as the territory's standard currency; oversaw rapid commercial expansion; improved public health infrastructure. Sympathetic to Chinese community welfare.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">11</td>
+            <td class="gov-name">Sir William Robinson</td>
+            <td class="gov-years">1891–1898</td>
+            <td class="gov-notes">Governed through the devastating <strong>bubonic plague of 1894</strong>; his handling — demolishing Chinese housing in Tai Ping Shan — caused lasting resentment but contained the outbreak. <strong>Negotiated the 99-year lease of the New Territories</strong> (1898).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Concise-History-Critical-Issues-International-ebook/dp/B00E2Q79NO" target="_blank" class="book-title-link">A Concise History of Hong Kong</a></div>
+            <div class="book-card-author">John M. Carroll · 2007</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Carroll's book is the most accessible and balanced single-volume history of Hong Kong, written by a professor at the University of Hong Kong who is equally at home with British colonial history, Chinese history, and the emerging field of Hong Kong studies. At around 270 pages it is concise without being superficial — carefully selected and clearly written.</p>
+          <p class="book-card-summary">One of Carroll's great strengths is his treatment of <strong>the Chinese community not as a passive subject of colonial rule but as active participants in shaping Hong Kong's society</strong>. He pays close attention to Chinese merchant elites, the Tung Wah Hospital directors, the District Watch Committee, and other institutions through which the Chinese community governed itself within the colonial framework. This perspective — largely absent in Welsh and partially present in Tsang — is invaluable for understanding how Hong Kong's unique social character developed.</p>
+          <p class="book-card-summary">Carroll is also excellent on questions of identity, showing how Hong Kong's Chinese residents gradually developed a sense of local identity distinct both from their British rulers and from mainland China — a process that accelerated in the post-war period and reached its culmination in the 1980s–90s. He concludes with a thoughtful analysis of the colonial legacies that shaped Hong Kong after 1997.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Excellent entry point for Module 2 onwards. Carroll is the most readable of the three main histories and the most consistent in keeping Chinese voices in view. Highly recommended for those who find Welsh too dense.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+Victorian+colonial+society+history" target="_blank"><span class="video-channel">History documentaries</span></a><span class="video-topic"> — Victorian colonial Hong Kong and its social structure</span><span class="video-why"> — look for documentary coverage of the merchant families, racial laws, and early urban development</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Tung+Wah+Hospital+Hong+Kong+history+colonial" target="_blank"><span class="video-channel">Hong Kong heritage channels</span></a><span class="video-topic"> — The Tung Wah Hospital and Chinese community institutions</span><span class="video-why"> — understanding how the Chinese community self-governed within the colonial structure</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+1894+bubonic+plague+history" target="_blank"><span class="video-channel">Medical history channels</span></a><span class="video-topic"> — The 1894 bubonic plague in Hong Kong</span><span class="video-why"> — one of the defining public health crises of colonial Hong Kong</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Choose one of the following governors and research them in detail: Pope Hennessy (the iconoclast who defended Chinese rights) or William Des Voeux (who founded the Hong Kong dollar). Write a short character study — what drove them, what they achieved, what opposition they faced, and what their legacy was. What does their governor's biography reveal about the tensions inherent in colonial administration?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 3 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-3">
+    <div class="module-header">
+      <div class="module-number">03</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 03 · 1 week</p>
+        <h2 class="module-title">The New Territories &amp; Edwardian Era, 1898–1919</h2>
+        <p class="module-desc">The 99-year lease of the New Territories in 1898 doubled Hong Kong's land area — but it planted the seed of the colony's end. This module covers the expansion and the early 20th century governors who consolidated British rule.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>Why Britain leased the New Territories rather than demanding perpetual cession</li>
+        <li>The resistance of the New Territories clans and its suppression</li>
+        <li>Governor Henry Blake's negotiations with the indigenous population</li>
+        <li>Hong Kong's role in the 1911 Chinese Revolution — Sun Yat-sen and his connections to the colony</li>
+        <li>The expansion of trade, banking, and the early financial sector</li>
+        <li>Governor Frederick Lugard and the founding of the University of Hong Kong (1911)</li>
+        <li>World War I and Hong Kong's minor but real contribution</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">12</td>
+            <td class="gov-name">Sir Henry Blake</td>
+            <td class="gov-years">1898–1903</td>
+            <td class="gov-notes"><strong>Negotiated the New Territories lease and its implementation</strong>; oversaw the (forced) expansion of the colony; attempted to accommodate indigenous clan customs to reduce friction. Established the Heung Yee Kuk advisory body for New Territories villagers.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">13</td>
+            <td class="gov-name">Sir Matthew Nathan</td>
+            <td class="gov-years">1904–1907</td>
+            <td class="gov-notes">Engineer-governor; <strong>built the Kowloon-Canton Railway</strong> (begun) and improved road infrastructure. Focused on practical development rather than political reform.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">14</td>
+            <td class="gov-name">Sir Frederick Lugard</td>
+            <td class="gov-years">1907–1912</td>
+            <td class="gov-notes">Noted colonial administrator; <strong>founded the University of Hong Kong in 1911</strong> — the colony's first university — as a deliberate attempt to educate Chinese students in Western learning. A significant and lasting achievement.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">15</td>
+            <td class="gov-name">Sir Francis May</td>
+            <td class="gov-years">1912–1919</td>
+            <td class="gov-notes">Former police superintendent; governed through World War I; <strong>oversaw the construction of the Kowloon-Canton Railway</strong> (completed 1910) and major harbour reclamation works. Experienced administrator who had spent his career in Hong Kong.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title">Continue: <a href="https://www.amazon.co.uk/History-Hong-Kong-Frank-Welsh/dp/000638871X" target="_blank" class="book-title-link">A History of Hong Kong</a> (Welsh) · Chapters on 1898–1919</div>
+            <div class="book-card-author">Frank Welsh</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Welsh's chapters on the New Territories acquisition and the Edwardian era are detailed and rich in primary source material. He traces the diplomatic manoeuvring that led to the 99-year lease rather than perpetual cession — a decision driven partly by the political climate in Britain at the time, where there was reluctance to annex Chinese territory outright, and partly by the Qing dynasty's insistence.</p>
+          <p class="book-card-summary">His portrait of Governor Lugard and the founding of the University of Hong Kong is particularly good — showing how even in this period there was a tension between those who wanted to educate the Chinese population (believing this would stabilise the colony) and those who feared an educated Chinese populace might become politically inconvenient.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Continue Welsh from where you left off. This is a relatively short period — one or two chapters — so combine with supplementary reading on Sun Yat-sen and Hong Kong's relationship with the 1911 Revolution.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=New+Territories+Hong+Kong+lease+1898+history" target="_blank"><span class="video-channel">History channels</span></a><span class="video-topic"> — The New Territories lease of 1898</span><span class="video-why"> — why a lease rather than cession and what it meant for 1997</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Sun+Yat+sen+Hong+Kong+connection+history" target="_blank"><span class="video-channel">History documentaries</span></a><span class="video-topic"> — Sun Yat-sen and Hong Kong</span><span class="video-why"> — the father of the Chinese Republic was educated and politicised in Hong Kong</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=University+of+Hong+Kong+history+founding+1911" target="_blank"><span class="video-channel">HKU / heritage channels</span></a><span class="video-topic"> — The founding of the University of Hong Kong</span><span class="video-why"> — one of the lasting institutional legacies of the colonial era</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Research the Convention of Peking (1898) which formalised the New Territories lease. Why was the lease set at 99 years? Compare it with the treaty terms for Hong Kong Island (perpetual cession) and Kowloon (also perpetual). Then consider: in 1898, did anyone imagine the lease would expire in 1997? What assumptions were being made about the longevity of the British Empire and Chinese sovereignty?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 4 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-4">
+    <div class="module-header">
+      <div class="module-number">04</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 04 · 1–2 weeks</p>
+        <h2 class="module-title">Strikes, Wars &amp; Occupation, 1919–1945</h2>
+        <p class="module-desc">The interwar years brought devastating labour unrest, a flourishing cultural scene, and then catastrophe — the Japanese invasion of December 1941 and three years and eight months of brutal occupation that permanently changed Hong Kong's relationship with Britain.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>The Seamen's Strike of 1922 and the Canton-Hong Kong General Strike of 1925–26</li>
+        <li>Governor Stubbs's response to labour unrest and its political consequences</li>
+        <li>Governor Clementi and efforts to engage with Chinese nationalism</li>
+        <li>The growing Japanese threat and Hong Kong's woeful unpreparedness in 1941</li>
+        <li>The Battle of Hong Kong (8–25 December 1941) — 18 days of resistance</li>
+        <li>Japanese military governance under Rensuke Isogai — internment, starvation, and atrocities</li>
+        <li>Governor Young's surrender and captivity — and why this mattered for post-war politics</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">16</td>
+            <td class="gov-name">Sir Reginald Stubbs</td>
+            <td class="gov-years">1919–1925</td>
+            <td class="gov-notes">Governed through severe labour unrest including the <strong>Seamen's Strike (1922)</strong> and the start of the Canton-Hong Kong strike (1925). Took a hard line against labour agitation; his tenure exposed the fragility of the colony's relationship with its Chinese workforce.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">17</td>
+            <td class="gov-name">Sir Cecil Clementi</td>
+            <td class="gov-years">1925–1930</td>
+            <td class="gov-notes">Unusual in speaking fluent Cantonese; <strong>resolved the 1925–26 strike</strong> through a combination of firmness and negotiation. Attempted to improve relations with Chinese nationalists and promote Chinese cultural education. A nuanced figure.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">18</td>
+            <td class="gov-name">Sir William Peel</td>
+            <td class="gov-years">1930–1935</td>
+            <td class="gov-notes">Governed through the Great Depression; focused on <strong>fiscal austerity and economic survival</strong>. Faced the difficult task of maintaining services while revenues collapsed.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">19</td>
+            <td class="gov-name">Sir Andrew Caldecott</td>
+            <td class="gov-years">1935–1937</td>
+            <td class="gov-notes">Short tenure; focused on defence improvements as Japanese aggression in China increased. <strong>Commissioned studies on Hong Kong's military vulnerability</strong> — studies that were largely ignored in London.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">20</td>
+            <td class="gov-name">Sir Geoffrey Northcote</td>
+            <td class="gov-years">1937–1940</td>
+            <td class="gov-notes">Governed as Japan invaded mainland China; managed an enormous <strong>refugee influx from the Sino-Japanese War</strong>. Concerned about the colony's defences but unable to secure adequate resources from London.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">21</td>
+            <td class="gov-name">Sir Mark Young</td>
+            <td class="gov-years">1941–1947</td>
+            <td class="gov-notes">Surrendered to Japan on Christmas Day 1941 — the <strong>"Black Christmas"</strong> — after 18 days of resistance. Spent the war in Japanese captivity in Manchuria. Upon return, proposed the visionary but ultimately aborted <strong>Young Plan for democratic reform</strong>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Modern-History-Hong-Kong-1841-1997/dp/1845114191" target="_blank" class="book-title-link">A Modern History of Hong Kong</a> · Chapters on 1919–1945</div>
+            <div class="book-card-author">Steve Tsang</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Tsang's chapters on the interwar period and the Japanese occupation are among the most important in the book. He situates Hong Kong's 1925–26 strike not merely as a labour dispute but as a <strong>political event shaped by Chinese nationalism</strong> — the strikes were partly inspired by the May 30th Incident in Shanghai and reflected growing anti-imperialist sentiment across China.</p>
+          <p class="book-card-summary">His account of the Japanese occupation is detailed and unflinching: the internment of European civilians, the starvation that killed tens of thousands of Chinese residents, the forced deportations, and the systematic humiliation of the British that permanently damaged the prestige of empire in Chinese eyes. The occupation, Tsang argues, fundamentally changed the relationship between the colonial government and the Chinese population after 1945.</p>
+          <p class="book-card-summary">He also gives careful attention to the <strong>Young Plan</strong> — Governor Young's post-war proposal for a directly elected municipal council and greater Chinese representation in LegCo. The plan was radical by colonial standards and was killed by his successor Grantham, who feared it would destabilise the colony. Tsang sees this as a critical missed opportunity for democratic development.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Essential for this module. Tsang gives far more depth on the occupation and its consequences than Welsh.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Battle+of+Hong+Kong+1941+Japanese+invasion+documentary" target="_blank"><span class="video-channel">WWII documentary channels</span></a><span class="video-topic"> — The Battle of Hong Kong, December 1941</span><span class="video-why"> — 18 days of resistance and the fall of the colony</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Japanese+occupation+Hong+Kong+1941+1945+history" target="_blank"><span class="video-channel">History channels</span></a><span class="video-topic"> — Japanese occupation of Hong Kong 1941–1945</span><span class="video-why"> — three years and eight months that permanently changed the colony</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+Canton+General+Strike+1925+1926+history" target="_blank"><span class="video-channel">History documentaries</span></a><span class="video-topic"> — The Canton-Hong Kong General Strike 1925–26</span><span class="video-why"> — the most serious labour crisis in colonial history</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Research the Young Plan (1946) — Governor Young's proposal for democratic reform after the war. What did it propose? Who opposed it and why? Governor Grantham (who succeeded Young) killed it, arguing Hong Kong was not ready for democracy. Was this a principled decision or a political one? Consider also: if the Young Plan had been implemented in 1946, how might it have affected the 1997 handover negotiations?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 5 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-5">
+    <div class="module-header">
+      <div class="module-number">05</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 05 · 1–2 weeks</p>
+        <h2 class="module-title">Post-War Reconstruction &amp; Refugee Crisis, 1945–1960</h2>
+        <p class="module-desc">A shattered colony rebuilds, then is overwhelmed by more than a million refugees fleeing the Chinese Civil War and Communist victory. The 1950s establish the economic model that will make Hong Kong extraordinary.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>The liberation of Hong Kong in August 1945 and the question of sovereignty — China almost reclaimed it</li>
+        <li>Governor Grantham and the deliberate suppression of the Young Plan</li>
+        <li>The massive refugee influx following the 1949 Communist victory on the mainland</li>
+        <li>The Korean War and UN embargo — how Hong Kong pivoted from entrepôt to manufacturer</li>
+        <li>The birth of Hong Kong's textile and manufacturing industries</li>
+        <li>The 1953 Shek Kip Mei fire and the origins of Hong Kong's public housing programme</li>
+        <li>The foundations of laissez-faire economics under Governor Black</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">22</td>
+            <td class="gov-name">Sir Alexander Grantham</td>
+            <td class="gov-years">1947–1957</td>
+            <td class="gov-notes">Killed the Young Plan; managed the 1949 refugee crisis with strict immigration controls; <strong>pivoted Hong Kong from entrepôt to manufacturer</strong> as the UN embargo cut off China trade. Established the non-interventionist economic philosophy that would define Hong Kong for decades. His decade in office set the colony on the path to prosperity.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">23</td>
+            <td class="gov-name">Sir Robert Black</td>
+            <td class="gov-years">1958–1964</td>
+            <td class="gov-notes">Consolidated Grantham's economic model; oversaw the <strong>expansion of public housing</strong> after the 1953 Shek Kip Mei fire destroyed squatter settlements housing 53,000 people. The government's response — building large resettlement estates — created the template for one of the world's most extensive public housing systems.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Concise-History-Critical-Issues-International-ebook/dp/B00E2Q79NO" target="_blank" class="book-title-link">A Concise History of Hong Kong</a> · Chapters on 1945–1960</div>
+            <div class="book-card-author">John M. Carroll</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Carroll's treatment of the post-war period is excellent — he captures the remarkable combination of chaos and pragmatism that characterised Hong Kong in the late 1940s and 1950s. The colony absorbed over a million refugees in just a few years, placing enormous strain on housing, sanitation, and employment, and yet by the end of the 1950s had not only survived but was beginning a period of spectacular economic growth.</p>
+          <p class="book-card-summary">Carroll is particularly good on the <strong>Shek Kip Mei fire of 1953</strong> and its consequences. The fire — which destroyed the homes of 53,000 squatters on Christmas Day — became a turning point in social policy. Rather than simply policing squatter settlements, the government began building large-scale resettlement estates. This was not born of idealism but of necessity, yet it established the principle of government responsibility for housing that remains central to Hong Kong's social contract today.</p>
+          <p class="book-card-summary">He also examines the Cold War context carefully — how the United States used Hong Kong as a listening post on China, how American capital helped fund Hong Kong's manufacturing expansion, and how the colony's status as a neutral entrepôt during the Korean War gave it unique strategic value.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Essential for this module. Carroll's balanced perspective on both the refugee crisis and the economic transformation is the clearest available.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+1949+refugees+Communist+China+documentary" target="_blank"><span class="video-channel">History documentaries</span></a><span class="video-topic"> — Hong Kong's 1949 refugee crisis</span><span class="video-why"> — the Communist victory on the mainland flooded Hong Kong with over a million refugees</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Shek+Kip+Mei+fire+1953+Hong+Kong+public+housing+history" target="_blank"><span class="video-channel">Hong Kong heritage channels</span></a><span class="video-topic"> — The Shek Kip Mei fire and the birth of public housing</span><span class="video-why"> — the 1953 fire that changed Hong Kong's social policy forever</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+economic+miracle+1950s+manufacturing+history" target="_blank"><span class="video-channel">Economic history channels</span></a><span class="video-topic"> — Hong Kong's manufacturing transformation in the 1950s</span><span class="video-why"> — how the colony pivoted from trade to industry after the UN embargo</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>The post-war debate over Hong Kong's future is fascinating: in 1945, China (under the Nationalists) expected to reclaim Hong Kong. The British, weakened by war, had to decide whether to insist on returning. They did insist — and China accepted. Research this episode. Why did China back down? What role did Britain's relationship with the United States play? And consider: how might Hong Kong's history have differed if it had been handed back to the Nationalist government in 1945?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 6 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-6">
+    <div class="module-header">
+      <div class="module-number">06</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 06 · 1–2 weeks</p>
+        <h2 class="module-title">Riots, Reform &amp; Rising Prosperity, 1960–1971</h2>
+        <p class="module-desc">The 1960s brought rapid economic growth and dangerous political instability. The 1967 riots — inspired by Mao's Cultural Revolution — pushed Hong Kong to the brink, then paradoxically accelerated the social reforms that would define the colony's next chapter.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>Governor Trench and the early 1960s economic boom — textiles, plastics, electronics</li>
+        <li>The 1966 riots — triggered by a Star Ferry fare increase — and what they revealed about social tensions</li>
+        <li>The 1967 leftist riots: Cultural Revolution overflow into Hong Kong — bombs, strikes, propaganda</li>
+        <li>How the British government in London considered abandoning Hong Kong in 1967</li>
+        <li>The riots as a turning point: why colonial government began to listen to the population</li>
+        <li>The emergence of a distinct Hong Kong identity separate from mainland China</li>
+        <li>Growing awareness of widespread corruption and its corrosive effect on daily life</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">24</td>
+            <td class="gov-name">Sir David Trench</td>
+            <td class="gov-years">1964–1971</td>
+            <td class="gov-notes">Governed through both the 1966 Star Ferry riots and the <strong>1967 leftist riots</strong>. His response — firm suppression combined with acknowledgement of legitimate grievances — set the template for post-riot reform. Established consultation bodies to give the population a formal (if limited) voice. Oversaw Hong Kong's emergence as a major manufacturing centre.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Modern-History-Hong-Kong-1841-1997/dp/1845114191" target="_blank" class="book-title-link">A Modern History of Hong Kong</a> · Chapters on the 1960s</div>
+            <div class="book-card-author">Steve Tsang</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Tsang's account of the 1967 riots is the most analytically rigorous available in a single-volume history. He shows that the riots were simultaneously a local expression of the Cultural Revolution's radicalism and a genuine protest against poor working conditions, long hours, and the indignities of life under a colonial government that largely ignored the Chinese population.</p>
+          <p class="book-card-summary">Crucially, Tsang documents what is rarely discussed: that <strong>the British government in London seriously considered abandoning Hong Kong</strong> during the crisis — writing off the colony as too expensive and too dangerous to defend. That it did not was partly because of the colony's economic value, partly because of American pressure (Washington needed Hong Kong as a Cold War asset), and partly because the riots, though frightening, were ultimately containable.</p>
+          <p class="book-card-summary">He then traces the paradoxical aftermath: the riots convinced the colonial government that it needed to do more to address social grievances — better housing, labour protections, social services, and a less contemptuous attitude towards the Chinese majority. The process of reform that followed, culminating in the MacLehose era, can be directly traced to the lessons of 1967.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> The 1967 riots are the pivot point of colonial Hong Kong's social history. Tsang's analysis is essential. Carroll also covers this period well from a social identity perspective.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+1967+riots+leftist+Cultural+Revolution+documentary" target="_blank"><span class="video-channel">Documentary channels</span></a><span class="video-topic"> — The 1967 Hong Kong riots</span><span class="video-why"> — the most serious internal crisis in colonial history and its reforming aftermath</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+identity+1960s+1970s+formation+history" target="_blank"><span class="video-channel">History and culture channels</span></a><span class="video-topic"> — The formation of Hong Kong identity in the 1960s–70s</span><span class="video-why"> — how Cantonese pop culture and local consciousness emerged distinct from mainland China</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+1960s+economic+boom+manufacturing+textile+history" target="_blank"><span class="video-channel">Economic history channels</span></a><span class="video-topic"> — Hong Kong's economic boom in the 1960s</span><span class="video-why"> — textiles, plastics, electronics — the factories that built a city</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>The 1967 riots are one of the most controversial events in Hong Kong history. Find two different accounts: one from a sympathiser with the left-wing rioters (who saw themselves as anti-colonial patriots) and one from the colonial government's perspective. How does each side characterise what happened? What does this exercise reveal about the difficulty of writing a neutral history of Hong Kong? Consider also: why is 1967 still a politically sensitive topic in Hong Kong today?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 7 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-7">
+    <div class="module-header">
+      <div class="module-number">07</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 07 · 1–2 weeks</p>
+        <h2 class="module-title">The MacLehose Era &amp; the Golden Years, 1971–1982</h2>
+        <p class="module-desc">Murray MacLehose was the most consequential governor Hong Kong ever had. His decade transformed the colony from a relatively neglected entrepôt into a modern city with mass public housing, universal education, labour protections, and the most feared anti-corruption body in Asia.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>MacLehose's background and why London sent an unusually capable man to Hong Kong in 1971</li>
+        <li>The Ten-Year Housing Programme — the most ambitious public housing drive in Hong Kong's history</li>
+        <li>The founding of the Independent Commission Against Corruption (ICAC) in 1974</li>
+        <li>Universal free education and the expansion of social services</li>
+        <li>The MacLehose Trail, country parks, and the transformation of Hong Kong's physical landscape</li>
+        <li>The Vietnamese refugee crisis and Hong Kong as a "first port of asylum"</li>
+        <li>MacLehose's 1979 visit to Beijing — the first public raising of the 1997 question</li>
+        <li>Economic diversification into finance and services — HSBC's rise, the Hang Seng Index</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governor in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">25</td>
+            <td class="gov-name">Sir Murray MacLehose</td>
+            <td class="gov-years">1971–1982</td>
+            <td class="gov-notes">The longest-serving governor; <strong>transformed Hong Kong's social infrastructure</strong> — mass public housing, the ICAC, universal primary and secondary education, a new hospital system, country parks, and the Mass Transit Railway (MTR). His anti-corruption campaign, through the ICAC, dismantled systemic graft that had permeated the police and public services for decades. In 1979 he travelled to Beijing and first raised the question of what would happen to the New Territories lease in 1997 — opening the diplomatic process that led to the Joint Declaration.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Man-Hurry-MacLehose-Colonial-Autonomy/dp/9888842927" target="_blank" class="book-title-link">Man in a Hurry: Murray MacLehose and Colonial Autonomy in Hong Kong</a></div>
+            <div class="book-card-author">Ray Yep · 2024</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">The first archive-based account of MacLehose's governorship, drawing on newly available primary sources from both British and Hong Kong archives. Yep is research director of the Hong Kong History Centre at Bristol and the leading academic specialist on the MacLehose period. The book is not a biography but a focused study of how MacLehose navigated the competing pressures of London and Hong Kong to carry out a programme of reform that neither fully wanted.</p>
+          <p class="book-card-summary">Yep's central argument is that MacLehose was a <strong>"reluctant reformer"</strong> — he did not arrive with a grand reforming agenda but was pushed towards reform by a combination of an increasingly assertive local population (still unsettled by the 1967 riots), a Labour government in London concerned about Hong Kong's labour conditions, and his own pragmatic recognition that a contented population was the best defence against political instability.</p>
+          <p class="book-card-summary">The book is structured around four key episodes: the anti-corruption campaign and the ICAC, social reforms including housing and education, the Vietnamese refugee crisis, and the question of the New Territories land leases beyond 1997. In each case, Yep shows the tensions between colonial autonomy (what Hong Kong wanted to do) and metropolitan oversight (what London demanded) — a dynamic he calls "positive autonomy" and "negative autonomy."</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Dedicated entirely to the most important decade in colonial Hong Kong's social history. Essential for Module 7. Academic in tone but accessible, and rich in detail unavailable elsewhere.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=ICAC+Hong+Kong+corruption+history+founding+1974" target="_blank"><span class="video-channel">ICAC / documentary channels</span></a><span class="video-topic"> — The founding of the ICAC and its anti-corruption campaign</span><span class="video-why"> — one of the most successful institutional anti-corruption efforts anywhere in the world</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+public+housing+history+resettlement+estates" target="_blank"><span class="video-channel">Urban history channels</span></a><span class="video-topic"> — Hong Kong public housing — from squatter estates to new towns</span><span class="video-why"> — the ten-year housing programme that rehoused millions of people</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Murray+MacLehose+Hong+Kong+governor+history+documentary" target="_blank"><span class="video-channel">History and heritage channels</span></a><span class="video-topic"> — Murray MacLehose — Hong Kong's greatest governor</span><span class="video-why"> — profiles and documentary coverage of the MacLehose era</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>The ICAC (Independent Commission Against Corruption) is often cited as one of the most successful anti-corruption institutions ever created. Research how it worked in practice: what powers did it have? How did it handle the 1977 police mutiny (when officers threatened to riot against corruption prosecutions)? And consider: MacLehose ultimately issued a partial amnesty to stop the police from imploding. Was this the right decision? What does it tell us about the limits of anti-corruption reform?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 8 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-8">
+    <div class="module-header">
+      <div class="module-number">08</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 08 · 1–2 weeks</p>
+        <h2 class="module-title">The Joint Declaration &amp; Countdown, 1982–1992</h2>
+        <p class="module-desc">Margaret Thatcher arrived in Beijing believing she could negotiate an extension of British rule. She was wrong. The result was the Sino-British Joint Declaration of 1984 — which settled Hong Kong's fate and left its people largely out of the conversation.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>Thatcher's 1982 Beijing visit and Deng Xiaoping's firm rejection of any sovereignty extension</li>
+        <li>Governor Youde's role in the Joint Declaration negotiations</li>
+        <li>The Sino-British Joint Declaration (1984) — "One Country, Two Systems" and what it promised</li>
+        <li>The Basic Law drafting process and the question of democratic development</li>
+        <li>The Tiananmen Square massacre of June 1989 and its devastating effect on Hong Kong confidence</li>
+        <li>The Brain Drain — emigration waves to Britain, Canada, Australia, and the US</li>
+        <li>Governor Wilson's attempts to maintain stability and the limits of colonial reform</li>
+        <li>The airport core programme and the building of the new Chek Lap Kok airport</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governors in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">26</td>
+            <td class="gov-name">Sir Edward Youde</td>
+            <td class="gov-years">1982–1986</td>
+            <td class="gov-notes">Former ambassador to China; <strong>played a central role in negotiating the Joint Declaration</strong>; walked the near-impossible line between London's desire to surrender gracefully and Hong Kong's desire not to be surrendered at all. Died in office in Beijing in 1986 — the only governor to die while serving. Widely respected.</td>
+          </tr>
+          <tr>
+            <td class="gov-years">27</td>
+            <td class="gov-name">Sir David Wilson</td>
+            <td class="gov-years">1987–1992</td>
+            <td class="gov-notes">Governed through Tiananmen (1989) and the consequent crisis of confidence; <strong>oversaw the start of the HK$20 billion airport core programme</strong>; introduced limited democratic reforms (first directly elected LegCo seats, 1991). Replaced by London because Beijing found him too sympathetic to democratic pressure. His removal was itself a concession to China.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Modern-History-Hong-Kong-1841-1997/dp/1845114191" target="_blank" class="book-title-link">A Modern History of Hong Kong</a> · Chapters on 1982–1992</div>
+            <div class="book-card-author">Steve Tsang</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Tsang's account of the Joint Declaration negotiations is authoritative and damning in equal measure. He documents how, from the outset, London effectively accepted that it would be handing Hong Kong over to China — the only question was on what terms. The Hong Kong government and people were consulted through an "Assessment Office" process that many regarded as a fig leaf, designed to show that their views had been heard rather than to actually incorporate them.</p>
+          <p class="book-card-summary">He is particularly strong on the <strong>Tiananmen aftermath</strong> — showing how the massacre of 4 June 1989 destroyed the confidence that many in Hong Kong had cautiously built around the Joint Declaration's promises. Hundreds of thousands of Hong Kong people took to the streets in solidarity with Beijing's students; many had relatives on the mainland. The event turbocharged emigration and produced a lasting crisis of trust in China's intentions that never fully recovered.</p>
+          <p class="book-card-summary">Tsang also analyses the Basic Law drafting process with care, showing how the question of "democratic development" was left deliberately vague — enabling both China and the pro-democracy camp to interpret it as they wished, but ultimately resolving in China's favour.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Tsang is at his best in these chapters. Essential reading for understanding how 1997 came about and why so many in Hong Kong felt they had been abandoned.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Sino+British+Joint+Declaration+1984+Hong+Kong+explained" target="_blank"><span class="video-channel">Political history channels</span></a><span class="video-topic"> — The Sino-British Joint Declaration of 1984</span><span class="video-why"> — what "One Country, Two Systems" actually promised</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Tiananmen+1989+Hong+Kong+reaction+candlelight+vigil" target="_blank"><span class="video-channel">Documentary channels</span></a><span class="video-topic"> — Tiananmen 1989 and Hong Kong's response</span><span class="video-why"> — the event that changed Hong Kong's relationship with its future</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Thatcher+Deng+Xiaoping+1982+Hong+Kong+negotiations" target="_blank"><span class="video-channel">Political history channels</span></a><span class="video-topic"> — Thatcher and Deng — the 1982 Beijing negotiations</span><span class="video-why"> — how Thatcher's position collapsed and the shape of the final deal</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Read the full text of the Sino-British Joint Declaration (1984) — it is available online. Pay particular attention to Annex I, which sets out China's basic policies towards Hong Kong. Then read Article 5 of the Basic Law (1990). Consider: what specific rights and freedoms were guaranteed? What was deliberately left vague? Now, in light of the 2020 National Security Law, assess which guarantees were upheld and which were not. What does this tell you about the limitations of international agreements that lack enforcement mechanisms?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODULE 9 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <article class="module" id="module-9">
+    <div class="module-header">
+      <div class="module-number">09</div>
+      <div class="module-title-block">
+        <p class="module-tag">Module 09 · 1–2 weeks</p>
+        <h2 class="module-title">Patten, the Handover &amp; Legacy, 1992–1997</h2>
+        <p class="module-desc">Chris Patten — a career politician, not a diplomat — arrived as the last governor and immediately set the colony alight with democratic reforms that infuriated Beijing and electrified Hong Kong. The final five years were the most dramatic in the colony's history.</p>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">What you'll learn</p>
+      <ul class="learn-list">
+        <li>Why London chose Patten — a non-diplomat — as the last governor and what this signalled</li>
+        <li>Patten's 1992 electoral reforms and the Chinese government's furious response</li>
+        <li>Beijing's counter-moves: the "second kitchen" — parallel institutions built in parallel</li>
+        <li>The 1995 LegCo elections — the most democratic in Hong Kong's history</li>
+        <li>The handover ceremony — 30 June/1 July 1997 — and what was lost and gained</li>
+        <li>An assessment of 156 years of British rule: the colonial legacy in law, institutions, and culture</li>
+        <li>Post-script: Hong Kong after 1997 and the 2020 National Security Law</li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🏛 Governor in this period</p>
+      <table class="gov-table">
+        <thead>
+          <tr><th>#</th><th>Governor</th><th>In Office</th><th>Key Achievements &amp; Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gov-years">28</td>
+            <td class="gov-name">Chris Patten</td>
+            <td class="gov-years">1992–1997</td>
+            <td class="gov-notes">The last governor; the only career politician (former Conservative Party chairman) to hold the role; <strong>introduced democratic reforms</strong> expanding the LegCo electorate from 21,000 to effectively the entire adult population through broadened functional constituencies. Beijing denounced him as a "triple violator" and "sinner who would be condemned for a thousand generations." <strong>Expanded social welfare programmes</strong>; hugely popular with the Hong Kong public (59.7% approval at departure). Sent the telegram "I have relinquished the administration of this government. God Save The Queen" at midnight on 1 July 1997.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">📚 Books</p>
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Last-Governor-Chris-Patten-Handover/dp/1526700638" target="_blank" class="book-title-link">The Last Governor: Chris Patten and the Handover of Hong Kong</a></div>
+            <div class="book-card-author">Jonathan Dimbleby · 1997</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Dimbleby's book, based on unprecedented access to Patten and his inner circle, is the most detailed account of the final five years of British Hong Kong. It is explicitly written from a perspective sympathetic to Patten's reforms — the author is a liberal journalist who clearly shares Patten's view that Britain had a moral obligation to the people of Hong Kong — but it is carefully reported and draws on extensive interview material.</p>
+          <p class="book-card-summary">The book is structured around the mounting tension between Patten's reforms and Beijing's furious response. Dimbleby gives detailed accounts of the diplomatic back-channels, the internal debates within London (where the Foreign Office was often less supportive of Patten than he wanted), and the extraordinary political theatre of the final handover ceremony — rain falling on Charles, Prince of Wales, as the Union Jack came down for the last time.</p>
+          <p class="book-card-summary">Its particular value is in capturing the mood of Hong Kong in those final years — the complicated mixture of pride, grief, anxiety, and stoicism among a population that had not been asked whether they wanted to be handed over and had no choice but to accept it. Dimbleby's account of ordinary Hong Kongers going to photograph colonial landmarks in the final days is particularly moving.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> The essential companion for Module 9. Read alongside Tsang's final chapters for a more analytical perspective on the same events.</p>
+        </div>
+      </details>
+
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Hong-Kong-Frank-Welsh/dp/0006376452" target="_blank" class="book-title-link">Hong Kong</a> <span style="font-size:13px;color:#7a8099;font-family:'Courier New',monospace">(a character study of the city)</span></div>
+            <div class="book-card-author">Jan Morris · 1988 (revised 1997)</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">Jan Morris — the greatest travel writer of the 20th century, and herself a veteran of imperial reportage — wrote this book in the late 1980s as an extended meditation on what Hong Kong was and what it meant. It is not a conventional history and should not be read as one, but as one of the finest pieces of literary non-fiction about any city in the world. Morris's prose is lucid, affectionate, and at times painfully beautiful.</p>
+          <p class="book-card-summary">Morris gives sustained attention to <strong>the texture of colonial life</strong> — the expat clubs and their hierarchies, the Cantonese street culture that ignored all of it, the astonishing energy of the commercial city, the relationship between the British governors and the people they nominally ruled. She is also alert to the absurdity of empire in its final decades: the ceremonies, the plumed hats, the Government House garden parties held under the shadow of the coming handover.</p>
+          <p class="book-card-summary">The revised 1997 edition, written in the final months before the handover, adds an elegiac quality that makes the book something special — a witness account from one of the best writers alive at a genuinely historic moment.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> Read this alongside Dimbleby as a counterpoint — where Dimbleby is political and analytical, Morris is sensory and literary. Together they give the full picture of what Hong Kong was in its final years as a British colony.</p>
+        </div>
+      </details>
+
+      <details class="book-card">
+        <summary>
+          <div class="book-card-toggle">+</div>
+          <div class="book-card-header">
+            <div class="book-card-title"><a href="https://www.amazon.co.uk/Gweilo-Memories-Hong-Kong-Childhood/dp/0753121212" target="_blank" class="book-title-link">Gweilo: Memories of a Hong Kong Childhood</a></div>
+            <div class="book-card-author">Martin Booth · 2004</div>
+          </div>
+        </summary>
+        <div class="book-card-body">
+          <p class="book-card-summary">A memoir rather than a history, but one of the most vivid and beloved accounts of colonial Hong Kong ever written. Booth — a novelist who grew up in Hong Kong in the 1950s — reconstructs his childhood in the colony with extraordinary sensory precision: the smells of the streets, the sounds of the harbour, the casual cruelty and unexpected generosity of colonial life, and the richness of a Chinese society that barely registered to most Europeans.</p>
+          <p class="book-card-summary">The book illuminates what formal histories tend to leave out: <strong>the texture of everyday colonial life</strong> as experienced by a child on the ground. Booth moves between worlds with a child's natural openness — he learns Cantonese, makes Chinese friends, explores the backstreets of Kowloon — while his parents inhabit the separate world of the expat community. The contrast reveals the colonial social structure more vividly than any academic account.</p>
+          <p class="book-card-summary">It is also an extraordinary portrait of Hong Kong in the 1950s — a city of squatter settlements, street hawkers, opium dens, Triad societies, and colonial gin palaces — that had survived the war and was beginning the long transformation into the gleaming metropolis it would become.</p>
+          <p class="book-card-relevance"><strong>Best read:</strong> At any point in the course as a palate cleanser and a reminder that history is lived from the ground up. Pairs naturally with Modules 5 and 6 for historical context, but can be read any time.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-section">
+      <p class="sub-label">🎬 Videos</p>
+      <ul class="video-list">
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Chris+Patten+last+governor+Hong+Kong+handover+documentary" target="_blank"><span class="video-channel">Documentary channels</span></a><span class="video-topic"> — Chris Patten and the last years of British Hong Kong</span><span class="video-why"> — Patten's reforms, Beijing's fury, and the approaching midnight</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+handover+1997+ceremony+footage" target="_blank"><span class="video-channel">Archive news channels</span></a><span class="video-topic"> — The Hong Kong handover ceremony, 1 July 1997</span><span class="video-why"> — original footage of the midnight ceremony and the lowering of the Union Jack</span></span></li>
+        <li class="video-item"><span class="video-icon">▶</span><span><a class="yt-link" href="https://www.youtube.com/results?search_query=Hong+Kong+British+colonial+legacy+assessment+history" target="_blank"><span class="video-channel">Academic and documentary channels</span></a><span class="video-topic"> — Assessing 156 years of British rule in Hong Kong</span><span class="video-why"> — what the colonial period left behind in law, institutions, culture, and identity</span></span></li>
+      </ul>
+    </div>
+
+    <div class="sub-section">
+      <div class="exercise-box">
+        <p class="exercise-label">🛠 Practical Exercise</p>
+        <p>Write a balanced assessment of British colonial rule in Hong Kong: What did it achieve for the people who lived there? What were its failures and injustices? Was it, on balance, a positive or negative experience for Hong Kong's Chinese population? Then consider the harder question: does Hong Kong's prosperity under British rule justify the colonial project? You might compare the assessments of Welsh (broadly positive), Tsang (nuanced, focused on institutional legacy), and Carroll (most attentive to Chinese experience). Where do you come down — and why?</p>
+      </div>
+    </div>
+  </article>
+
+  <hr class="divider">
+
+  <!-- REFERENCE TABLES -->
+  <section class="ref-section">
+    <p class="section-label">All Books at a Glance</p>
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Author</th>
+          <th>Year</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><a href="https://www.amazon.co.uk/History-Hong-Kong-Frank-Welsh/dp/000638871X" target="_blank" class="book-title-link">A History of Hong Kong</a></td><td>Frank Welsh</td><td>1993</td><td>Colonial government, governors, political narrative — full span</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Modern-History-Hong-Kong-1841-1997/dp/1845114191" target="_blank" class="book-title-link">A Modern History of Hong Kong: 1841–1997</a></td><td>Steve Tsang</td><td>2004</td><td>Balanced British/Chinese analysis; identity; transition negotiations</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Concise-History-Critical-Issues-International-ebook/dp/B00E2Q79NO" target="_blank" class="book-title-link">A Concise History of Hong Kong</a></td><td>John M. Carroll</td><td>2007</td><td>Most accessible overview; best on Chinese community; post-1997</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Man-Hurry-MacLehose-Colonial-Autonomy/dp/9888842927" target="_blank" class="book-title-link">Man in a Hurry: Murray MacLehose</a></td><td>Ray Yep</td><td>2024</td><td>Definitive archive-based account of the MacLehose era</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Last-Governor-Chris-Patten-Handover/dp/1526700638" target="_blank" class="book-title-link">The Last Governor</a></td><td>Jonathan Dimbleby</td><td>1997</td><td>Patten's governorship; the final five years; the handover</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Hong-Kong-Frank-Welsh/dp/0006376452" target="_blank" class="book-title-link">Hong Kong</a></td><td>Jan Morris</td><td>1988/1997</td><td>Literary portrait of colonial Hong Kong in its final decades</td></tr>
+        <tr><td><a href="https://www.amazon.co.uk/Gweilo-Memories-Hong-Kong-Childhood/dp/0753121212" target="_blank" class="book-title-link">Gweilo: Memories of a Hong Kong Childhood</a></td><td>Martin Booth</td><td>2004</td><td>Memoir; 1950s colonial life from a child's-eye view</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="ref-section" style="margin-top:36px;">
+    <p class="section-label">All 28 Governors at a Glance</p>
+    <table class="gov-glance-table">
+      <thead>
+        <tr><th>#</th><th>Governor</th><th>In Office</th><th>Module</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="gov-years">01</td><td class="gov-name">Sir Henry Pottinger</td><td class="gov-years">1843–1844</td><td style="color:#7a8099;font-size:13px;">01</td></tr>
+        <tr><td class="gov-years">02</td><td class="gov-name">Sir John Francis Davis</td><td class="gov-years">1844–1848</td><td style="color:#7a8099;font-size:13px;">01</td></tr>
+        <tr><td class="gov-years">03</td><td class="gov-name">Sir Samuel Bonham</td><td class="gov-years">1848–1854</td><td style="color:#7a8099;font-size:13px;">01</td></tr>
+        <tr><td class="gov-years">04</td><td class="gov-name">Sir John Bowring</td><td class="gov-years">1854–1859</td><td style="color:#7a8099;font-size:13px;">01</td></tr>
+        <tr><td class="gov-years">05</td><td class="gov-name">Sir Hercules Robinson</td><td class="gov-years">1859–1865</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">06</td><td class="gov-name">Sir Richard MacDonnell</td><td class="gov-years">1866–1872</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">07</td><td class="gov-name">Sir Arthur Kennedy</td><td class="gov-years">1872–1877</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">08</td><td class="gov-name">Sir John Pope Hennessy</td><td class="gov-years">1877–1882</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">09</td><td class="gov-name">Sir George Bowen</td><td class="gov-years">1883–1885</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">10</td><td class="gov-name">Sir William Des Voeux</td><td class="gov-years">1887–1891</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">11</td><td class="gov-name">Sir William Robinson</td><td class="gov-years">1891–1898</td><td style="color:#7a8099;font-size:13px;">02</td></tr>
+        <tr><td class="gov-years">12</td><td class="gov-name">Sir Henry Blake</td><td class="gov-years">1898–1903</td><td style="color:#7a8099;font-size:13px;">03</td></tr>
+        <tr><td class="gov-years">13</td><td class="gov-name">Sir Matthew Nathan</td><td class="gov-years">1904–1907</td><td style="color:#7a8099;font-size:13px;">03</td></tr>
+        <tr><td class="gov-years">14</td><td class="gov-name">Sir Frederick Lugard</td><td class="gov-years">1907–1912</td><td style="color:#7a8099;font-size:13px;">03</td></tr>
+        <tr><td class="gov-years">15</td><td class="gov-name">Sir Francis May</td><td class="gov-years">1912–1919</td><td style="color:#7a8099;font-size:13px;">03</td></tr>
+        <tr><td class="gov-years">16</td><td class="gov-name">Sir Reginald Stubbs</td><td class="gov-years">1919–1925</td><td style="color:#7a8099;font-size:13px;">04</td></tr>
+        <tr><td class="gov-years">17</td><td class="gov-name">Sir Cecil Clementi</td><td class="gov-years">1925–1930</td><td style="color:#7a8099;font-size:13px;">04</td></tr>
+        <tr><td class="gov-years">18</td><td class="gov-name">Sir William Peel</td><td class="gov-years">1930–1935</td><td style="color:#7a8099;font-size:13px;">04</td></tr>
+        <tr><td class="gov-years">19</td><td class="gov-name">Sir Andrew Caldecott</td><td class="gov-years">1935–1937</td><td style="color:#7a8099;font-size:13px;">04</td></tr>
+        <tr><td class="gov-years">20</td><td class="gov-name">Sir Geoffrey Northcote</td><td class="gov-years">1937–1940</td><td style="color:#7a8099;font-size:13px;">04</td></tr>
+        <tr><td class="gov-years">21</td><td class="gov-name">Sir Mark Young</td><td class="gov-years">1941–1947</td><td style="color:#7a8099;font-size:13px;">04–05</td></tr>
+        <tr><td class="gov-years">22</td><td class="gov-name">Sir Alexander Grantham</td><td class="gov-years">1947–1957</td><td style="color:#7a8099;font-size:13px;">05</td></tr>
+        <tr><td class="gov-years">23</td><td class="gov-name">Sir Robert Black</td><td class="gov-years">1958–1964</td><td style="color:#7a8099;font-size:13px;">05–06</td></tr>
+        <tr><td class="gov-years">24</td><td class="gov-name">Sir David Trench</td><td class="gov-years">1964–1971</td><td style="color:#7a8099;font-size:13px;">06</td></tr>
+        <tr><td class="gov-years">25</td><td class="gov-name">Sir Murray MacLehose</td><td class="gov-years">1971–1982</td><td style="color:#7a8099;font-size:13px;">07</td></tr>
+        <tr><td class="gov-years">26</td><td class="gov-name">Sir Edward Youde</td><td class="gov-years">1982–1986</td><td style="color:#7a8099;font-size:13px;">08</td></tr>
+        <tr><td class="gov-years">27</td><td class="gov-name">Sir David Wilson</td><td class="gov-years">1987–1992</td><td style="color:#7a8099;font-size:13px;">08</td></tr>
+        <tr><td class="gov-years">28</td><td class="gov-name">Chris Patten</td><td class="gov-years">1992–1997</td><td style="color:#7a8099;font-size:13px;">09</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CLOSING NOTE -->
+  <section class="closing">
+    <h2>A Note on Perspective</h2>
+    <p>Hong Kong's history is deeply contested — and this is not merely an academic observation. The events covered in this syllabus are still live political questions. How you interpret the Opium Wars, the 1967 riots, the Joint Declaration, Patten's reforms, and the 1997 handover depends substantially on whether you approach them from a British imperial, a Chinese nationalist, a Hong Kong localist, or a universal human rights perspective. None of these perspectives is simply wrong.</p>
+    <p>The recommended reading list is deliberately diverse. <strong>Welsh</strong> gives you the British colonial government's perspective at its most detailed. <strong>Tsang</strong> gives you the most rigorous scholarly analysis, attentive to both sides. <strong>Carroll</strong> keeps the Chinese community's experience in view. <strong>Dimbleby</strong> and <strong>Morris</strong> give you texture and emotion that pure history cannot.</p>
+    <p>Read them arguing with each other, and you will understand Hong Kong better than reading any single account. The city was always more than one story.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-text">History of Hong Kong · 28 Governors · 156 Years · Prepared by Claude</p>
+    <div class="total-pill">9 modules · 12–16 weeks</div>
+  </footer>
+
+</div>
+</body>
+</html>
