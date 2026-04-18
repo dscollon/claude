@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tolerance &amp; Fit Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1a1a;
+      --surface:   #242424;
+      --surface2:  #2e2e2e;
+      --border:    #3a3a3a;
+      --copper:    #c8763a;
+      --copper-lt: #e0924f;
+      --copper-dk: #9e5b28;
+      --text:      #e8e8e8;
+      --text-dim:  #888;
+      --green:     #5ba08a;
+      --green-bg:  rgba(91,160,138,0.12);
+      --yellow:    #c8a03a;
+      --yellow-bg: rgba(200,160,58,0.12);
+      --red:       #c84a3a;
+      --red-bg:    rgba(200,74,58,0.12);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+    }
+
+    .app { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+    h1 {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--copper);
+    }
+
+    .sub {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    /* Preset buttons */
+    .preset-groups { display: flex; flex-direction: column; gap: 10px; }
+
+    .preset-group-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+    .preset-group-label.clearance { color: var(--green); }
+    .preset-group-label.transition { color: var(--yellow); }
+    .preset-group-label.interference { color: var(--red); }
+
+    .preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .preset-btn {
+      padding: 5px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      font-family: 'Consolas', monospace;
+    }
+
+    .preset-btn:hover { color: var(--text); border-color: var(--copper-dk); }
+    .preset-btn.active { border-color: var(--copper); color: var(--copper-lt); background: rgba(200,118,58,0.08); }
+
+    /* Inputs */
+    .input-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .field input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: 'Consolas', monospace;
+      padding: 9px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 120px;
+    }
+
+    .field input:focus { border-color: var(--copper-dk); }
+    .field input.error { border-color: var(--red); }
+
+    #diam { width: 110px; }
+
+    /* Results card */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .result-title {
+      font-family: 'Consolas', monospace;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      color: var(--copper-lt);
+    }
+
+    .fit-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+
+    .fit-badge.clearance   { color: var(--green);  border-color: var(--green);  background: var(--green-bg); }
+    .fit-badge.transition  { color: var(--yellow); border-color: var(--yellow); background: var(--yellow-bg); }
+    .fit-badge.interference{ color: var(--red);    border-color: var(--red);    background: var(--red-bg); }
+
+    .result-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .result-col {
+      padding: 16px 18px;
+    }
+
+    .result-col:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .result-col-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .limit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 3px 0;
+      font-size: 0.85rem;
+    }
+
+    .limit-label { color: var(--text-dim); font-size: 0.78rem; }
+    .limit-val { font-family: 'Consolas', monospace; color: var(--text); }
+    .limit-dev { font-family: 'Consolas', monospace; font-size: 0.75rem; color: var(--text-dim); }
+
+    .result-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .fit-stat { display: flex; flex-direction: column; gap: 3px; }
+
+    .fit-stat-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .fit-stat-val {
+      font-family: 'Consolas', monospace;
+      font-size: 0.9rem;
+    }
+
+    .fit-stat-val.pos { color: var(--green); }
+    .fit-stat-val.neg { color: var(--red); }
+    .fit-stat-val.mix { color: var(--yellow); }
+
+    /* Diagram */
+    .diagram-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .diagram-wrap svg { display: block; width: 100%; overflow: visible; }
+
+    /* Error */
+    .error-msg {
+      background: var(--surface);
+      border: 1px solid var(--red);
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: var(--red);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div>
+    <h1>Tolerance &amp; Fit Calculator</h1>
+    <p class="sub">ISO 286 limits and fits for holes and shafts</p>
+  </div>
+
+  <!-- Presets -->
+  <div>
+    <div class="section-label">Common fits — hole basis</div>
+    <div class="preset-groups">
+      <div>
+        <div class="preset-group-label clearance">Clearance</div>
+        <div class="preset-row" id="presets-c"></div>
+      </div>
+      <div>
+        <div class="preset-group-label transition">Transition</div>
+        <div class="preset-row" id="presets-t"></div>
+      </div>
+      <div>
+        <div class="preset-group-label interference">Interference</div>
+        <div class="preset-row" id="presets-i"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inputs -->
+  <div class="input-row">
+    <div class="field">
+      <label>Nominal Ø&nbsp;(mm)</label>
+      <input type="number" id="diam" value="25" min="0.1" max="500" step="0.5">
+    </div>
+    <div class="field">
+      <label>Hole</label>
+      <input type="text" id="holeInput" value="H7" maxlength="5" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Shaft</label>
+      <input type="text" id="shaftInput" value="f6" maxlength="5" spellcheck="false">
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div id="output"></div>
+
+</div>
+<script>
+// ── ISO 286 implementation ────────────────────────────────────────────────
+
+const SIZE_RANGES = [
+  [0,3],[3,6],[6,10],[10,18],[18,30],[30,50],
+  [50,80],[80,120],[120,180],[180,250],[250,315],[315,400],[400,500]
+];
+
+function getSizeIdx(d) {
+  for (let i = 0; i < SIZE_RANGES.length; i++) {
+    if (d > SIZE_RANGES[i][0] && d <= SIZE_RANGES[i][1]) return i;
+  }
+  return -1;
+}
+
+function geomMean(idx) {
+  const [lo, hi] = SIZE_RANGES[idx];
+  return Math.sqrt((lo || 1) * hi); // avoid sqrt(0)
+}
+
+// IT grades via standard formula (μm)
+const IT_K = {5:7, 6:10, 7:16, 8:25, 9:40, 10:64, 11:100, 12:160, 13:250, 14:400};
+function getIT(grade, idx) {
+  const D = geomMean(idx);
+  const i = 0.45 * Math.pow(D, 1/3) + 0.001 * D;
+  return Math.round(IT_K[grade] * i);
+}
+
+// Shaft fundamental deviations (μm) — 13 size ranges
+// a–h: upper deviation (es), shaft below zero
+// k–u: lower deviation (ei), shaft above zero
+const SFD = {
+  c:  [-60,-70,-80,-95,-110,-120,-130,-140,-150,-170,-190,-210,-230],
+  d:  [-20,-30,-40,-50,-65,-80,-100,-120,-145,-170,-190,-210,-230],
+  e:  [-14,-20,-25,-32,-40,-50,-60,-72,-85,-100,-110,-125,-135],
+  f:  [-6,-10,-13,-16,-20,-25,-30,-36,-43,-50,-56,-62,-68],
+  g:  [-2,-4,-5,-6,-7,-9,-10,-12,-14,-15,-17,-18,-20],
+  h:  [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  k:  [0,1,1,1,2,2,2,3,3,4,4,4,5],
+  m:  [2,4,6,7,8,9,11,13,15,17,20,21,23],
+  n:  [4,8,10,12,15,17,20,23,27,31,34,37,40],
+  p:  [6,12,15,18,22,26,32,37,43,50,56,62,68],
+  r:  [10,15,19,23,28,34,41,51,63,77,98,114,132],
+  s:  [14,19,23,28,35,43,53,71,92,122,152,182,214],
+  u:  [18,23,28,33,41,48,60,79,107,139,172,215,265],
+};
+
+// Hole fundamental deviations (μm)
+// E–H: lower deviation (EI), hole above zero
+// K–U: upper deviation (ES), related to corresponding shaft
+const HFD = {
+  E:  [14,20,25,32,40,50,60,72,85,100,110,125,135],
+  F:  [6,10,13,16,20,25,30,36,43,50,56,62,68],
+  G:  [2,4,5,6,7,9,10,12,14,15,17,18,20],
+  H:  [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  P:  [-6,-12,-15,-18,-22,-26,-32,-37,-43,-50,-56,-62,-68],
+  S:  [-14,-19,-23,-28,-35,-43,-53,-71,-92,-122,-152,-182,-214],
+};
+
+function parseCode(code) {
+  const m = code.trim().match(/^([A-Za-z]+)(\d+)$/);
+  if (!m) return null;
+  const grade = parseInt(m[2]);
+  if (!IT_K[grade]) return null;
+  return { letter: m[1], grade };
+}
+
+function shaftLimits(letter, grade, idx) {
+  const fd = SFD[letter];
+  if (!fd) return null;
+  const it = getIT(grade, idx);
+  if (letter === 'h') return { es: 0, ei: -it };
+  if (letter === 'js') return { es: Math.ceil(it/2), ei: -Math.floor(it/2) };
+  if ('abcdefg'.includes(letter)) {
+    const es = fd[idx];
+    return { es, ei: es - it };
+  }
+  const ei = fd[idx];
+  return { es: ei + it, ei };
+}
+
+function holeLimits(letter, grade, idx) {
+  const it = getIT(grade, idx);
+  if (letter === 'H') return { EI: 0, ES: it };
+  if (letter === 'JS') return { EI: -Math.floor(it/2), ES: Math.ceil(it/2) };
+  const fd = HFD[letter];
+  if (!fd) return null;
+  if ('EFGH'.includes(letter)) {
+    const EI = fd[idx];
+    return { EI, ES: EI + it };
+  }
+  const ES = fd[idx];
+  return { EI: ES - it, ES };
+}
+
+function calculate(d, hCode, sCode) {
+  const h = parseCode(hCode), s = parseCode(sCode);
+  if (!h) return { err: `Cannot parse hole tolerance "${hCode}"` };
+  if (!s) return { err: `Cannot parse shaft tolerance "${sCode}"` };
+
+  const idx = getSizeIdx(d);
+  if (idx < 0) return { err: `Diameter ${d} mm is outside the supported range (0–500 mm)` };
+
+  const hole  = holeLimits(h.letter, h.grade, idx);
+  const shaft = shaftLimits(s.letter, s.grade, idx);
+  if (!hole)  return { err: `Hole type "${h.letter}" is not supported. Supported: E F G H JS P S` };
+  if (!shaft) return { err: `Shaft type "${s.letter}" is not supported. Supported: c d e f g h js k m n p r s u` };
+
+  // Clearance = hole − shaft (positive → clearance, negative → interference)
+  const maxC = hole.ES - shaft.ei;
+  const minC = hole.EI - shaft.es;
+
+  const fitType = minC >= 0 ? 'clearance' : maxC <= 0 ? 'interference' : 'transition';
+
+  return {
+    d, idx,
+    holeCode: `${h.letter}${h.grade}`, holeIT: getIT(h.grade, idx),
+    shaftCode: `${s.letter}${s.grade}`, shaftIT: getIT(s.grade, idx),
+    hole:  { EI: hole.EI,  ES: hole.ES,  min: d + hole.EI/1000,  max: d + hole.ES/1000 },
+    shaft: { ei: shaft.ei, es: shaft.es, min: d + shaft.ei/1000, max: d + shaft.es/1000 },
+    fit: { type: fitType, maxC, minC }
+  };
+}
+
+// ── Presets ───────────────────────────────────────────────────────────────
+
+const PRESETS = {
+  c: [
+    { hole:'H11', shaft:'c11', label:'H11/c11', name:'Loose running' },
+    { hole:'H9',  shaft:'d9',  label:'H9/d9',   name:'Free running'  },
+    { hole:'H8',  shaft:'f7',  label:'H8/f7',   name:'Easy running'  },
+    { hole:'H7',  shaft:'g6',  label:'H7/g6',   name:'Sliding'       },
+    { hole:'H7',  shaft:'h6',  label:'H7/h6',   name:'Loc. clearance'},
+  ],
+  t: [
+    { hole:'H7', shaft:'k6', label:'H7/k6', name:'Loc. transition' },
+    { hole:'H7', shaft:'m6', label:'H7/m6', name:'Push fit'        },
+    { hole:'H7', shaft:'n6', label:'H7/n6', name:'Snug fit'        },
+  ],
+  i: [
+    { hole:'H7', shaft:'p6', label:'H7/p6', name:'Loc. interference' },
+    { hole:'H7', shaft:'s6', label:'H7/s6', name:'Medium drive'      },
+    { hole:'H7', shaft:'u6', label:'H7/u6', name:'Force fit'         },
+  ],
+};
+
+function buildPresets() {
+  ['c','t','i'].forEach(group => {
+    const el = document.getElementById(`presets-${group}`);
+    PRESETS[group].forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'preset-btn';
+      btn.dataset.hole = p.hole;
+      btn.dataset.shaft = p.shaft;
+      btn.dataset.label = p.label;
+      btn.title = p.name;
+      btn.textContent = p.label;
+      btn.addEventListener('click', () => {
+        document.getElementById('holeInput').value = p.hole;
+        document.getElementById('shaftInput').value = p.shaft;
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+      });
+      el.appendChild(btn);
+    });
+  });
+}
+
+// ── Rendering ─────────────────────────────────────────────────────────────
+
+function fmt(mm, dp=4) { return mm.toFixed(dp); }
+function fmtDev(µm) {
+  if (µm === 0) return '±0';
+  return (µm > 0 ? '+' : '') + µm;
+}
+function fmtFit(µm) {
+  if (µm === 0) return '0';
+  return (µm > 0 ? '+' : '') + µm + ' μm';
+}
+
+function renderResult(r) {
+  const fitNames = { clearance:'Clearance', transition:'Transition', interference:'Interference' };
+  const fitName = fitNames[r.fit.type];
+
+  let fitStats = '';
+  if (r.fit.type === 'clearance') {
+    fitStats = `
+      <div class="fit-stat">
+        <div class="fit-stat-label">Min clearance</div>
+        <div class="fit-stat-val pos">${fmtFit(r.fit.minC)}</div>
+      </div>
+      <div class="fit-stat">
+        <div class="fit-stat-label">Max clearance</div>
+        <div class="fit-stat-val pos">${fmtFit(r.fit.maxC)}</div>
+      </div>`;
+  } else if (r.fit.type === 'interference') {
+    fitStats = `
+      <div class="fit-stat">
+        <div class="fit-stat-label">Min interference</div>
+        <div class="fit-stat-val neg">${fmtFit(-r.fit.maxC)}</div>
+      </div>
+      <div class="fit-stat">
+        <div class="fit-stat-label">Max interference</div>
+        <div class="fit-stat-val neg">${fmtFit(-r.fit.minC)}</div>
+      </div>`;
+  } else {
+    fitStats = `
+      <div class="fit-stat">
+        <div class="fit-stat-label">Max clearance</div>
+        <div class="fit-stat-val mix">${fmtFit(r.fit.maxC)}</div>
+      </div>
+      <div class="fit-stat">
+        <div class="fit-stat-label">Max interference</div>
+        <div class="fit-stat-val mix">${fmtFit(-r.fit.minC)}</div>
+      </div>`;
+  }
+
+  return `
+  <div class="result-card">
+    <div class="result-header">
+      <div class="result-title">∅${r.d} ${r.holeCode}/${r.shaftCode}</div>
+      <div class="fit-badge ${r.fit.type}">${fitName}</div>
+    </div>
+    <div class="result-body">
+      <div class="result-col">
+        <div class="result-col-title">Hole — ${r.holeCode} (IT${r.hole.ES - r.hole.EI} μm)</div>
+        <div class="limit-row">
+          <span class="limit-label">Max (MMC)</span>
+          <span class="limit-val">${fmt(r.hole.max)}</span>
+          <span class="limit-dev">${fmtDev(r.hole.ES)} μm</span>
+        </div>
+        <div class="limit-row">
+          <span class="limit-label">Min</span>
+          <span class="limit-val">${fmt(r.hole.min)}</span>
+          <span class="limit-dev">${fmtDev(r.hole.EI)} μm</span>
+        </div>
+      </div>
+      <div class="result-col">
+        <div class="result-col-title">Shaft — ${r.shaftCode} (IT${r.shaft.es - r.shaft.ei} μm)</div>
+        <div class="limit-row">
+          <span class="limit-label">Max</span>
+          <span class="limit-val">${fmt(r.shaft.max)}</span>
+          <span class="limit-dev">${fmtDev(r.shaft.es)} μm</span>
+        </div>
+        <div class="limit-row">
+          <span class="limit-label">Min (MMC)</span>
+          <span class="limit-val">${fmt(r.shaft.min)}</span>
+          <span class="limit-dev">${fmtDev(r.shaft.ei)} μm</span>
+        </div>
+      </div>
+    </div>
+    <div class="result-footer">${fitStats}</div>
+  </div>
+  ${renderDiagram(r)}`;
+}
+
+function renderDiagram(r) {
+  const W = 340, H = 260, PAD = 48;
+  const holeColX = PAD + 40, shaftColX = W - PAD - 40;
+  const colW = 56;
+
+  // All four deviation values
+  const vals = [r.hole.EI, r.hole.ES, r.shaft.ei, r.shaft.es];
+  const vMin = Math.min(...vals, 0);
+  const vMax = Math.max(...vals, 0);
+  const vRange = vMax - vMin || 10;
+  const scale = (H - 40) / (vRange * 1.3);
+  const zeroY = 20 + (vMax * 1.15) * scale;
+
+  function yOf(µm) { return zeroY - µm * scale; }
+
+  // Colors
+  const fitColors = { clearance: '#5ba08a', transition: '#c8a03a', interference: '#c84a3a' };
+  const fitAlphas = { clearance: '22', transition: '22', interference: '22' };
+  const fc = fitColors[r.fit.type];
+  const fa = fitAlphas[r.fit.type];
+
+  // Hole rectangle
+  const hY1 = yOf(r.hole.ES), hY2 = yOf(r.hole.EI);
+  // Shaft rectangle
+  const sY1 = yOf(r.shaft.es), sY2 = yOf(r.shaft.ei);
+
+  // Overlap (clearance = gap above shaft / interference = overlap)
+  const overlapTop = Math.min(yOf(r.fit.maxC > 0 ? 0 : r.fit.maxC), Math.min(hY1, sY1));
+  const overlapBot = Math.max(yOf(r.fit.minC < 0 ? 0 : r.fit.minC), Math.max(hY2, sY2));
+
+  function devLabel(µm, x, y, anchor='middle') {
+    if (µm === 0) return '';
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}"
+      fill="#888" font-size="9" font-family="Consolas,monospace">${fmtDev(µm)}</text>`;
+  }
+
+  return `
+  <div class="diagram-wrap">
+    <div class="section-label" style="margin-bottom:12px">Tolerance diagram (μm from nominal)</div>
+    <svg viewBox="0 0 ${W} ${H}" style="height:${H}px">
+      <!-- zero line -->
+      <line x1="0" y1="${zeroY}" x2="${W}" y2="${zeroY}" stroke="#444" stroke-width="1"/>
+      <text x="${W/2}" y="${zeroY - 3}" text-anchor="middle" fill="#555" font-size="9">0 (nominal)</text>
+
+      <!-- Hole zone -->
+      <rect x="${holeColX - colW/2}" y="${hY1}" width="${colW}" height="${hY2 - hY1}"
+            fill="#c8763a" fill-opacity="0.18" stroke="#c8763a" stroke-width="1" rx="2"/>
+      <text x="${holeColX}" y="${H - 6}" text-anchor="middle" fill="#888" font-size="10">Hole ${r.holeCode}</text>
+      ${devLabel(r.hole.ES, holeColX - colW/2 - 4, hY1 + 4, 'end')}
+      ${devLabel(r.hole.EI, holeColX - colW/2 - 4, hY2 - 2, 'end')}
+
+      <!-- Shaft zone -->
+      <rect x="${shaftColX - colW/2}" y="${Math.min(sY1,sY2)}" width="${colW}" height="${Math.abs(sY2 - sY1)}"
+            fill="${fc}" fill-opacity="0.22" stroke="${fc}" stroke-width="1" rx="2"/>
+      <text x="${shaftColX}" y="${H - 6}" text-anchor="middle" fill="#888" font-size="10">Shaft ${r.shaftCode}</text>
+      ${devLabel(r.shaft.es, shaftColX + colW/2 + 4, Math.min(sY1,sY2) + 4, 'start')}
+      ${devLabel(r.shaft.ei, shaftColX + colW/2 + 4, Math.max(sY1,sY2) - 2, 'start')}
+
+      <!-- Y axis ticks -->
+      ${[vMin, 0, vMax].map(v => `
+        <line x1="${W/2 - 6}" y1="${yOf(v)}" x2="${W/2 + 6}" y2="${yOf(v)}" stroke="#444" stroke-width="1"/>
+        ${v !== 0 ? `<text x="${W/2}" y="${yOf(v) + 3}" text-anchor="middle" fill="#555" font-size="8">${v}</text>` : ''}
+      `).join('')}
+    </svg>
+  </div>`;
+}
+
+// ── Main render ───────────────────────────────────────────────────────────
+
+function render() {
+  const d = parseFloat(document.getElementById('diam').value);
+  const hCode = document.getElementById('holeInput').value.trim();
+  const sCode = document.getElementById('shaftInput').value.trim();
+  const out = document.getElementById('output');
+
+  [document.getElementById('holeInput'), document.getElementById('shaftInput'),
+   document.getElementById('diam')].forEach(el => el.classList.remove('error'));
+
+  if (!d || d <= 0) {
+    document.getElementById('diam').classList.add('error');
+    out.innerHTML = '';
+    return;
+  }
+
+  const r = calculate(d, hCode, sCode);
+
+  if (r.err) {
+    out.innerHTML = `<div class="error-msg">${r.err}</div>`;
+    return;
+  }
+
+  // Sync active preset button
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    const match = btn.dataset.hole === r.holeCode && btn.dataset.shaft === r.shaftCode;
+    btn.classList.toggle('active', match);
+  });
+
+  out.innerHTML = renderResult(r);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+
+buildPresets();
+
+['diam','holeInput','shaftInput'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+});
+
+render();
+</script>
+</body>
+</html>
