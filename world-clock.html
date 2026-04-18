@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Clock</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1a1a;
+      --surface:   #242424;
+      --surface2:  #2e2e2e;
+      --border:    #3a3a3a;
+      --copper:    #c8763a;
+      --copper-lt: #e0924f;
+      --copper-dk: #9e5b28;
+      --text:      #e8e8e8;
+      --text-dim:  #888;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--copper);
+    }
+
+    .clocks {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .clock-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 220px;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .clock-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .clock-time {
+      font-size: 1.8rem;
+      font-weight: 200;
+      letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .clock-date {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    .clock-offset {
+      font-size: 0.68rem;
+      color: var(--copper-dk);
+      letter-spacing: 0.08em;
+      font-family: 'Consolas', monospace;
+    }
+
+    .clock-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--copper-lt);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* City selector on second clock */
+    .city-select {
+      appearance: none;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--copper-lt);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 6px 28px 6px 10px;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+      text-align: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 9px center;
+      transition: border-color 0.2s;
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .city-select:focus { border-color: var(--copper-dk); }
+
+    /* Diff badge */
+    .diff-badge {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      text-align: center;
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .diff-badge span { color: var(--copper-lt); }
+  </style>
+</head>
+<body>
+
+<h1>World Clock</h1>
+
+<div class="clocks">
+  <!-- UK clock -->
+  <div class="clock-card">
+    <canvas id="canvas-uk" width="170" height="170"></canvas>
+    <div class="clock-info">
+      <div class="clock-time" id="time-uk">--:--:--</div>
+      <div class="clock-date" id="date-uk">---</div>
+      <div class="clock-offset" id="offset-uk">---</div>
+    </div>
+    <div class="clock-label">United Kingdom</div>
+  </div>
+
+  <!-- Second clock -->
+  <div class="clock-card">
+    <canvas id="canvas-2" width="170" height="170"></canvas>
+    <div class="clock-info">
+      <div class="clock-time" id="time-2">--:--:--</div>
+      <div class="clock-date" id="date-2">---</div>
+      <div class="clock-offset" id="offset-2">---</div>
+    </div>
+    <select class="city-select" id="citySelect"></select>
+  </div>
+</div>
+
+<div class="diff-badge" id="diffBadge">—</div>
+
+<script>
+  const CITIES = [
+    { name: 'Hong Kong',    tz: 'Asia/Hong_Kong' },
+    { name: 'Tokyo',        tz: 'Asia/Tokyo' },
+    { name: 'Singapore',    tz: 'Asia/Singapore' },
+    { name: 'Sydney',       tz: 'Australia/Sydney' },
+    { name: 'Auckland',     tz: 'Pacific/Auckland' },
+    { name: 'Dubai',        tz: 'Asia/Dubai' },
+    { name: 'Mumbai',       tz: 'Asia/Kolkata' },
+    { name: 'Nairobi',      tz: 'Africa/Nairobi' },
+    { name: 'Istanbul',     tz: 'Europe/Istanbul' },
+    { name: 'Paris',        tz: 'Europe/Paris' },
+    { name: 'Berlin',       tz: 'Europe/Berlin' },
+    { name: 'New York',     tz: 'America/New_York' },
+    { name: 'Chicago',      tz: 'America/Chicago' },
+    { name: 'Los Angeles',  tz: 'America/Los_Angeles' },
+    { name: 'Toronto',      tz: 'America/Toronto' },
+    { name: 'São Paulo',    tz: 'America/Sao_Paulo' },
+  ];
+
+  // Populate selector
+  const sel = document.getElementById('citySelect');
+  const saved = localStorage.getItem('worldclock_city') || 'Asia/Hong_Kong';
+  CITIES.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.tz;
+    opt.textContent = c.name;
+    if (c.tz === saved) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  sel.addEventListener('change', () => {
+    localStorage.setItem('worldclock_city', sel.value);
+  });
+
+  // ── Canvas clock drawing ──────────────────────────────────────────────
+
+  function drawClock(canvasId, tz) {
+    const canvas = document.getElementById(canvasId);
+    const dpr = window.devicePixelRatio || 1;
+
+    // Size canvas for DPR once
+    if (!canvas._sized) {
+      const size = 170;
+      canvas.width  = size * dpr;
+      canvas.height = size * dpr;
+      canvas.style.width  = size + 'px';
+      canvas.style.height = size + 'px';
+      canvas._sized = true;
+    }
+
+    const ctx = canvas.getContext('2d');
+    const dprScale = window.devicePixelRatio || 1;
+    const W = canvas.width / dprScale;
+    const H = canvas.height / dprScale;
+    ctx.save();
+    ctx.scale(dprScale, dprScale);
+
+    const cx = W / 2, cy = H / 2, r = W / 2 - 6;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Get time parts
+    const now = new Date();
+    const parts = {};
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: tz,
+      hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false
+    }).formatToParts(now).forEach(p => { parts[p.type] = parseInt(p.value); });
+    const h = parts.hour % 12, m = parts.minute, s = parts.second;
+
+    // Face
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#1e1e1e';
+    ctx.fill();
+
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#3a3a3a';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Hour markers
+    for (let i = 0; i < 60; i++) {
+      const angle = (i / 60) * Math.PI * 2 - Math.PI / 2;
+      const isHour = i % 5 === 0;
+      const inner = r - (isHour ? 13 : 7);
+      const outer = r - 2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
+      ctx.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
+      ctx.strokeStyle = isHour ? '#c8763a' : '#2e2e2e';
+      ctx.lineWidth   = isHour ? 2 : 1;
+      ctx.stroke();
+    }
+
+    // Hour hand
+    const hAngle = ((h + m / 60) / 12) * Math.PI * 2 - Math.PI / 2;
+    drawHand(ctx, cx, cy, hAngle, r * 0.50, 3.5, '#c8763a');
+
+    // Minute hand
+    const mAngle = ((m + s / 60) / 60) * Math.PI * 2 - Math.PI / 2;
+    drawHand(ctx, cx, cy, mAngle, r * 0.70, 2.5, '#e0924f');
+
+    // Second hand
+    const sAngle = (s / 60) * Math.PI * 2 - Math.PI / 2;
+    drawHand(ctx, cx, cy, sAngle, r * 0.78, 1, '#e0924f');
+    // Tail
+    drawHand(ctx, cx, cy, sAngle + Math.PI, r * 0.18, 1, '#e0924f');
+
+    // Centre cap
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#c8763a';
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawHand(ctx, cx, cy, angle, len, width, color) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+  }
+
+  // ── Digital display ───────────────────────────────────────────────────
+
+  function getOffset(tz) {
+    const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    const tzDate = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+    const localDate = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+    const diffHours = (tzDate - localDate) / 3600000;
+    const sign = diffHours >= 0 ? '+' : '−';
+    const abs = Math.abs(diffHours);
+    const hh = Math.floor(abs);
+    const mm = Math.round((abs - hh) * 60);
+    return `UTC${sign}${hh}${mm ? ':' + String(mm).padStart(2,'0') : ''}`;
+  }
+
+  function updateDisplay(suffix, tz) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', {
+      timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    });
+    const dateStr = now.toLocaleDateString('en-GB', {
+      timeZone: tz, weekday: 'short', day: 'numeric', month: 'short'
+    });
+    document.getElementById('time-' + suffix).textContent = timeStr;
+    document.getElementById('date-' + suffix).textContent = dateStr;
+    document.getElementById('offset-' + suffix).textContent = getOffset(tz);
+  }
+
+  function updateDiff() {
+    const now = new Date();
+    const ukDate  = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
+    const tzDate  = new Date(now.toLocaleString('en-US', { timeZone: sel.value }));
+    const diffH   = Math.round((tzDate - ukDate) / 3600000);
+    const cityName = CITIES.find(c => c.tz === sel.value)?.name || sel.value;
+    const sign = diffH >= 0 ? '+' : '−';
+    const abs = Math.abs(diffH);
+    const label = abs === 0
+      ? `${cityName} is the same time as the UK`
+      : `${cityName} is <span>${sign}${abs}h</span> ${diffH > 0 ? 'ahead of' : 'behind'} the UK`;
+    document.getElementById('diffBadge').innerHTML = label;
+  }
+
+  // ── Tick ─────────────────────────────────────────────────────────────
+
+  function tick() {
+    drawClock('canvas-uk', 'Europe/London');
+    drawClock('canvas-2',  sel.value);
+    updateDisplay('uk', 'Europe/London');
+    updateDisplay('2',  sel.value);
+    updateDiff();
+  }
+
+  sel.addEventListener('change', tick);
+  setInterval(tick, 1000);
+  tick();
+</script>
+</body>
+</html>
