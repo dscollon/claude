@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STATION ECHO-7 — SIGINT</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #040402;
+      --panel:  #060604;
+      --border: #1c1800;
+      --a:      #c89010;   /* amber main   */
+      --ab:     #f0b828;   /* amber bright */
+      --ad:     #5a4008;   /* amber dim    */
+      --av:     #1a1200;   /* amber very dim */
+      --red:    #c84030;
+      --green:  #3a9050;
+      --mono:   'Courier New', Courier, monospace;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--a);
+      font-family: var(--mono);
+    }
+
+    /* CRT overlay */
+    .crt {
+      position: fixed; inset: 0; pointer-events: none; z-index: 999;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+      );
+    }
+    .crt::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0,0,0,0.55) 100%);
+    }
+
+    /* Station layout */
+    .station {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 40px 1fr 108px;
+      gap: 2px;
+      padding: 2px;
+    }
+
+    /* Header bar */
+    .hbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      gap: 20px;
+    }
+
+    .hbar-section { display: flex; align-items: center; gap: 10px; }
+
+    .hbar-id {
+      color: var(--ab);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-shadow: 0 0 10px rgba(240,184,40,0.5);
+    }
+
+    .hbar-sep { color: var(--ad); }
+
+    .hbar-label { color: var(--ad); letter-spacing: 0.12em; }
+
+    .hbar-clock {
+      color: var(--ab);
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 8px rgba(240,184,40,0.4);
+    }
+
+    .dot { font-size: 0.7rem; }
+    .dot.green { color: var(--green); text-shadow: 0 0 6px var(--green); animation: blink 2s infinite; }
+    .dot.amber { color: var(--ab);   text-shadow: 0 0 6px var(--ab);    animation: blink 1.3s infinite; }
+    .dot.red   { color: var(--red);  text-shadow: 0 0 6px var(--red);   animation: blink 0.8s infinite; }
+
+    @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0.2} }
+
+    /* Main grid */
+    .mgrid {
+      display: grid;
+      grid-template-columns: 27fr 46fr 27fr;
+      gap: 2px;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .center-col, .right-col {
+      display: flex; flex-direction: column; gap: 2px; min-height: 0;
+    }
+
+    /* Panels */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .panel-hdr {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--ad);
+      padding: 4px 10px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-hdr .phdr-title { color: var(--a); }
+
+    .panel-body {
+      flex: 1;
+      overflow: hidden;
+      padding: 6px 8px;
+      min-height: 0;
+      font-size: 0.64rem;
+      line-height: 1.6;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Intercept feed */
+    #intercept-feed {
+      display: flex;
+      flex-direction: column-reverse;
+      overflow: hidden;
+      gap: 1px;
+    }
+
+    .intercept-line {
+      display: flex;
+      gap: 6px;
+      animation: fadein 0.4s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @keyframes fadein { from { opacity:0; transform: translateX(-6px); } to { opacity:1; transform: none; } }
+
+    .int-time { color: var(--ad); flex-shrink: 0; }
+    .int-freq { color: var(--ab); flex-shrink: 0; font-size: 0.6rem; }
+    .int-msg  { color: var(--a);  overflow: hidden; text-overflow: ellipsis; }
+    .int-msg.new { color: var(--ab); text-shadow: 0 0 8px rgba(240,184,40,0.3); }
+
+    /* Signals table */
+    .sig-row {
+      display: grid;
+      grid-template-columns: 5.5em 3.5em 2em 1fr;
+      gap: 4px;
+      padding: 2px 0;
+      border-bottom: 1px solid var(--av);
+      font-size: 0.62rem;
+      animation: fadein 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .sig-row.hdr { color: var(--ad); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 2px; }
+    .sig-freq    { color: var(--ab); }
+    .sig-mod     { color: var(--ad); }
+    .sig-str     { color: var(--a); text-align: right; }
+    .sig-status  { color: var(--ad); font-size: 0.58rem; }
+    .sig-status.locked { color: var(--green); text-shadow: 0 0 6px rgba(58,144,80,0.4); }
+    .sig-status.alert  { color: var(--ab);    text-shadow: 0 0 6px rgba(240,184,40,0.4); }
+
+    /* Traffic panel */
+    .traffic-panel {
+      overflow: hidden;
+    }
+
+    .traffic-panel canvas { height: 100%; }
+
+    /* Strength bar */
+    .str-bar {
+      display: inline-block;
+      height: 6px;
+      background: var(--a);
+      vertical-align: middle;
+      max-width: 40px;
+    }
+  </style>
+</head>
+<body>
+<div class="crt"></div>
+
+<div class="station">
+
+  <!-- HEADER -->
+  <div class="hbar">
+    <div class="hbar-section">
+      <span class="hbar-id">◈ STATION ECHO-7</span>
+      <span class="hbar-sep">//</span>
+      <span class="hbar-label">HF SIGNALS INTELLIGENCE</span>
+      <span class="hbar-sep">//</span>
+      <span class="hbar-label">OPERATOR: WATCHKEEPER</span>
+    </div>
+    <div class="hbar-section">
+      <span class="hbar-label">UTC</span>
+      <span class="hbar-clock" id="hclock">00:00:00</span>
+    </div>
+    <div class="hbar-section">
+      <span class="dot green">●</span>
+      <span class="hbar-label">RECEIVE ACTIVE</span>
+      <span class="hbar-sep">//</span>
+      <span class="dot amber">●</span>
+      <span class="hbar-label">DF ONLINE</span>
+      <span class="hbar-sep">//</span>
+      <span class="hbar-label">UNCLASSIFIED // EXERCISE</span>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="mgrid">
+
+    <!-- INTERCEPT FEED -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="phdr-title">◈ INTERCEPT FEED</span>
+        <span id="int-count">000 ENTRIES</span>
+      </div>
+      <div class="panel-body" id="intercept-feed"></div>
+    </div>
+
+    <!-- CENTER: SPECTRUM + WAVEFORM -->
+    <div class="center-col">
+      <div class="panel" style="flex:3">
+        <div class="panel-hdr">
+          <span class="phdr-title">◈ SPECTRUM MONITOR</span>
+          <span id="spec-range">3.5 – 30.0 MHZ</span>
+        </div>
+        <canvas id="spec-canvas"></canvas>
+      </div>
+      <div class="panel" style="flex:2">
+        <div class="panel-hdr">
+          <span class="phdr-title">◈ SIGNAL WAVEFORM</span>
+          <span id="wave-info">—</span>
+        </div>
+        <canvas id="wave-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- RIGHT: SIGNALS + COMPASS -->
+    <div class="right-col">
+      <div class="panel" style="flex:3">
+        <div class="panel-hdr">
+          <span class="phdr-title">◈ ACTIVE SIGNALS</span>
+          <span id="sig-count">0 ACTIVE</span>
+        </div>
+        <div class="panel-body" style="padding:6px 8px 0;">
+          <div class="sig-row hdr">
+            <span>FREQ</span><span>MOD</span><span>STR</span><span>STATUS</span>
+          </div>
+          <div id="signals-list"></div>
+        </div>
+      </div>
+      <div class="panel" style="flex:2">
+        <div class="panel-hdr">
+          <span class="phdr-title">◈ DIRECTION FINDING</span>
+          <span id="df-bearing">BRG —°</span>
+        </div>
+        <canvas id="compass-canvas"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TRAFFIC CHART -->
+  <div class="panel traffic-panel">
+    <div class="panel-hdr">
+      <span class="phdr-title">◈ TRAFFIC ANALYSIS</span>
+      <span id="traffic-stats">LAST 120s — MONITORING ALL BANDS</span>
+    </div>
+    <canvas id="traffic-canvas"></canvas>
+  </div>
+
+</div>
+
+<script>
+// ── Utilities ─────────────────────────────────────────────────────────
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+function rnd(lo, hi) { return lo + Math.random() * (hi - lo); }
+function rndInt(lo, hi) { return Math.floor(rnd(lo, hi + 1)); }
+function pad(n, w=2) { return String(n).padStart(w, '0'); }
+function hex(n) { return Array.from({length:n},()=>Math.floor(Math.random()*16).toString(16).toUpperCase()).join(''); }
+function grid() {
+  const L='ABCDEFGHJKLMNPQRSTUVWX';
+  return L[rndInt(0,21)]+L[rndInt(0,21)]+pad(rndInt(0,99))+pad(rndInt(0,99));
+}
+function freq() {
+  const b=[3.5,7.0,10.1,14.0,18.1,21.0,24.9,28.0];
+  return (pick(b)+rnd(0,0.5)).toFixed(3);
+}
+
+// ── Canvas init ────────────────────────────────────────────────────────
+function initCanvas(id) {
+  const el = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  const rect = el.getBoundingClientRect();
+  el.width  = rect.width  * dpr;
+  el.height = rect.height * dpr;
+  const ctx = el.getContext('2d');
+  ctx.scale(dpr, dpr);
+  el._w = rect.width;
+  el._h = rect.height;
+  return ctx;
+}
+
+let specCtx, waveCtx, compassCtx, trafficCtx;
+
+function initAllCanvases() {
+  specCtx    = initCanvas('spec-canvas');
+  waveCtx    = initCanvas('wave-canvas');
+  compassCtx = initCanvas('compass-canvas');
+  trafficCtx = initCanvas('traffic-canvas');
+}
+
+// ── Spectrum data ─────────────────────────────────────────────────────
+const BINS = 80;
+const FIXED_SIGS = [
+  { bin: 9,  base: 0.72, var: 0.12 },  // 7 MHz CW
+  { bin: 28, base: 0.82, var: 0.28 },  // 14 MHz voice
+  { bin: 38, base: 0.55, var: 0.22 },  // 18 MHz digital
+  { bin: 51, base: 0.48, var: 0.18 },  // 21 MHz
+  { bin: 66, base: 0.38, var: 0.35 },  // 27 MHz burst
+];
+
+const specSmooth = new Float32Array(BINS).fill(0.05);
+const specRaw    = new Float32Array(BINS).fill(0.05);
+
+function tickSpectrum() {
+  for (let i = 0; i < BINS; i++) specRaw[i] = 0.04 + Math.random() * 0.05;
+  FIXED_SIGS.forEach(s => {
+    const v = s.base + (Math.random() - 0.5) * s.var;
+    for (let d = -3; d <= 3; d++) {
+      const i = s.bin + d;
+      if (i >= 0 && i < BINS) specRaw[i] += v * Math.max(0, 1 - Math.abs(d) * 0.4);
+    }
+  });
+  if (Math.random() < 0.006) {
+    const sp = rndInt(0, BINS - 1);
+    specRaw[sp] = 0.9 + Math.random() * 0.1;
+  }
+  for (let i = 0; i < BINS; i++) specSmooth[i] = specSmooth[i]*0.75 + specRaw[i]*0.25;
+}
+
+function drawSpectrum(ctx) {
+  const W = ctx.canvas._w, H = ctx.canvas._h;
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid lines
+  const gridLines = 5;
+  for (let g = 0; g <= gridLines; g++) {
+    const y = (H - 20) * (1 - g / gridLines) + 2;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y);
+    ctx.strokeStyle = '#1a1400'; ctx.lineWidth = 1; ctx.stroke();
+  }
+
+  const bw = W / BINS;
+  // Freq labels
+  const labelFreqs = ['3.5','7','10','14','18','21','25','28'];
+  labelFreqs.forEach((lf, li) => {
+    const x = (li / (labelFreqs.length - 1)) * W;
+    ctx.fillStyle = '#3a2c08';
+    ctx.font = `${Math.round(9 * (window.devicePixelRatio||1)) / (window.devicePixelRatio||1)}px Courier New`;
+    ctx.textAlign = 'center';
+    ctx.fillText(lf, x, H - 4);
+  });
+
+  // History ghost (previous frame faint)
+  ctx.beginPath();
+  for (let i = 0; i < BINS; i++) {
+    const x = i * bw + bw / 2;
+    const y = (H - 20) * (1 - specSmooth[i]) + 2;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = 'rgba(100,64,8,0.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Bars
+  for (let i = 0; i < BINS; i++) {
+    const v = Math.min(specSmooth[i], 1);
+    const x = i * bw + 1;
+    const barH = (H - 22) * v;
+    const y = H - 20 - barH;
+    const bright = v > 0.6;
+
+    const grad = ctx.createLinearGradient(0, y, 0, H - 20);
+    grad.addColorStop(0, bright ? 'rgba(240,184,40,0.9)' : 'rgba(180,120,16,0.8)');
+    grad.addColorStop(1, 'rgba(80,52,8,0.4)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, Math.max(bw - 2, 1), barH);
+
+    if (bright) {
+      ctx.fillStyle = 'rgba(240,184,40,0.25)';
+      ctx.fillRect(x - 1, y - 2, bw + 1, barH + 4);
+    }
+  }
+
+  // Peak line
+  ctx.beginPath();
+  for (let i = 0; i < BINS; i++) {
+    const x = i * bw + bw / 2;
+    const y = (H - 20) * (1 - specSmooth[i]) + 2;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = 'rgba(240,184,40,0.6)';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+}
+
+// ── Waveform ──────────────────────────────────────────────────────────
+let wPhase = 0, wFreq = 3.2, wFreqT = 3.2, wAmp = 0.65, wAmpT = 0.65;
+const WAVE_MODES = ['USB','LSB','CW','AM','BPSK','RTTY'];
+let waveMode = 'USB';
+let waveModeTimer = 0;
+
+function tickWave() {
+  wPhase += 0.07;
+  if (waveModeTimer-- <= 0) {
+    wFreqT = rnd(1.5, 9);
+    wAmpT  = rnd(0.35, 0.8);
+    waveMode = pick(WAVE_MODES);
+    waveModeTimer = rndInt(120, 400);
+    document.getElementById('wave-info').textContent = `${freq()} MHZ — ${waveMode}`;
+  }
+  wFreq += (wFreqT - wFreq) * 0.015;
+  wAmp  += (wAmpT  - wAmp)  * 0.015;
+}
+
+function drawWaveform(ctx) {
+  const W = ctx.canvas._w, H = ctx.canvas._h;
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = '#0e0c02';
+  ctx.lineWidth = 1;
+  for (let g = 1; g < 4; g++) {
+    const y = H * g / 4;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  for (let g = 1; g < 8; g++) {
+    const x = W * g / 8;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // Centre zero line
+  ctx.strokeStyle = '#2a1e04';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, H/2); ctx.lineTo(W, H/2); ctx.stroke();
+
+  // Glow pass (blurred)
+  ctx.save();
+  ctx.shadowColor = 'rgba(200,144,16,0.5)';
+  ctx.shadowBlur = 6;
+
+  const noise = waveMode === 'RTTY' ? 0.15 : waveMode === 'CW' ? 0.04 : 0.08;
+  const harmonics = waveMode === 'AM' ? 3 : waveMode === 'BPSK' ? 2 : 1;
+
+  ctx.beginPath();
+  for (let px = 0; px < W; px++) {
+    const t = px / W;
+    let y = 0;
+    for (let h = 1; h <= harmonics; h++) {
+      y += Math.sin(t * wFreq * Math.PI * 2 * h + wPhase * (h === 1 ? 1 : 0.3)) * wAmp / h;
+    }
+    if (waveMode === 'CW') {
+      const burst = Math.abs(Math.sin(t * 2 + wPhase * 0.1)) > 0.6 ? 1 : 0.05;
+      y *= burst;
+    }
+    y += (Math.random() - 0.5) * noise;
+    const ypx = H / 2 - y * H / 2 * 0.85;
+    if (px === 0) ctx.moveTo(px, ypx); else ctx.lineTo(px, ypx);
+  }
+  ctx.strokeStyle = '#e8a820';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ── Direction finding ─────────────────────────────────────────────────
+const dfBearings = [
+  { bearing: 127, target: 127, strength: 0.85 },
+  { bearing: 243, target: 243, strength: 0.6 },
+  { bearing: 312, target: 312, strength: 0.4 },
+];
+
+function tickCompass() {
+  dfBearings.forEach(b => {
+    if (Math.random() < 0.004) b.target = rnd(0, 360);
+    b.bearing += (b.target - b.bearing) * 0.004;
+    b.strength = Math.max(0.2, Math.min(1, b.strength + (Math.random() - 0.5) * 0.02));
+  });
+  const primary = dfBearings[0].bearing;
+  document.getElementById('df-bearing').textContent = `BRG ${String(Math.round(primary)).padStart(3,'0')}°`;
+}
+
+function drawCompass(ctx) {
+  const W = ctx.canvas._w, H = ctx.canvas._h;
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(W, H) / 2 - 10;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Outer ring
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.strokeStyle = '#1e1800'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Rings
+  [0.6, 0.35].forEach(f => {
+    ctx.beginPath(); ctx.arc(cx, cy, R * f, 0, Math.PI * 2);
+    ctx.strokeStyle = '#0e0c02'; ctx.lineWidth = 1; ctx.stroke();
+  });
+
+  // Tick marks
+  for (let i = 0; i < 72; i++) {
+    const angle = (i / 72) * Math.PI * 2 - Math.PI / 2;
+    const isMajor = i % 9 === 0; // every 45°
+    const isMed   = i % 3 === 0; // every 15°
+    const len = isMajor ? 12 : isMed ? 7 : 4;
+    const col = isMajor ? '#c89010' : isMed ? '#3a2c08' : '#1a1400';
+    const ri = R - 1, ro = ri - len;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle) * ri, cy + Math.sin(angle) * ri);
+    ctx.lineTo(cx + Math.cos(angle) * ro, cy + Math.sin(angle) * ro);
+    ctx.strokeStyle = col; ctx.lineWidth = isMajor ? 1.5 : 1; ctx.stroke();
+  }
+
+  // Cardinal labels
+  const cardinals = [['N',0],['E',90],['S',180],['W',270]];
+  ctx.font = `${Math.round(10 * (window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Courier New`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  cardinals.forEach(([lbl, deg]) => {
+    const angle = (deg - 90) * Math.PI / 180;
+    const ri = R - 20;
+    ctx.fillStyle = '#c89010';
+    ctx.fillText(lbl, cx + Math.cos(angle) * ri, cy + Math.sin(angle) * ri);
+  });
+
+  // Bearing lines
+  dfBearings.forEach((b, idx) => {
+    const angle = (b.bearing - 90) * Math.PI / 180;
+    const alpha = b.strength * (idx === 0 ? 1 : 0.5);
+    ctx.save();
+    ctx.shadowColor = idx === 0 ? 'rgba(240,184,40,0.6)' : 'rgba(200,144,16,0.3)';
+    ctx.shadowBlur = idx === 0 ? 8 : 4;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * R * 0.9, cy + Math.sin(angle) * R * 0.9);
+    ctx.strokeStyle = idx === 0 ? `rgba(240,184,40,${alpha})` : `rgba(180,120,16,${alpha})`;
+    ctx.lineWidth = idx === 0 ? 1.5 : 1;
+    ctx.stroke();
+    ctx.restore();
+
+    // Arrow
+    if (idx === 0) {
+      const tipX = cx + Math.cos(angle) * R * 0.88;
+      const tipY = cy + Math.sin(angle) * R * 0.88;
+      ctx.beginPath(); ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#f0b828'; ctx.fill();
+    }
+  });
+
+  // Centre dot
+  const capGrad = ctx.createRadialGradient(cx-1, cy-1, 0.5, cx, cy, 5);
+  capGrad.addColorStop(0, '#f0b828'); capGrad.addColorStop(1, '#5a3808');
+  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+  ctx.fillStyle = capGrad; ctx.fill();
+}
+
+// ── Traffic chart ─────────────────────────────────────────────────────
+const TRAFFIC_LEN = 120;
+const trafficData = new Array(TRAFFIC_LEN).fill(0).map(() => rnd(0.1, 0.4));
+let trafficTick = 0;
+
+function pushTraffic() {
+  const base = 0.25;
+  // Occasional spikes
+  const spike = Math.random() < 0.04 ? rnd(0.3, 0.7) : 0;
+  trafficData.push(Math.min(1, base + rnd(0, 0.25) + spike));
+  trafficData.shift();
+}
+
+function drawTraffic(ctx) {
+  const W = ctx.canvas._w, H = ctx.canvas._h;
+  const pH = 16; // padding
+  ctx.clearRect(0, 0, W, H);
+
+  const dH = H - pH;
+
+  // Grid
+  ctx.strokeStyle = '#0e0c02'; ctx.lineWidth = 1;
+  for (let g = 1; g < 4; g++) {
+    const y = pH + dH * g / 4;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Time labels
+  ctx.fillStyle = '#3a2c08';
+  ctx.font = `${Math.round(8 * (window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Courier New`;
+  ctx.textAlign = 'center';
+  ['–120s','–90s','–60s','–30s','NOW'].forEach((lbl, i) => {
+    ctx.fillText(lbl, W * i / 4, H - 2);
+  });
+
+  const dx = W / (TRAFFIC_LEN - 1);
+
+  // Fill under curve
+  ctx.beginPath();
+  ctx.moveTo(0, H - pH);
+  trafficData.forEach((v, i) => {
+    ctx.lineTo(i * dx, pH + dH * (1 - v));
+  });
+  ctx.lineTo((TRAFFIC_LEN - 1) * dx, H - pH);
+  ctx.closePath();
+  const fillGrad = ctx.createLinearGradient(0, pH, 0, H - pH);
+  fillGrad.addColorStop(0, 'rgba(200,144,16,0.25)');
+  fillGrad.addColorStop(1, 'rgba(200,144,16,0.02)');
+  ctx.fillStyle = fillGrad;
+  ctx.fill();
+
+  // Line
+  ctx.save();
+  ctx.shadowColor = 'rgba(240,184,40,0.4)';
+  ctx.shadowBlur  = 5;
+  ctx.beginPath();
+  trafficData.forEach((v, i) => {
+    const x = i * dx, y = pH + dH * (1 - v);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#e8a820';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+
+  // Current value marker
+  const last = trafficData[TRAFFIC_LEN - 1];
+  const lx = (TRAFFIC_LEN - 1) * dx;
+  const ly = pH + dH * (1 - last);
+  ctx.beginPath(); ctx.arc(lx, ly, 3, 0, Math.PI * 2);
+  ctx.fillStyle = '#f0b828'; ctx.fill();
+}
+
+// ── Intercept feed ────────────────────────────────────────────────────
+const CALLSIGNS = ['ALPHA-1','BRAVO-7','CHARLIE-3','DELTA-9','ECHO-4',
+  'FOXTROT-2','GOLF-5','HOTEL-8','INDIA-6','KILO-2','LIMA-4','MIKE-9',
+  'NOVEMBER-3','OSCAR-7','PAPA-1','QUEBEC-8'];
+
+const MSG_GEN = [
+  () => `${pick(CALLSIGNS)} THIS IS ${pick(CALLSIGNS)} — SIGNAL CHECK`,
+  () => `UNID STN ${freq()} MHZ — NUMBERS FORMAT`,
+  () => `DF FIX BRG ${pad(rndInt(0,359),3)}° ±${rndInt(1,5)}° — CONF ${pick(['HIGH','MEDIUM','LOW'])}`,
+  () => `INTERCEPT ${freq()} MHZ — ${rndInt(50,500)} GROUPS ENCR`,
+  () => `MOBILE UNIT GRID ${grid()} MOVING ${pick(['N','NE','E','SE','S','SW','W','NW'])}`,
+  () => `BURST TX ${freq()} MHZ DUR ${rnd(0.3,9.5).toFixed(1)}s`,
+  () => `AUTH ${hex(8)} — ${pick(['ACCEPTED','PENDING','FAILED'])}`,
+  () => `FREQ CHANGE ${freq()} → ${freq()} MHZ`,
+  () => `LINK QTY ${pick(CALLSIGNS)} ${rndInt(55,99)}%`,
+  () => `UNKNOWN SIGNAL ${freq()} MHZ — ${pick(['ANALYSIS PENDING','POSSIBLE NUMBERS STN','DIGITAL MODE UNK','VOICE ENCRYPTED'])}`,
+  () => `TRAFFIC ANOMALY ${pick(['14.0','7.0','21.0','3.5'])} MHZ — ${rndInt(110,380)}% ABOVE BASELINE`,
+  () => `CRYPTO SYNC ${pick(CALLSIGNS)} — KEY ${hex(4)}`,
+  () => `${pick(CALLSIGNS)} CONTACT REPORT — GRID ${grid()} — ${rndInt(1,3)} ELEMENTS`,
+  () => `RELAY ${pick(CALLSIGNS)} VIA ${pick(CALLSIGNS)} — MSG ${pad(rndInt(1,99))} OF ${rndInt(2,10)}`,
+];
+
+let interceptCount = 0;
+const MAX_LINES = 28;
+
+function addIntercept() {
+  interceptCount++;
+  const now = new Date();
+  const tf = `${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
+  const fq = freq();
+  const msg = pick(MSG_GEN)();
+
+  const feed = document.getElementById('intercept-feed');
+  const line = document.createElement('div');
+  line.className = 'intercept-line';
+  line.innerHTML = `
+    <span class="int-time">${tf}Z</span>
+    <span class="int-freq">${fq}</span>
+    <span class="int-msg new">${msg}</span>`;
+  feed.prepend(line);
+
+  // Remove new class after a beat
+  setTimeout(() => line.querySelector('.int-msg')?.classList.remove('new'), 2000);
+
+  // Trim
+  while (feed.children.length > MAX_LINES) feed.removeChild(feed.lastChild);
+
+  document.getElementById('int-count').textContent = `${String(interceptCount).padStart(3,'0')} ENTRIES`;
+}
+
+// ── Active signals table ──────────────────────────────────────────────
+const MODS = ['USB','LSB','CW','AM','FM','BPSK31','RTTY','WSPR','FT8','ALE','STANAG'];
+const STATS = ['MONITORING','ANALYZING','TRACKING','QUEUED','LOCKED'];
+
+let activeSignals = [];
+
+function refreshSignals() {
+  // Add/remove signals randomly
+  if (activeSignals.length < 8 && Math.random() < 0.4) {
+    activeSignals.push({
+      freq: freq(), mod: pick(MODS),
+      strength: rndInt(2, 9),
+      status: pick(STATS),
+      ttl: rndInt(3, 10),
+    });
+  }
+  activeSignals = activeSignals.filter(s => {
+    s.ttl--;
+    s.strength = Math.max(1, Math.min(9, s.strength + rndInt(-1, 1)));
+    return s.ttl > 0;
+  });
+
+  const list = document.getElementById('signals-list');
+  list.innerHTML = '';
+  activeSignals.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'sig-row';
+    const isLocked = s.status === 'LOCKED';
+    const isAlert  = s.strength >= 7;
+    div.innerHTML = `
+      <span class="sig-freq">${s.freq}</span>
+      <span class="sig-mod">${s.mod}</span>
+      <span class="sig-str">${s.strength}/9</span>
+      <span class="sig-status ${isLocked?'locked':isAlert?'alert':''}">${s.status}</span>`;
+    list.appendChild(div);
+  });
+  document.getElementById('sig-count').textContent = `${activeSignals.length} ACTIVE`;
+}
+
+// ── Clock ─────────────────────────────────────────────────────────────
+function updateClock() {
+  const n = new Date();
+  document.getElementById('hclock').textContent =
+    `${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}Z`;
+}
+
+// ── Main animation loop ───────────────────────────────────────────────
+function frame() {
+  tickSpectrum();
+  tickWave();
+  tickCompass();
+
+  drawSpectrum(specCtx);
+  drawWaveform(waveCtx);
+  drawCompass(compassCtx);
+  drawTraffic(trafficCtx);
+
+  requestAnimationFrame(frame);
+}
+
+// ── Intervals ─────────────────────────────────────────────────────────
+function scheduleIntercept() {
+  addIntercept();
+  setTimeout(scheduleIntercept, rndInt(1800, 6000));
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  initAllCanvases();
+  updateClock();
+  setInterval(updateClock, 1000);
+  setInterval(pushTraffic, 1000);
+  setInterval(refreshSignals, 2200);
+  scheduleIntercept();
+  // Initial data
+  for (let i = 0; i < 8; i++) addIntercept();
+  refreshSignals();
+  document.getElementById('wave-info').textContent = `${freq()} MHZ — USB`;
+  requestAnimationFrame(frame);
+});
+
+window.addEventListener('resize', () => {
+  setTimeout(initAllCanvases, 100);
+});
+</script>
+</body>
+</html>
