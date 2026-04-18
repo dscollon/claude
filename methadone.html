@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Methadone Supply Calculator</title>
+  <title>Methadone Calculator</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -83,8 +83,6 @@
 
     tbody tr:last-child { border-bottom: none; }
 
-    tbody tr:hover { background: var(--surface2); }
-
     td {
       padding: 9px 0;
       text-align: center;
@@ -105,9 +103,12 @@
       color: var(--text);
     }
 
-    /* Highlight column on hover via JS */
-    td.col-hover { background: rgba(200, 118, 58, 0.06); }
-    thead th.col-hover { background: rgba(200, 118, 58, 0.12); }
+    /* Row and column highlight */
+    tr.row-hover td                 { background: rgba(200, 118, 58, 0.07); }
+    tr.row-hover td:first-child     { color: var(--copper-lt); }
+    td.col-hover                    { background: rgba(200, 118, 58, 0.07); }
+    thead th.col-hover              { background: rgba(200, 118, 58, 0.15); color: var(--copper-lt); }
+    tr.row-hover td.col-hover       { background: rgba(200, 118, 58, 0.22); color: var(--copper-lt); font-weight: 600; }
 
     @media print {
       body { background: white; color: black; padding: 16px; }
@@ -126,15 +127,15 @@
 <div class="app">
 
   <header>
-    <h1>Methadone Supply Calculator</h1>
-    <p>Total quantity (mg) by daily dose and supply duration</p>
+    <h1>Methadone Calculator</h1>
+    <p>Total quantity by daily dose and supply duration</p>
   </header>
 
   <div class="table-wrap">
     <table id="grid">
       <thead>
         <tr>
-          <th>Dose (mg/day)</th>
+          <th>Dose / day</th>
           <th data-col="0">7 days</th>
           <th data-col="1">14 days</th>
           <th data-col="2">21 days</th>
@@ -153,7 +154,7 @@
   for (let dose = 5; dose <= 150; dose += 5) {
     const tr = document.createElement('tr');
     const doseCell = document.createElement('td');
-    doseCell.textContent = dose + ' mg';
+    doseCell.textContent = dose;
     tr.appendChild(doseCell);
 
     DAYS.forEach((days, colIdx) => {
@@ -167,15 +168,24 @@
     tbody.appendChild(tr);
   }
 
-  // Column hover highlight
+  // Row and column highlight
   document.getElementById('grid').addEventListener('mouseover', e => {
-    const col = e.target.dataset.col;
-    document.querySelectorAll('[data-col]').forEach(el => {
-      el.classList.toggle('col-hover', el.dataset.col === col && col !== undefined);
-    });
+    const td = e.target.closest('td, th');
+    if (!td) return;
+    const col = td.dataset.col;
+    const row = td.closest('tr');
+
+    document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('row-hover'));
+    document.querySelectorAll('[data-col]').forEach(el => el.classList.remove('col-hover'));
+
+    if (row && row.closest('tbody')) row.classList.add('row-hover');
+    if (col !== undefined) {
+      document.querySelectorAll(`[data-col="${col}"]`).forEach(el => el.classList.add('col-hover'));
+    }
   });
 
   document.getElementById('grid').addEventListener('mouseleave', () => {
+    document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('row-hover'));
     document.querySelectorAll('[data-col]').forEach(el => el.classList.remove('col-hover'));
   });
 </script>
