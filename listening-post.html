@@ -44,25 +44,23 @@
       background: radial-gradient(ellipse at 50% 35%, transparent 50%, rgba(0,0,0,0.65) 100%);
     }
 
-    /* ── Layout ── */
+    /* ── Top-level layout ── */
     .station {
       height: 100vh;
-      display: grid;
-      grid-template-rows: 42px 1fr 112px;
+      display: flex; flex-direction: column;
       gap: 2px; padding: 2px;
     }
 
     /* Header */
     .hbar {
+      height: 42px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 12px;
       background: var(--panel);
       border: 1px solid var(--border);
       gap: 12px;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-
     .hbar::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -70,6 +68,35 @@
       opacity: 0.4;
     }
 
+    /* Display area */
+    .display-area {
+      flex: 1; min-height: 0; position: relative;
+    }
+    .display {
+      display: none; width: 100%; height: 100%;
+    }
+    .display.active { display: flex; flex-direction: column; }
+
+    /* Switcher */
+    .switcher {
+      display: flex; align-items: center;
+      background: var(--panel); border-top: 1px solid var(--border);
+      padding: 0 8px; gap: 2px; height: 36px; flex-shrink: 0;
+    }
+    .sw-btn {
+      flex: 1; height: 26px; background: #0a0a06;
+      border: 1px solid var(--border);
+      color: var(--cop-dim); font-size: 0.6rem; letter-spacing: 0.12em;
+      text-transform: uppercase; cursor: pointer; font-family: var(--mono);
+      border-radius: 3px; transition: all 0.15s;
+    }
+    .sw-btn:hover { color: var(--copper); border-color: var(--copper); }
+    .sw-btn.active {
+      background: var(--cop-vd); border-color: var(--cop-br); color: var(--cop-br);
+      box-shadow: 0 0 10px rgba(240,160,48,0.15);
+    }
+
+    /* Header elements */
     .hb  { display: flex; align-items: center; gap: 8px; }
     .hb-id {
       color: var(--cop-br); font-size: 0.72rem; letter-spacing: 0.22em;
@@ -77,103 +104,78 @@
     }
     .hb-sep { color: var(--cop-dim); font-size: 0.65rem; }
     .hb-lbl { color: var(--cop-dim); font-size: 0.6rem; letter-spacing: 0.12em; }
-    .hb-val { font-size: 0.68rem; letter-spacing: 0.1em; }
     .hb-clock {
       color: var(--cop-br); font-size: 0.9rem; letter-spacing: 0.14em;
       font-variant-numeric: tabular-nums;
       text-shadow: 0 0 10px rgba(240,160,48,0.4);
     }
 
-    .indicator {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 0.58rem; letter-spacing: 0.1em;
-    }
+    .indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 0.58rem; letter-spacing: 0.1em; }
     .ind-dot { font-size: 0.6rem; }
     .ind-dot.g { color: var(--green);  text-shadow: 0 0 6px var(--green);  animation: blink 2.8s infinite; }
     .ind-dot.a { color: var(--cop-br); text-shadow: 0 0 6px var(--cop-br); animation: blink 1.8s infinite; }
     .ind-dot.r { color: var(--red);    text-shadow: 0 0 6px var(--red);    animation: blink 0.7s infinite; }
     .ind-dot.c { color: var(--cyan);   text-shadow: 0 0 6px var(--cyan);   animation: blink 2.2s infinite; }
-
     @keyframes blink { 0%,48%{opacity:1} 50%,98%{opacity:0.15} 100%{opacity:1} }
 
-    .alert-ticker {
-      font-size: 0.6rem; color: var(--red); letter-spacing: 0.08em;
-      animation: flash 1.2s infinite;
-      display: none;
-    }
+    .alert-ticker { font-size: 0.6rem; color: var(--red); letter-spacing: 0.08em; animation: flash 1.2s infinite; display: none; }
     .alert-ticker.show { display: block; }
     @keyframes flash { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 
-    /* Main grid */
-    .mgrid {
-      display: grid;
-      grid-template-columns: 24fr 52fr 24fr;
-      gap: 2px; min-height: 0;
-    }
-    .center-col, .right-col {
-      display: flex; flex-direction: column; gap: 2px; min-height: 0;
-    }
-
-    /* Panels */
+    /* ── Shared panel styles ── */
     .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      overflow: hidden; min-height: 0;
+      background: var(--panel); border: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden; min-height: 0;
     }
-
     .ph {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 3px 10px;
-      border-bottom: 1px solid var(--border);
+      padding: 3px 10px; border-bottom: 1px solid var(--border);
       flex-shrink: 0; gap: 8px;
     }
-    .ph::before {
-      content: ''; position: absolute;
-      height: 1px; left: 0; right: 0; top: 0;
-    }
-
-    .ph-title {
-      font-size: 0.58rem; letter-spacing: 0.18em; color: var(--copper);
-      text-transform: uppercase; white-space: nowrap;
-    }
-    .ph-right {
-      font-size: 0.55rem; color: var(--cop-dim); letter-spacing: 0.08em;
-      white-space: nowrap; text-align: right;
-    }
+    .ph-title { font-size: 0.58rem; letter-spacing: 0.18em; color: var(--copper); text-transform: uppercase; white-space: nowrap; }
+    .ph-right { font-size: 0.55rem; color: var(--cop-dim); letter-spacing: 0.08em; white-space: nowrap; text-align: right; }
     .ph-right.live { color: var(--green); }
     .ph-right.alert { color: var(--red); }
-
-    .pb {
-      flex: 1; overflow: hidden;
-      padding: 5px 8px; min-height: 0;
-      font-size: 0.62rem; line-height: 1.55;
-    }
+    .pb { flex: 1; overflow: hidden; padding: 5px 8px; min-height: 0; font-size: 0.62rem; line-height: 1.55; }
 
     canvas { display: block; width: 100%; flex: 1; min-height: 0; }
 
-    /* ── Intercept feed ── */
-    #int-feed {
-      display: flex; flex-direction: column-reverse;
-      overflow: hidden; gap: 0;
+    /* ── Control button ── */
+    .cb {
+      padding: 4px 10px; border: 1px solid var(--border); background: #0a0a06;
+      color: var(--cop-dim); font-family: var(--mono); font-size: 0.58rem;
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      border-radius: 3px; transition: all 0.15s;
     }
+    .cb:hover { border-color: var(--copper); color: var(--copper); }
+    .cb.on { background: var(--cop-vd); border-color: var(--cop-br); color: var(--cop-br); box-shadow: 0 0 8px rgba(240,160,48,0.2); }
+    .cb.on-g { background: var(--grn-dim); border-color: var(--green); color: var(--green); }
+    .cb.on-r { background: var(--red-dim); border-color: var(--red); color: var(--red); }
+    .cb.on-c { background: var(--cyn-dim); border-color: var(--cyan); color: var(--cyan); }
+    .cb.danger { color: var(--red); border-color: var(--red-dim); }
 
+    .ctrl-strip {
+      display: flex; align-items: center; gap: 4px; height: 40px; flex-shrink: 0;
+      padding: 0 8px; border-top: 1px solid var(--border); background: #050503;
+      flex-wrap: nowrap; overflow: hidden;
+    }
+    .ctrl-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
+    .ctrl-lbl { font-size: 0.52rem; color: var(--cop-dim); letter-spacing: 0.1em; flex-shrink: 0; }
+
+    /* ── Intercept feed ── */
+    .int-feed-wrap { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column-reverse; }
     .il {
       display: flex; gap: 5px; align-items: flex-start;
-      padding: 2px 0;
-      border-bottom: 1px solid rgba(24,20,8,0.6);
-      animation: slidein 0.35s ease;
-      white-space: nowrap; overflow: hidden;
+      padding: 2px 6px; border-bottom: 1px solid rgba(24,20,8,0.6);
+      animation: slidein 0.35s ease; white-space: nowrap; overflow: hidden;
     }
     @keyframes slidein { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
-
     .il-time { color: var(--cop-dim); flex-shrink: 0; font-size: 0.58rem; }
     .il-pri  { font-size: 0.55rem; font-weight: bold; flex-shrink: 0; border-radius: 2px; padding: 0 3px; }
     .pri-flash    { background: var(--red-dim);  color: var(--red);    animation: flash 0.8s infinite; }
     .pri-priority { background: var(--ylw-dim);  color: var(--yellow); }
     .pri-routine  { background: transparent;     color: var(--cop-dim); }
     .pri-admin    { background: transparent;     color: #3a3020; }
-
     .il-type { font-size: 0.55rem; color: var(--cyan); flex-shrink: 0; }
     .il-msg  { color: var(--text); overflow: hidden; text-overflow: ellipsis; font-size: 0.61rem; }
     .il-msg.new { color: var(--cop-br); text-shadow: 0 0 8px rgba(240,160,48,0.25); }
@@ -181,16 +183,16 @@
     /* ── Signals table ── */
     .sig-hdr, .sig-row {
       display: grid;
-      grid-template-columns: 5.2em 3.2em 52px 4.2em 4.2em;
+      grid-template-columns: 5.2em 3.2em 52px 4em 4.5em 5.5em 2.8em;
       gap: 3px; padding: 2px 0;
       border-bottom: 1px solid rgba(24,20,8,0.5);
-      font-size: 0.59rem; white-space: nowrap;
+      font-size: 0.59rem; white-space: nowrap; align-items: center;
     }
     .sig-hdr { color: var(--cop-dim); border-bottom: 1px solid var(--border); padding-bottom: 3px; margin-bottom: 1px; font-size: 0.56rem; letter-spacing: 0.08em; }
     .sig-row { animation: slidein 0.3s ease; }
     .sf { color: var(--cop-br); }
     .sm { color: var(--cop-dim); }
-    .ss-bar-wrap { position: relative; height: 7px; margin-top: 3px; background: var(--cop-vd); border-radius: 1px; }
+    .ss-bar-wrap { position: relative; height: 7px; background: var(--cop-vd); border-radius: 1px; }
     .ss-bar { height: 100%; border-radius: 1px; }
     .sd { font-size: 0.57rem; }
     .sc { font-size: 0.55rem; }
@@ -202,34 +204,103 @@
     /* ── System status ── */
     .status-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 2px 0;
-      border-bottom: 1px solid rgba(24,20,8,0.4);
-      font-size: 0.58rem;
+      padding: 2px 0; border-bottom: 1px solid rgba(24,20,8,0.4); font-size: 0.58rem;
     }
     .sr-label { color: var(--cop-dim); letter-spacing: 0.06em; }
-    .sr-val   { font-size: 0.57rem; }
+    .sr-val { font-size: 0.57rem; }
     .sr-val.ok    { color: var(--green); }
     .sr-val.warn  { color: var(--yellow); }
     .sr-val.error { color: var(--red); }
     .sr-val.info  { color: var(--cyan); }
 
-    /* ── ELINT panel ── */
-    .elint-row {
-      display: flex; align-items: center; gap: 6px;
-      padding: 2px 0; font-size: 0.59rem;
-      border-bottom: 1px solid rgba(24,20,8,0.4);
-    }
+    /* ── ELINT ── */
+    .elint-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 0.59rem; border-bottom: 1px solid rgba(24,20,8,0.4); }
     .er-type { width: 3.8em; color: var(--copper); flex-shrink: 0; }
     .er-bar-wrap { flex: 1; height: 5px; background: var(--cop-vd); border-radius: 1px; }
     .er-bar { height: 100%; border-radius: 1px; transition: width 0.8s ease; }
     .er-count { width: 3em; text-align: right; color: var(--cop-dim); font-size: 0.56rem; }
 
-    /* Bottom row */
-    .bottom-row {
-      display: grid;
-      grid-template-columns: 60fr 40fr;
-      gap: 2px;
+    /* ── D1 specific ── */
+    #d1 { flex-direction: column; }
+    .d1-mgrid {
+      display: grid; grid-template-columns: 24fr 52fr 24fr;
+      gap: 2px; flex: 1; min-height: 0;
     }
+    .d1-center-col, .d1-right-col { display: flex; flex-direction: column; gap: 2px; min-height: 0; }
+    .d1-bottom-row { display: grid; grid-template-columns: 60fr 40fr; gap: 2px; flex-shrink: 0; height: 112px; }
+
+    /* ── D2 specific ── */
+    #d2 { flex-direction: column; }
+
+    /* ── D3 specific ── */
+    #d3 { flex-direction: column; }
+    .d3-feed-wrap { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column-reverse; }
+    .il-d3 { font-size: 0.72rem; line-height: 1.8; padding: 2px 10px; }
+
+    /* ── D4 specific ── */
+    #d4 { flex-direction: row; }
+    .d4-left  { flex: 58; display: flex; flex-direction: column; }
+    .d4-right { flex: 42; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .d4-bearing-list { flex: 1; overflow-y: auto; padding: 4px 8px; }
+    .dfb-row { display: flex; align-items: center; gap: 6px; padding: 3px 0; border-bottom: 1px solid rgba(24,20,8,0.4); font-size: 0.6rem; }
+    .dfb-brg { width: 4em; color: var(--cop-br); flex-shrink: 0; }
+    .dfb-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .dfb-str-wrap { flex: 1; height: 6px; background: var(--cop-vd); border-radius: 1px; }
+    .dfb-str-bar { height: 100%; border-radius: 1px; }
+    .dfb-conf { width: 3em; text-align: right; font-size: 0.55rem; flex-shrink: 0; }
+    .dfb-conf.high { color: var(--green); }
+    .dfb-conf.med  { color: var(--yellow); }
+    .dfb-conf.low  { color: var(--red); }
+    .d4-fix-quality { padding: 6px 8px; font-size: 0.6rem; letter-spacing: 0.1em; border-top: 1px solid var(--border); flex-shrink: 0; }
+
+    /* ── D5 specific ── */
+    #d5 { flex-direction: column; }
+    .d5-bottom { display: flex; gap: 2px; flex: 2; min-height: 0; }
+    .d5-stats { flex: 1; padding: 6px 8px; overflow-y: auto; }
+    .d5-stat-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 0.6rem; border-bottom: 1px solid rgba(24,20,8,0.3); }
+    .d5-anomaly { flex: 1; overflow-y: auto; padding: 4px 8px; }
+    .d5-anomaly-row { font-size: 0.58rem; padding: 1px 0; border-bottom: 1px solid rgba(24,20,8,0.3); display: flex; gap: 6px; }
+    .d5-anomaly-time { color: var(--cop-dim); flex-shrink: 0; }
+    .d5-anomaly-msg { color: var(--text); }
+
+    /* ── D6 specific ── */
+    #d6 { flex-direction: column; }
+    .d6-sig-list { flex: 1; overflow-y: auto; padding: 0 8px; }
+    .sig6-hdr, .sig6-row {
+      display: grid;
+      grid-template-columns: 5.5em 3.5em 52px 4em 4em 5.5em 2.8em;
+      gap: 4px; padding: 3px 0;
+      border-bottom: 1px solid rgba(24,20,8,0.5);
+      font-size: 0.68rem; align-items: center;
+    }
+    .sig6-hdr { color: var(--cop-dim); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 2px; font-size: 0.6rem; letter-spacing: 0.08em; position: sticky; top: 0; background: var(--panel); }
+
+    /* ── D7 specific ── */
+    #d7 { flex-direction: row; gap: 2px; }
+    .d7-left  { flex: 45; display: flex; flex-direction: column; gap: 2px; }
+    .d7-right { flex: 55; display: flex; flex-direction: column; }
+    .d7-sys-panel { flex: 1; overflow-y: auto; padding: 4px 8px; }
+    .d7-sys-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid rgba(24,20,8,0.4); font-size: 0.68rem; }
+    .d7-controls { padding: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+    .d7-ctrl-row { display: flex; gap: 4px; flex-wrap: wrap; }
+    .op-log { flex: 1; overflow-y: auto; padding: 4px 8px; }
+    .op-entry { font-size: 0.65rem; padding: 2px 0; border-bottom: 1px solid rgba(24,20,8,0.3); display: flex; gap: 6px; }
+    .op-time { color: var(--cop-dim); flex-shrink: 0; }
+    .op-msg { color: var(--text); }
+    .op-msg.sys { color: var(--cyan); }
+    .op-input-row { display: flex; gap: 4px; padding: 6px 8px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .op-input {
+      flex: 1; background: #050503; border: 1px solid var(--border); color: var(--text);
+      font-family: var(--mono); font-size: 0.62rem; padding: 4px 8px;
+      border-radius: 3px; outline: none;
+    }
+    .op-input:focus { border-color: var(--copper); }
+    .op-input::placeholder { color: var(--cop-dim); }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cop-dim); border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -246,10 +317,10 @@
       <span class="hb-lbl">OP: WATCHKEEPER</span>
     </div>
     <div class="hb" style="gap:14px">
-      <div class="indicator"><span class="ind-dot g">●</span><span class="hb-lbl">RCV ACTIVE</span></div>
+      <div class="indicator" id="ind-rcv"><span class="ind-dot g">●</span><span class="hb-lbl">RCV ACTIVE</span></div>
       <div class="indicator"><span class="ind-dot a">●</span><span class="hb-lbl">DF ARRAY</span></div>
-      <div class="indicator"><span class="ind-dot c">●</span><span class="hb-lbl">CRYPTO SYNC</span></div>
-      <div class="indicator"><span class="ind-dot g">●</span><span class="hb-lbl">RECORD</span></div>
+      <div class="indicator" id="ind-crypto"><span class="ind-dot c">●</span><span class="hb-lbl">CRYPTO SYNC</span></div>
+      <div class="indicator" id="ind-rec"><span class="ind-dot g">●</span><span class="hb-lbl">RECORD</span></div>
     </div>
     <div class="hb">
       <span class="hb-lbl" id="htz">GMT</span>
@@ -263,96 +334,305 @@
     </div>
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="mgrid">
+  <!-- DISPLAY AREA -->
+  <div class="display-area">
 
-    <!-- LEFT: INTERCEPTS -->
-    <div class="panel">
-      <div class="ph">
-        <span class="ph-title">◈ INTERCEPT LOG</span>
-        <span class="ph-right live" id="int-count">000 ENTRIES</span>
+    <!-- ═══════════════════════════════════════════ DISPLAY 1 — OVERVIEW -->
+    <div class="display active" id="d1">
+      <div class="d1-mgrid">
+
+        <!-- Left: intercept log -->
+        <div class="panel">
+          <div class="ph">
+            <span class="ph-title">◈ INTERCEPT LOG</span>
+            <span class="ph-right live" id="d1-int-count">000 ENTRIES</span>
+          </div>
+          <div class="int-feed-wrap" id="d1-int-feed"></div>
+        </div>
+
+        <!-- Centre -->
+        <div class="d1-center-col">
+          <div class="panel" style="flex:17">
+            <div class="ph">
+              <span class="ph-title">◈ SPECTRUM + WATERFALL — 3.5–30.0 MHZ</span>
+              <span class="ph-right" id="d1-spec-peak">PEAK: — MHZ</span>
+            </div>
+            <canvas id="d1-spec"></canvas>
+          </div>
+          <div class="panel" style="flex:10">
+            <div class="ph">
+              <span class="ph-title">◈ SIGNAL WAVEFORM</span>
+              <span class="ph-right live" id="d1-wave-info">—</span>
+            </div>
+            <canvas id="d1-wave"></canvas>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="d1-right-col">
+          <div class="panel" style="flex:13">
+            <div class="ph">
+              <span class="ph-title">◈ ACTIVE SIGNALS</span>
+              <span class="ph-right" id="d1-sig-count">0 ACTIVE</span>
+            </div>
+            <div class="pb" style="padding:4px 8px 0">
+              <div class="sig-hdr" style="grid-template-columns:5.2em 3.2em 52px 4.2em 4.2em">
+                <span>FREQ</span><span>MOD</span><span>STR</span><span>BRG</span><span>STATUS</span>
+              </div>
+              <div id="d1-sig-list"></div>
+            </div>
+          </div>
+          <div class="panel" style="flex:9">
+            <div class="ph">
+              <span class="ph-title">◈ DIRECTION FINDING</span>
+              <span class="ph-right" id="d1-df-info">BRG —° // FIX QUALITY: —</span>
+            </div>
+            <canvas id="d1-compass"></canvas>
+          </div>
+          <div class="panel" style="flex:5">
+            <div class="ph">
+              <span class="ph-title">◈ SYSTEM STATUS</span>
+              <span class="ph-right live">ALL SYSTEMS NOMINAL</span>
+            </div>
+            <div class="pb" style="padding:3px 8px" id="d1-sys-status"></div>
+          </div>
+        </div>
       </div>
-      <div class="pb" style="padding:4px 6px">
-        <div id="int-feed"></div>
+
+      <!-- Bottom row -->
+      <div class="d1-bottom-row">
+        <div class="panel">
+          <div class="ph">
+            <span class="ph-title">◈ BAND TRAFFIC — LAST 120s</span>
+            <span class="ph-right">
+              <span style="color:var(--cop-br)">■</span> 7MHZ &nbsp;
+              <span style="color:var(--cyan)">■</span> 14MHZ &nbsp;
+              <span style="color:var(--green)">■</span> 21MHZ
+            </span>
+          </div>
+          <canvas id="d1-traffic"></canvas>
+        </div>
+        <div class="panel">
+          <div class="ph">
+            <span class="ph-title">◈ ELINT CLASSIFICATION</span>
+            <span class="ph-right" id="d1-elint-last">LAST: —</span>
+          </div>
+          <div class="pb" style="padding:4px 8px" id="d1-elint-panel"></div>
+        </div>
       </div>
     </div>
 
-    <!-- CENTER -->
-    <div class="center-col">
-      <div class="panel" style="flex:17">
+    <!-- ═══════════════════════════════════ DISPLAY 2 — SPECTRUM ANALYSIS -->
+    <div class="display" id="d2">
+      <div class="panel" style="flex:3;min-height:0">
         <div class="ph">
-          <span class="ph-title">◈ SPECTRUM + WATERFALL — 3.5–30.0 MHZ</span>
-          <span class="ph-right" id="spec-peak">PEAK: — MHZ</span>
+          <span class="ph-title">◈ SPECTRUM ANALYSIS — 3.5–30.0 MHZ</span>
+          <span class="ph-right" id="d2-spec-peak">PEAK: — MHZ</span>
         </div>
-        <canvas id="spec-canvas"></canvas>
+        <canvas id="d2-spec"></canvas>
       </div>
-      <div class="panel" style="flex:10">
+      <div class="panel" style="flex:2;min-height:0">
         <div class="ph">
           <span class="ph-title">◈ SIGNAL WAVEFORM</span>
-          <span class="ph-right live" id="wave-info">—</span>
+          <span class="ph-right live" id="d2-wave-info">—</span>
         </div>
-        <canvas id="wave-canvas"></canvas>
+        <canvas id="d2-wave"></canvas>
+      </div>
+      <div class="ctrl-strip">
+        <span class="ctrl-lbl">BAND:</span>
+        <button class="cb" data-band="160m" onclick="selectBand('160m',this)">160m</button>
+        <button class="cb" data-band="80m"  onclick="selectBand('80m',this)">80m</button>
+        <button class="cb" data-band="40m"  onclick="selectBand('40m',this)">40m</button>
+        <button class="cb" data-band="30m"  onclick="selectBand('30m',this)">30m</button>
+        <button class="cb" data-band="20m"  onclick="selectBand('20m',this)">20m</button>
+        <button class="cb" data-band="17m"  onclick="selectBand('17m',this)">17m</button>
+        <button class="cb" data-band="15m"  onclick="selectBand('15m',this)">15m</button>
+        <button class="cb" data-band="12m"  onclick="selectBand('12m',this)">12m</button>
+        <button class="cb" data-band="10m"  onclick="selectBand('10m',this)">10m</button>
+        <div class="ctrl-sep"></div>
+        <span class="ctrl-lbl">GAIN:</span>
+        <button class="cb" onclick="adjustGain(-0.1)">−</button>
+        <span class="ctrl-lbl" id="gain-readout">1.0×</span>
+        <button class="cb" onclick="adjustGain(0.1)">+</button>
+        <div class="ctrl-sep"></div>
+        <button class="cb" id="peak-hold-btn" onclick="togglePeakHold()">PEAK HOLD</button>
+        <button class="cb" onclick="clearPeaks()">CLEAR PEAKS</button>
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="right-col">
-      <div class="panel" style="flex:13">
+    <!-- ════════════════════════════════════════ DISPLAY 3 — INTERCEPT LOG -->
+    <div class="display" id="d3">
+      <div class="ctrl-strip" style="border-top:none;border-bottom:1px solid var(--border)">
+        <span class="ctrl-lbl">PRIORITY:</span>
+        <button class="cb on"    id="d3-f-all"      onclick="setIntFilter('pri','ALL',this)">ALL</button>
+        <button class="cb on-r"  id="d3-f-flash"    onclick="setIntFilter('pri','FLASH',this)">FLASH</button>
+        <button class="cb"       id="d3-f-priority"  onclick="setIntFilter('pri','PRIORITY',this)">PRIORITY</button>
+        <button class="cb"       id="d3-f-routine"   onclick="setIntFilter('pri','ROUTINE',this)">ROUTINE</button>
+        <div class="ctrl-sep"></div>
+        <span class="ctrl-lbl">TYPE:</span>
+        <button class="cb on" id="d3-t-all"   onclick="setIntFilter('type','ALL',this)">ALL</button>
+        <button class="cb"    id="d3-t-voice"  onclick="setIntFilter('type','VOICE',this)">VOICE</button>
+        <button class="cb"    id="d3-t-cw"     onclick="setIntFilter('type','CW',this)">CW</button>
+        <button class="cb"    id="d3-t-data"   onclick="setIntFilter('type','DATA',this)">DATA</button>
+        <button class="cb"    id="d3-t-burst"  onclick="setIntFilter('type','BURST',this)">BURST</button>
+        <div class="ctrl-sep"></div>
+        <button class="cb" id="d3-pause" onclick="toggleIntPause()">PAUSE</button>
+        <button class="cb danger" onclick="ackAllAlerts()">ACK ALL</button>
+        <button class="cb danger" onclick="clearIntLog()">CLEAR LOG</button>
+      </div>
+      <div class="panel" style="flex:1;min-height:0;border:none">
+        <div class="d3-feed-wrap" id="d3-feed"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════ DISPLAY 4 — DIRECTION FINDING -->
+    <div class="display" id="d4">
+      <div class="d4-left panel">
         <div class="ph">
-          <span class="ph-title">◈ ACTIVE SIGNALS</span>
-          <span class="ph-right" id="sig-count">0 ACTIVE</span>
+          <span class="ph-title">◈ DIRECTION FINDING — ARRAY</span>
+          <span class="ph-right" id="d4-df-info">BRG —° // FIX: —</span>
         </div>
-        <div class="pb" style="padding:4px 8px 0">
-          <div class="sig-hdr">
-            <span>FREQ</span><span>MOD</span><span>STR</span><span>BRG</span><span>STATUS</span>
+        <canvas id="d4-compass"></canvas>
+      </div>
+      <div class="d4-right">
+        <div class="panel" style="flex:1;min-height:0">
+          <div class="ph">
+            <span class="ph-title">◈ BEARING LIST</span>
+            <span class="ph-right" id="d4-fix-quality">INTERSECTION QUALITY: —</span>
           </div>
-          <div id="sig-list"></div>
+          <div class="d4-bearing-list" id="d4-bearing-list"></div>
+          <div class="d4-fix-quality" id="d4-fix-text">INTERSECTION QUALITY: <span style="color:var(--green)">HIGH</span></div>
+          <div class="ctrl-strip">
+            <button class="cb" id="d4-lock-btn" onclick="toggleDFLock()">LOCK FIX</button>
+            <button class="cb danger" onclick="clearDFBearings()">CLEAR</button>
+            <div class="ctrl-sep"></div>
+            <span class="ctrl-lbl">CONF:</span>
+            <button class="cb on" id="d4-c-all"  onclick="setDFFilter('ALL',this)">ALL</button>
+            <button class="cb"    id="d4-c-high" onclick="setDFFilter('HIGH',this)">HIGH</button>
+            <button class="cb"    id="d4-c-med"  onclick="setDFFilter('MED',this)">MED</button>
+            <button class="cb"    id="d4-c-low"  onclick="setDFFilter('LOW',this)">LOW</button>
+          </div>
         </div>
       </div>
-      <div class="panel" style="flex:9">
+    </div>
+
+    <!-- ═══════════════════════════════════════ DISPLAY 5 — TRAFFIC ANALYSIS -->
+    <div class="display" id="d5">
+      <div class="panel" style="flex:3;min-height:0">
         <div class="ph">
-          <span class="ph-title">◈ DIRECTION FINDING</span>
-          <span class="ph-right" id="df-info">BRG —° // FIX QUALITY: —</span>
+          <span class="ph-title">◈ MULTI-BAND TRAFFIC ANALYSIS</span>
+          <span class="ph-right">
+            <span style="color:var(--cop-br)">■</span> 7MHZ &nbsp;
+            <span style="color:var(--cyan)">■</span> 14MHZ &nbsp;
+            <span style="color:var(--green)">■</span> 21MHZ
+          </span>
         </div>
-        <canvas id="compass-canvas"></canvas>
+        <canvas id="d5-traffic"></canvas>
       </div>
-      <div class="panel" style="flex:5">
-        <div class="ph">
-          <span class="ph-title">◈ SYSTEM STATUS</span>
-          <span class="ph-right live">ALL SYSTEMS NOMINAL</span>
+      <div class="d5-bottom" style="flex:2;min-height:0">
+        <div class="panel" style="flex:1">
+          <div class="ph"><span class="ph-title">◈ BAND STATISTICS</span></div>
+          <div class="d5-stats" id="d5-stats"></div>
         </div>
-        <div class="pb" style="padding:3px 8px" id="sys-status"></div>
+        <div class="panel" style="flex:1">
+          <div class="ph"><span class="ph-title">◈ ANOMALY LOG</span></div>
+          <div class="d5-anomaly" id="d5-anomaly-log"></div>
+        </div>
+      </div>
+      <div class="ctrl-strip">
+        <span class="ctrl-lbl">BANDS:</span>
+        <button class="cb on" id="d5-b0" onclick="toggleBandVis(0,this)">7 MHZ</button>
+        <button class="cb on" id="d5-b1" onclick="toggleBandVis(1,this)">14 MHZ</button>
+        <button class="cb on" id="d5-b2" onclick="toggleBandVis(2,this)">21 MHZ</button>
+        <div class="ctrl-sep"></div>
+        <span class="ctrl-lbl">RANGE:</span>
+        <button class="cb on" id="d5-r30"  onclick="setTrafficWindow(30,this)">30s</button>
+        <button class="cb"    id="d5-r60"  onclick="setTrafficWindow(60,this)">60s</button>
+        <button class="cb"    id="d5-r120" onclick="setTrafficWindow(120,this)">120s</button>
+        <div class="ctrl-sep"></div>
+        <button class="cb danger" onclick="resetTrafficData()">RESET</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ DISPLAY 6 — SIGNALS BOARD -->
+    <div class="display" id="d6">
+      <div class="panel" style="flex:1;min-height:0;border:none">
+        <div class="ph">
+          <span class="ph-title">◈ SIGNALS BOARD</span>
+          <span class="ph-right" id="d6-sig-count">0 SIGNALS</span>
+        </div>
+        <div class="d6-sig-list">
+          <div class="sig6-hdr">
+            <span>FREQ</span><span>MOD</span><span>STRENGTH</span><span>BEARING</span><span>DURATION</span><span>STATUS</span><span>ACT</span>
+          </div>
+          <div id="d6-sig-list"></div>
+        </div>
+      </div>
+      <div class="ctrl-strip">
+        <span class="ctrl-lbl">SORT:</span>
+        <button class="cb on" id="d6-s-freq"  onclick="setSigSort('freq',this)">FREQ</button>
+        <button class="cb"    id="d6-s-str"   onclick="setSigSort('str',this)">STRENGTH</button>
+        <button class="cb"    id="d6-s-brg"   onclick="setSigSort('brg',this)">BEARING</button>
+        <div class="ctrl-sep"></div>
+        <span class="ctrl-lbl">FILTER:</span>
+        <button class="cb on" id="d6-f-all"     onclick="setSigFilter('ALL',this)">ALL</button>
+        <button class="cb"    id="d6-f-locked"  onclick="setSigFilter('LOCKED',this)">LOCKED</button>
+        <button class="cb"    id="d6-f-track"   onclick="setSigFilter('TRACKING',this)">TRACKING</button>
+        <button class="cb"    id="d6-f-high"    onclick="setSigFilter('HIGH',this)">HIGH (≥7)</button>
+        <div class="ctrl-sep"></div>
+        <button class="cb danger" onclick="ackAllSigs()">ACK ALL</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ DISPLAY 7 — OPERATIONS -->
+    <div class="display" id="d7">
+      <div class="d7-left">
+        <div class="panel" style="flex:1;min-height:0">
+          <div class="ph"><span class="ph-title">◈ SYSTEM STATUS</span></div>
+          <div class="d7-sys-panel" id="d7-sys-panel"></div>
+        </div>
+        <div class="panel" style="flex-shrink:0">
+          <div class="ph"><span class="ph-title">◈ SYSTEM CONTROLS</span></div>
+          <div class="d7-controls">
+            <div class="d7-ctrl-row">
+              <button class="cb on-g" id="d7-rec-btn"   onclick="toggleOpsControl('rec')">RECORDING ON</button>
+              <button class="cb on-g" id="d7-df-btn"    onclick="toggleOpsControl('df')">DF SCAN ON</button>
+              <button class="cb on-g" id="d7-freq-btn"  onclick="toggleOpsControl('freq')">FREQ SCAN ON</button>
+            </div>
+            <div class="d7-ctrl-row">
+              <button class="cb" id="d7-crypto-btn"  onclick="triggerCryptoSync()">CRYPTO SYNC</button>
+              <button class="cb danger" onclick="ackAllAlerts()">ACKNOWLEDGE ALL ALERTS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d7-right panel">
+        <div class="ph"><span class="ph-title">◈ OPERATOR LOG</span></div>
+        <div class="op-log" id="d7-op-log"></div>
+        <div class="op-input-row">
+          <input class="op-input" id="d7-op-input" placeholder="TYPE NOTE AND PRESS ENTER…" maxlength="200">
+          <button class="cb" onclick="addOpNote()">ADD NOTE</button>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- BOTTOM ROW -->
-  <div class="bottom-row">
-    <div class="panel">
-      <div class="ph">
-        <span class="ph-title">◈ BAND TRAFFIC — LAST 120s</span>
-        <span class="ph-right">
-          <span style="color:var(--cop-br)">■</span> 7MHZ &nbsp;
-          <span style="color:var(--cyan)">■</span> 14MHZ &nbsp;
-          <span style="color:var(--green)">■</span> 21MHZ
-        </span>
-      </div>
-      <canvas id="traffic-canvas"></canvas>
-    </div>
-    <div class="panel">
-      <div class="ph">
-        <span class="ph-title">◈ ELINT CLASSIFICATION</span>
-        <span class="ph-right" id="elint-last">LAST: —</span>
-      </div>
-      <div class="pb" style="padding:4px 8px" id="elint-panel"></div>
-    </div>
+  <!-- SWITCHER BAR -->
+  <div class="switcher">
+    <button class="sw-btn active" onclick="switchDisplay(1)">1 OVERVIEW</button>
+    <button class="sw-btn"        onclick="switchDisplay(2)">2 SPECTRUM</button>
+    <button class="sw-btn"        onclick="switchDisplay(3)">3 INTERCEPTS</button>
+    <button class="sw-btn"        onclick="switchDisplay(4)">4 DIRECTION FINDING</button>
+    <button class="sw-btn"        onclick="switchDisplay(5)">5 TRAFFIC</button>
+    <button class="sw-btn"        onclick="switchDisplay(6)">6 SIGNALS</button>
+    <button class="sw-btn"        onclick="switchDisplay(7)">7 OPERATIONS</button>
   </div>
 
 </div>
 
 <script>
-// ── Utilities ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════ UTILITIES
 const pick  = a => a[Math.floor(Math.random()*a.length)];
 const rnd   = (lo,hi) => lo + Math.random()*(hi-lo);
 const ri    = (lo,hi) => Math.floor(rnd(lo,hi+1));
@@ -360,13 +640,43 @@ const pad   = (n,w=2) => String(n).padStart(w,'0');
 const hex   = n => Array.from({length:n},()=>ri(0,15).toString(16).toUpperCase()).join('');
 const grid  = () => { const L='ABCDEFGHJKLMNPQRSTUVWX'; return L[ri(0,21)]+L[ri(0,21)]+pad(ri(0,99))+pad(ri(0,99)); };
 const freqMHz = () => { const b=[3.5,7.0,10.1,14.0,18.1,21.0,24.9,28.0]; return (pick(b)+rnd(0,0.48)).toFixed(3); };
+const ukTime = () => {
+  const n=new Date();
+  return n.toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+};
 
-// ── Canvas setup ──────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════ DISPLAY SWITCH
+let currentDisplay = 1;
+const DISPLAY_CANVASES = {
+  1: ['d1-spec','d1-wave','d1-compass','d1-traffic'],
+  2: ['d2-spec','d2-wave'],
+  4: ['d4-compass'],
+  5: ['d5-traffic'],
+};
+
+function switchDisplay(n) {
+  document.getElementById('d'+currentDisplay).classList.remove('active');
+  document.querySelectorAll('.sw-btn').forEach((b,i)=>b.classList.toggle('active',i===n-1));
+  currentDisplay = n;
+  document.getElementById('d'+n).classList.add('active');
+  const ids = DISPLAY_CANVASES[n];
+  if (ids) setTimeout(()=>{ ids.forEach(id=>initCanvas(id)); if(n===1) initWaterfall('d1-spec'); if(n===2) initWaterfall('d2-spec'); }, 60);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  const n = parseInt(e.key);
+  if (n >= 1 && n <= 7) switchDisplay(n);
+});
+
+// ════════════════════════════════════════════════════════ CANVAS ENGINE
 const canvases = {};
 function initCanvas(id) {
   const el = document.getElementById(id);
+  if (!el) return null;
   const dpr = window.devicePixelRatio || 1;
   const r = el.getBoundingClientRect();
+  if (!r.width || !r.height) return null;
   el.width  = r.width  * dpr;
   el.height = r.height * dpr;
   el.style.width  = r.width  + 'px';
@@ -377,12 +687,9 @@ function initCanvas(id) {
   canvases[id] = ctx;
   return ctx;
 }
-function allCanvases() {
-  ['spec-canvas','wave-canvas','compass-canvas','traffic-canvas'].forEach(id => initCanvas(id));
-  initWaterfall();
-}
+function draw(id, fn) { if (canvases[id]) fn(canvases[id]); }
 
-// ── Spectrum + Waterfall ──────────────────────────────────────────────
+// ═══════════════════════════════════════════════════ SPECTRUM + WATERFALL
 const BINS = 96;
 const FIXED = [
   {bin:9,  base:0.78, v:0.15, label:'CW'},
@@ -397,22 +704,43 @@ const specRaw    = new Float32Array(BINS).fill(0.04);
 const specSmooth = new Float32Array(BINS).fill(0.04);
 const specPeak   = new Float32Array(BINS).fill(0.04);
 
-let wfImageData = null;
-let wfW = 0, wfH = 0;
-const WF_ROW_H = 2;
-let wfFrameCount = 0;
-const WF_UPDATE_EVERY = 4;
+// Spectrum controls
+let gainLevel    = 1.0;
+let peakHold     = false;
+let selectedBand = null; // null or band string
+const BAND_RANGES = { // [freqLo, freqHi] in MHz
+  '160m':[1.8,2.0], '80m':[3.5,4.0], '40m':[7.0,7.3], '30m':[10.1,10.15],
+  '20m':[14.0,14.35],'17m':[18.068,18.168],'15m':[21.0,21.45],
+  '12m':[24.89,24.99],'10m':[28.0,29.7]
+};
 
-function initWaterfall() {
-  const ctx = canvases['spec-canvas'];
+function selectBand(band, btn) {
+  if (selectedBand === band) { selectedBand = null; }
+  else { selectedBand = band; }
+  document.querySelectorAll('[data-band]').forEach(b => b.classList.toggle('on', b.dataset.band === selectedBand));
+}
+function adjustGain(delta) {
+  gainLevel = Math.max(0.5, Math.min(2.0, gainLevel + delta));
+  document.getElementById('gain-readout').textContent = gainLevel.toFixed(1)+'×';
+}
+function togglePeakHold() {
+  peakHold = !peakHold;
+  document.getElementById('peak-hold-btn').classList.toggle('on', peakHold);
+}
+function clearPeaks() { specPeak.fill(0.04); }
+
+// Waterfall state per canvas id
+const wfState = {};
+function initWaterfall(id) {
+  const ctx = canvases[id];
   if (!ctx) return;
   const W = ctx.canvas._w, H = ctx.canvas._h;
   const specH = Math.floor(H * 0.42);
-  wfW = W; wfH = H - specH;
-  wfImageData = ctx.createImageData(Math.floor(wfW), Math.floor(wfH));
-  wfImageData.data.fill(3);
+  const wfW = W, wfH = H - specH;
+  const imgData = ctx.createImageData(Math.floor(wfW), Math.floor(wfH));
+  imgData.data.fill(3);
+  wfState[id] = { imgData, wfW, wfH, specH };
 }
-
 function vToRGB(v) {
   const c = Math.min(v, 1);
   if (c < 0.12) return [0, 0, ri(0,8)];
@@ -422,70 +750,92 @@ function vToRGB(v) {
   if (c < 0.9)  { const t=(c-0.75)/0.15; return [230,Math.round(160+t*60),Math.round(t*60)]; }
   const t=(c-0.9)/0.1; return [230+Math.round(t*25),220+Math.round(t*35),Math.round(60+t*195)];
 }
-
-function pushWaterfallRow() {
-  const rowBytes = wfImageData.width * 4 * WF_ROW_H;
-  const data = wfImageData.data;
+function pushWaterfallRow(id) {
+  const ws = wfState[id]; if (!ws) return;
+  const { imgData } = ws;
+  const rowBytes = imgData.width * 4 * 2;
+  const data = imgData.data;
   data.copyWithin(rowBytes, 0, data.length - rowBytes);
   for (let b = 0; b < BINS; b++) {
-    const v = specSmooth[b];
+    const v = Math.min(specSmooth[b] * gainLevel, 1);
     const [r,g,bl] = vToRGB(v);
-    const x0 = Math.floor(b / BINS * wfImageData.width);
-    const x1 = Math.floor((b+1) / BINS * wfImageData.width);
+    const x0 = Math.floor(b / BINS * imgData.width);
+    const x1 = Math.floor((b+1) / BINS * imgData.width);
     for (let x = x0; x < x1; x++) {
-      for (let row = 0; row < WF_ROW_H; row++) {
-        const i = (row * wfImageData.width + x) * 4;
+      for (let row = 0; row < 2; row++) {
+        const i = (row * imgData.width + x) * 4;
         data[i]=r; data[i+1]=g; data[i+2]=bl; data[i+3]=255;
       }
     }
   }
 }
 
+let wfFrameCount = 0;
 function tickSpectrum() {
   for (let i=0;i<BINS;i++) specRaw[i] = 0.03 + Math.random()*0.04;
   FIXED.forEach(s => {
     const v = s.base + (Math.random()-0.5)*s.v;
     for (let d=-3;d<=3;d++) {
-      const i=s.bin+d;
-      if (i>=0&&i<BINS) specRaw[i] += v * Math.max(0,1-Math.abs(d)*0.38);
+      const idx=s.bin+d;
+      if (idx>=0&&idx<BINS) specRaw[idx] += v * Math.max(0,1-Math.abs(d)*0.38);
     }
   });
   if (Math.random()<0.007) specRaw[ri(0,BINS-1)] = 0.9+Math.random()*0.1;
   for (let i=0;i<BINS;i++) {
     specSmooth[i] = specSmooth[i]*0.72 + specRaw[i]*0.28;
-    specPeak[i]   = Math.max(specPeak[i]*0.998, specSmooth[i]);
+    if (peakHold) {
+      specPeak[i] = Math.max(specPeak[i], specSmooth[i]);
+    } else {
+      specPeak[i] = Math.max(specPeak[i]*0.998, specSmooth[i]);
+    }
   }
   wfFrameCount++;
-  if (wfFrameCount >= WF_UPDATE_EVERY) { pushWaterfallRow(); wfFrameCount=0; }
-
-  // Update peak label
+  if (wfFrameCount >= 4) {
+    pushWaterfallRow('d1-spec');
+    pushWaterfallRow('d2-spec');
+    wfFrameCount=0;
+  }
   const maxBin = specSmooth.indexOf(Math.max(...specSmooth));
   const mhz = (3.5 + maxBin/BINS*26.5).toFixed(2);
-  document.getElementById('spec-peak').textContent = `PEAK: ${mhz} MHZ`;
+  const peakTxt = `PEAK: ${mhz} MHZ`;
+  ['d1-spec-peak','d2-spec-peak'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=peakTxt; });
 }
 
 function drawSpectrum(ctx) {
   const W=ctx.canvas._w, H=ctx.canvas._h;
   const specH = Math.floor(H*0.42);
   const wfY   = specH;
-
+  const wsId  = ctx.canvas.id;
   ctx.clearRect(0,0,W,H);
 
-  // Spectrum section grid
+  // Grid
   for (let g=1;g<5;g++) {
     const y = specH*(1-g/5);
     ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y);
     ctx.strokeStyle='#0e0a02'; ctx.lineWidth=1; ctx.stroke();
   }
 
-  // Band marker lines
-  [3.5,7,10.1,14,18.1,21,24.9,28].forEach((f,i) => {
+  // Band markers
+  [3.5,7,10.1,14,18.1,21,24.9,28].forEach(f => {
     const x = ((f-3.5)/26.5)*W;
     ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,specH-16);
     ctx.strokeStyle='rgba(92,58,10,0.3)'; ctx.lineWidth=1; ctx.stroke();
-    ctx.fillStyle='#3a2808'; ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+    ctx.fillStyle='#3a2808';
+    ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
     ctx.textAlign='center'; ctx.fillText(f,x,specH-4);
   });
+
+  // Selected band overlay
+  if (selectedBand && BAND_RANGES[selectedBand]) {
+    const [flo,fhi] = BAND_RANGES[selectedBand];
+    const xlo = Math.max(0,((flo-3.5)/26.5)*W);
+    const xhi = Math.min(W,((fhi-3.5)/26.5)*W);
+    ctx.fillStyle = 'rgba(200,124,32,0.08)';
+    ctx.fillRect(xlo,0,xhi-xlo,specH);
+    ctx.strokeStyle = 'rgba(200,124,32,0.25)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(xlo,0,xhi-xlo,specH);
+  }
 
   // Peak hold line
   ctx.beginPath();
@@ -498,7 +848,7 @@ function drawSpectrum(ctx) {
   // Bars
   const bw = W/BINS;
   for (let i=0;i<BINS;i++) {
-    const v=Math.min(specSmooth[i],1);
+    const v=Math.min(specSmooth[i]*gainLevel,1);
     const x=i*bw, h2=specH*v, y=specH-h2;
     const bright=v>0.55;
     const grad=ctx.createLinearGradient(0,y,0,specH);
@@ -507,48 +857,41 @@ function drawSpectrum(ctx) {
     grad.addColorStop(1,'rgba(40,20,2,0.3)');
     ctx.fillStyle=grad;
     ctx.fillRect(x+0.5,y,Math.max(bw-1,1),h2);
-    if (bright) {
-      ctx.fillStyle='rgba(240,160,48,0.12)';
-      ctx.fillRect(x,y-1,bw,h2+2);
-    }
+    if (bright) { ctx.fillStyle='rgba(240,160,48,0.12)'; ctx.fillRect(x,y-1,bw,h2+2); }
   }
 
   // Signal line
   ctx.save(); ctx.shadowColor='rgba(240,160,48,0.5)'; ctx.shadowBlur=4;
   ctx.beginPath();
   for (let i=0;i<BINS;i++) {
-    const x=i*bw+bw/2, y=specH*(1-specSmooth[i])+2;
+    const x=i*bw+bw/2, y=specH*(1-Math.min(specSmooth[i]*gainLevel,1))+2;
     if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
   }
   ctx.strokeStyle='rgba(240,160,48,0.7)'; ctx.lineWidth=1.2; ctx.stroke();
   ctx.restore();
 
   // Waterfall
-  if (wfImageData) {
+  const ws = wfState[wsId];
+  if (ws && ws.imgData) {
     const tmp = document.createElement('canvas');
-    tmp.width = wfImageData.width; tmp.height = wfImageData.height;
-    tmp.getContext('2d').putImageData(wfImageData,0,0);
+    tmp.width = ws.imgData.width; tmp.height = ws.imgData.height;
+    tmp.getContext('2d').putImageData(ws.imgData,0,0);
     ctx.drawImage(tmp, 0, wfY, W, H-wfY);
   }
 
-  // Waterfall label
   ctx.fillStyle='rgba(92,58,10,0.5)';
   ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
-  ctx.textAlign='left';
-  ctx.fillText('▼ HISTORY',4,wfY+10);
+  ctx.textAlign='left'; ctx.fillText('▼ HISTORY',4,wfY+10);
 
-  // Fixed signal labels on spectrum
   FIXED.forEach(s => {
     if (specSmooth[s.bin] > 0.45) {
       const x = s.bin/BINS*W;
-      ctx.fillStyle='rgba(240,160,48,0.7)';
-      ctx.textAlign='center';
-      ctx.fillText(s.label, x, 9);
+      ctx.fillStyle='rgba(240,160,48,0.7)'; ctx.textAlign='center'; ctx.fillText(s.label,x,9);
     }
   });
 }
 
-// ── Waveform ──────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════ WAVEFORM
 let wPhase=0, wFreq=3.2, wFreqT=3.2, wAmp=0.6, wAmpT=0.6;
 const WMODES=['USB','LSB','CW','AM','BPSK31','RTTY','FT8','WSPR'];
 let wMode='USB', wModeTimer=0, wFreqMHz=14.225;
@@ -559,7 +902,8 @@ function tickWave() {
     wFreqT=rnd(1.5,10); wAmpT=rnd(0.3,0.82);
     wMode=pick(WMODES); wModeTimer=ri(100,380);
     wFreqMHz=parseFloat(freqMHz());
-    document.getElementById('wave-info').textContent=`${wFreqMHz.toFixed(3)} MHZ — ${wMode} — SNR ${ri(8,28)}dB`;
+    const info=`${wFreqMHz.toFixed(3)} MHZ — ${wMode} — SNR ${ri(8,28)}dB`;
+    ['d1-wave-info','d2-wave-info'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=info;});
   }
   wFreq+=(wFreqT-wFreq)*0.018;
   wAmp +=(wAmpT -wAmp )*0.018;
@@ -568,180 +912,244 @@ function tickWave() {
 function drawWaveform(ctx) {
   const W=ctx.canvas._w, H=ctx.canvas._h;
   ctx.clearRect(0,0,W,H);
-
-  // Grid
   ctx.strokeStyle='#0c0a02'; ctx.lineWidth=1;
   for (let g=1;g<4;g++) { const y=H*g/4; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
   for (let g=1;g<10;g++) { const x=W*g/10; ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
   ctx.strokeStyle='#1a1404'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
-
-  // Time markers
   ctx.fillStyle='#2a1e04';
   ctx.font=`${Math.round(7*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
   ['0','10ms','20ms','30ms','40ms','50ms','60ms','70ms','80ms','90ms','100ms'].forEach((l,i)=>{
-    ctx.textAlign=i===0?'left':'center';
-    ctx.fillText(l,W*i/10,H-2);
+    ctx.textAlign=i===0?'left':'center'; ctx.fillText(l,W*i/10,H-2);
   });
-
   const noise = wMode==='RTTY'?0.14:wMode==='CW'?0.03:0.07;
-
-  ctx.save();
-  ctx.shadowColor='rgba(200,128,20,0.5)'; ctx.shadowBlur=8;
-
-  // Faint ghost previous frame
+  ctx.save(); ctx.shadowColor='rgba(200,128,20,0.5)'; ctx.shadowBlur=8;
   ctx.globalAlpha=0.2;
   ctx.beginPath();
   for (let px=0;px<W;px++) {
-    const t=px/W;
-    let y=Math.sin(t*wFreq*Math.PI*2+(wPhase-0.5))*wAmp + (Math.random()-0.5)*noise*0.5;
-    if (wMode==='CW') y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.05;
-    const ypx=H/2-y*H/2*0.82;
-    if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
+    const t=px/W; let y=Math.sin(t*wFreq*Math.PI*2+(wPhase-0.5))*wAmp+(Math.random()-0.5)*noise*0.5;
+    if(wMode==='CW') y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.05;
+    const ypx=H/2-y*H/2*0.82; if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
   }
   ctx.strokeStyle='#c87820'; ctx.lineWidth=1; ctx.stroke();
   ctx.globalAlpha=1;
-
-  // Main wave
   ctx.beginPath();
   for (let px=0;px<W;px++) {
-    const t=px/W;
-    let y=Math.sin(t*wFreq*Math.PI*2+wPhase)*wAmp;
-    if (wMode==='AM')     y*=(0.6+0.4*Math.sin(t*wFreq*0.3*Math.PI*2+wPhase*0.2));
-    if (wMode==='BPSK31') y =Math.sign(Math.sin(t*wFreq*Math.PI*2+wPhase))*wAmp;
-    if (wMode==='RTTY')   y =(Math.round(y/wAmp*2)/2)*wAmp;
-    if (wMode==='CW')     y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.02;
-    if (wMode==='FT8')    y+=Math.sin(t*wFreq*3*Math.PI*2+wPhase*0.7)*wAmp*0.25;
-    y += (Math.random()-0.5)*noise;
-    const ypx=H/2-y*H/2*0.82;
-    if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
+    const t=px/W; let y=Math.sin(t*wFreq*Math.PI*2+wPhase)*wAmp;
+    if(wMode==='AM')     y*=(0.6+0.4*Math.sin(t*wFreq*0.3*Math.PI*2+wPhase*0.2));
+    if(wMode==='BPSK31') y =Math.sign(Math.sin(t*wFreq*Math.PI*2+wPhase))*wAmp;
+    if(wMode==='RTTY')   y =(Math.round(y/wAmp*2)/2)*wAmp;
+    if(wMode==='CW')     y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.02;
+    if(wMode==='FT8')    y+=Math.sin(t*wFreq*3*Math.PI*2+wPhase*0.7)*wAmp*0.25;
+    y+=(Math.random()-0.5)*noise;
+    const ypx=H/2-y*H/2*0.82; if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
   }
   ctx.strokeStyle='#f0a830'; ctx.lineWidth=1.5; ctx.stroke();
   ctx.restore();
-
-  // Mode tag
   ctx.fillStyle='rgba(200,124,32,0.6)';
   ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
-  ctx.textAlign='right';
-  ctx.fillText(wMode, W-4, 11);
+  ctx.textAlign='right'; ctx.fillText(wMode,W-4,11);
 }
 
-// ── Compass / DF ──────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════ COMPASS / DF
 const DFB = [
-  {b:127,t:127,s:0.88,c:'rgba(240,160,48,0.9)',cone:8},
-  {b:243,t:243,s:0.6, c:'rgba(24,176,208,0.7)',cone:14},
-  {b:052,t:52, s:0.45,c:'rgba(40,184,96,0.6)', cone:20},
+  {b:127,t:127,s:0.88,c:'rgba(240,160,48,0.9)', cone:8,  conf:'HIGH'},
+  {b:243,t:243,s:0.6, c:'rgba(24,176,208,0.7)', cone:14, conf:'MED'},
+  {b:52, t:52,  s:0.45,c:'rgba(40,184,96,0.6)', cone:20, conf:'LOW'},
+  {b:310,t:310, s:0.72,c:'rgba(160,64,192,0.7)',cone:11, conf:'HIGH'},
+  {b:185,t:185, s:0.38,c:'rgba(212,176,32,0.7)',cone:18, conf:'LOW'},
 ];
+let dfLocked = false;
+let dfFilter = 'ALL';
 
 function tickCompass() {
+  if (dfLocked) return;
   DFB.forEach(b=>{
     if(Math.random()<0.003) b.t=rnd(0,360);
     b.b += (b.t-b.b)*0.005;
     b.s = Math.max(0.2,Math.min(1,b.s+(Math.random()-0.5)*0.015));
+    b.conf = b.s>0.65?'HIGH':b.s>0.4?'MED':'LOW';
   });
   const p=DFB[0].b;
-  document.getElementById('df-info').textContent=`BRG ${String(Math.round(p)).padStart(3,'0')}° // FIX: ${DFB[0].s>0.7?'HIGH':DFB[0].s>0.4?'MED':'LOW'}`;
+  const qual = DFB[0].s>0.65?'HIGH':DFB[0].s>0.4?'MED':'LOW';
+  const dfTxt = `BRG ${String(Math.round(p)).padStart(3,'0')}° // FIX: ${qual}`;
+  ['d1-df-info','d4-df-info'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=dfTxt;});
+}
+
+function toggleDFLock() {
+  dfLocked = !dfLocked;
+  const btn = document.getElementById('d4-lock-btn');
+  btn.classList.toggle('on-g', dfLocked);
+  btn.textContent = dfLocked ? 'UNLOCK FIX' : 'LOCK FIX';
+  if (dfLocked) addOpLog('DF FIX LOCKED BY OPERATOR', true);
+}
+
+function clearDFBearings() {
+  DFB.forEach(b=>{ b.t=rnd(0,360); });
+  dfLocked = false;
+  document.getElementById('d4-lock-btn').classList.remove('on-g');
+  document.getElementById('d4-lock-btn').textContent='LOCK FIX';
+}
+
+function setDFFilter(f, btn) {
+  dfFilter = f;
+  ['d4-c-all','d4-c-high','d4-c-med','d4-c-low'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.classList.remove('on');
+  });
+  if(btn) btn.classList.add('on');
+}
+
+function renderBearingList() {
+  const el = document.getElementById('d4-bearing-list'); if(!el) return;
+  const filtered = DFB.filter(b=>dfFilter==='ALL'||b.conf===dfFilter);
+  el.innerHTML = '';
+  filtered.forEach(b=>{
+    const row=document.createElement('div'); row.className='dfb-row';
+    const swatchColor = b.c.replace(/[\d.]+\)$/,'0.8)');
+    const confCls = b.conf.toLowerCase();
+    row.innerHTML=`<span class="dfb-brg">${String(Math.round(b.b)).padStart(3,'0')}°</span>
+      <div class="dfb-swatch" style="background:${swatchColor}"></div>
+      <div class="dfb-str-wrap"><div class="dfb-str-bar" style="width:${b.s*100}%;background:${swatchColor}"></div></div>
+      <span class="dfb-conf ${confCls}">${b.conf}</span>`;
+    el.appendChild(row);
+  });
+  const avgConf = DFB.reduce((s,b)=>s+(b.conf==='HIGH'?2:b.conf==='MED'?1:0),0)/DFB.length;
+  const qualLabel = avgConf>1.3?'HIGH':avgConf>0.7?'MED':'LOW';
+  const qualCol = qualLabel==='HIGH'?'var(--green)':qualLabel==='MED'?'var(--yellow)':'var(--red)';
+  const ft = document.getElementById('d4-fix-text');
+  if(ft) ft.innerHTML=`INTERSECTION QUALITY: <span style="color:${qualCol}">${qualLabel}</span>`;
 }
 
 function drawCompass(ctx) {
   const W=ctx.canvas._w, H=ctx.canvas._h;
   const cx=W/2, cy=H/2, R=Math.min(W,H)/2-8;
   ctx.clearRect(0,0,W,H);
-
-  // Outer shadow
   ctx.save(); ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=16;
   ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#050503'; ctx.fill();
   ctx.restore();
-
-  // Rings
   [1,0.7,0.45].forEach(f=>{
     ctx.beginPath(); ctx.arc(cx,cy,R*f,0,Math.PI*2);
     ctx.strokeStyle=f===1?'#2a2008':'#0e0c04'; ctx.lineWidth=1; ctx.stroke();
   });
-
-  // Radials
   for (let i=0;i<36;i++) {
     const a=(i/36)*Math.PI*2-Math.PI/2;
     const isMaj=i%9===0, isMed=i%3===0;
-    ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*R*(isMaj?0.72:isMed?0.8:0.88), cy+Math.sin(a)*R*(isMaj?0.72:isMed?0.8:0.88));
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*R*(isMaj?0.72:isMed?0.8:0.88),cy+Math.sin(a)*R*(isMaj?0.72:isMed?0.8:0.88));
     ctx.lineTo(cx+Math.cos(a)*(R-1),cy+Math.sin(a)*(R-1));
     ctx.strokeStyle=isMaj?'#c87820':isMed?'#3a2808':'#161004';
     ctx.lineWidth=isMaj?1.5:1; ctx.stroke();
   }
-
-  // Cardinals
   const fs=Math.round(9*(window.devicePixelRatio||1))/(window.devicePixelRatio||1);
   ctx.font=`${fs}px Consolas`; ctx.textAlign='center'; ctx.textBaseline='middle';
   [['N',0,'#f0a830'],['E',90,'#c87820'],['S',180,'#c87820'],['W',270,'#c87820']].forEach(([l,d,c])=>{
-    const a=(d-90)*Math.PI/180, ri2=R*0.6;
-    ctx.fillStyle=c; ctx.fillText(l,cx+Math.cos(a)*ri2,cy+Math.sin(a)*ri2);
+    const a=(d-90)*Math.PI/180, r2=R*0.6;
+    ctx.fillStyle=c; ctx.fillText(l,cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);
   });
-
-  // Uncertainty cones + bearing lines
-  DFB.forEach((b,idx)=>{
+  const visible = DFB.filter(b=>dfFilter==='ALL'||b.conf===dfFilter);
+  visible.forEach((b,idx)=>{
     const a=(b.b-90)*Math.PI/180;
     const halfCone=b.cone*Math.PI/180;
-
-    // Cone fill
     ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R*0.88,a-halfCone,a+halfCone);
-    ctx.closePath();
-    ctx.fillStyle=b.c.replace(/[\d.]+\)$/,'0.06)');
-    ctx.fill();
-
-    // Cone edges
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.lineTo(cx+Math.cos(a-halfCone)*R*0.88,cy+Math.sin(a-halfCone)*R*0.88);
-    ctx.moveTo(cx,cy);
-    ctx.lineTo(cx+Math.cos(a+halfCone)*R*0.88,cy+Math.sin(a+halfCone)*R*0.88);
-    ctx.strokeStyle=b.c.replace(/[\d.]+\)$/,'0.3)'); ctx.lineWidth=0.8; ctx.stroke();
-
-    // Main bearing line
-    ctx.shadowColor=b.c; ctx.shadowBlur=idx===0?8:4;
     ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.lineTo(cx+Math.cos(a)*R*0.86,cy+Math.sin(a)*R*0.86);
+    ctx.arc(cx,cy,R*0.88,a-halfCone,a+halfCone); ctx.closePath();
+    ctx.fillStyle=b.c.replace(/[\d.]+\)$/,'0.06)'); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a-halfCone)*R*0.88,cy+Math.sin(a-halfCone)*R*0.88);
+    ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a+halfCone)*R*0.88,cy+Math.sin(a+halfCone)*R*0.88);
+    ctx.strokeStyle=b.c.replace(/[\d.]+\)$/,'0.3)'); ctx.lineWidth=0.8; ctx.stroke();
+    ctx.shadowColor=b.c; ctx.shadowBlur=idx===0?8:4;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*R*0.86,cy+Math.sin(a)*R*0.86);
     ctx.strokeStyle=b.c; ctx.lineWidth=idx===0?1.8:1.2; ctx.stroke();
     ctx.restore();
-
-    // Tip dot
     if(idx===0){
       ctx.beginPath(); ctx.arc(cx+Math.cos(a)*R*0.84,cy+Math.sin(a)*R*0.84,2.5,0,Math.PI*2);
       ctx.fillStyle='#f0a830'; ctx.fill();
     }
   });
-
-  // Fix intersection dot (center of DF triangle)
-  const avgX=cx+DFB.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.cos(a);}
-    ,0)/DFB.length*R*0.3;
-  const avgY=cy+DFB.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.sin(a);}
-    ,0)/DFB.length*R*0.3;
+  const avgX=cx+visible.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.cos(a);}
+    ,0)/(visible.length||1)*R*0.3;
+  const avgY=cy+visible.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.sin(a);}
+    ,0)/(visible.length||1)*R*0.3;
   ctx.save(); ctx.shadowColor='rgba(40,184,96,0.6)'; ctx.shadowBlur=8;
-  ctx.beginPath(); ctx.arc(avgX,avgY,3,0,Math.PI*2);
-  ctx.fillStyle='#28b860'; ctx.fill();
+  ctx.beginPath(); ctx.arc(avgX,avgY,3,0,Math.PI*2); ctx.fillStyle='#28b860'; ctx.fill();
   ctx.restore();
-
-  // Centre cap
   const cg=ctx.createRadialGradient(cx-1,cy-1,0.5,cx,cy,5);
   cg.addColorStop(0,'#f0a830'); cg.addColorStop(1,'#5c3a0a');
   ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2); ctx.fillStyle=cg; ctx.fill();
 }
 
-// ── Traffic chart ─────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════ TRAFFIC CHART
 const TLEN=120;
 const bands = [
-  {data: new Array(TLEN).fill(0).map(()=>rnd(0.1,0.35)), color:'rgba(240,160,48,0.9)', fill:'rgba(240,160,48,0.12)', label:'7MHZ',  spike:0.06},
-  {data: new Array(TLEN).fill(0).map(()=>rnd(0.15,0.5)), color:'rgba(24,176,208,0.85)', fill:'rgba(24,176,208,0.08)', label:'14MHZ', spike:0.08},
-  {data: new Array(TLEN).fill(0).map(()=>rnd(0.05,0.25)), color:'rgba(40,184,96,0.85)', fill:'rgba(40,184,96,0.08)', label:'21MHZ', spike:0.04},
+  {data:new Array(TLEN).fill(0).map(()=>rnd(0.1,0.35)), color:'rgba(240,160,48,0.9)', fill:'rgba(240,160,48,0.12)', label:'7MHZ',  spike:0.06, visible:true, peak:0, sum:0, count:0, anomalies:0},
+  {data:new Array(TLEN).fill(0).map(()=>rnd(0.15,0.5)), color:'rgba(24,176,208,0.85)',fill:'rgba(24,176,208,0.08)', label:'14MHZ', spike:0.08, visible:true, peak:0, sum:0, count:0, anomalies:0},
+  {data:new Array(TLEN).fill(0).map(()=>rnd(0.05,0.25)),color:'rgba(40,184,96,0.85)', fill:'rgba(40,184,96,0.08)', label:'21MHZ', spike:0.04, visible:true, peak:0, sum:0, count:0, anomalies:0},
 ];
+let bandVisible = [true,true,true];
+let trafficWindow = 30;
+const anomalyLog = [];
+
+let bandToggleBtns = ['d5-b0','d5-b1','d5-b2'];
+function toggleBandVis(idx, btn) {
+  bandVisible[idx] = !bandVisible[idx];
+  bands[idx].visible = bandVisible[idx];
+  btn.classList.toggle('on', bandVisible[idx]);
+}
+function setTrafficWindow(w, btn) {
+  trafficWindow = w;
+  ['d5-r30','d5-r60','d5-r120'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('on');});
+  if(btn) btn.classList.add('on');
+}
+function resetTrafficData() {
+  bands.forEach(b=>{ b.data.fill(0); b.peak=0; b.sum=0; b.count=0; b.anomalies=0; });
+  anomalyLog.length=0;
+  renderTrafficStats();
+  renderAnomalyLog();
+}
 
 function pushTraffic() {
-  bands.forEach(b=>{
+  bands.forEach((b,i)=>{
     const spk=Math.random()<0.05?rnd(0.3,0.65):0;
-    b.data.push(Math.min(1,rnd(0.05,0.35)+spk*(b.spike*10)));
-    b.data.shift();
+    const v=Math.min(1,rnd(0.05,0.35)+spk*(b.spike*10));
+    b.data.push(v); b.data.shift();
+    b.peak=Math.max(b.peak,v); b.sum+=v; b.count++;
+    if(v>0.7){
+      b.anomalies++;
+      anomalyLog.unshift({time:ukTime(),band:b.label,val:(v*100).toFixed(0)+'%'});
+      if(anomalyLog.length>50) anomalyLog.pop();
+    }
+  });
+  if(currentDisplay===5){ renderTrafficStats(); renderAnomalyLog(); }
+}
+
+function renderTrafficStats() {
+  const el=document.getElementById('d5-stats'); if(!el) return;
+  el.innerHTML='';
+  const cols=[['var(--cop-br)'],['var(--cyan)'],['var(--green)']];
+  bands.forEach((b,i)=>{
+    const avg=b.count?b.sum/b.count:0;
+    const col=b.color;
+    const rows=[
+      {l:`${b.label} PEAK`,v:(b.peak*100).toFixed(0)+'%',c:col},
+      {l:`${b.label} AVG`, v:(avg*100).toFixed(0)+'%',c:col},
+      {l:`${b.label} ANOMALIES`,v:String(b.anomalies),c:b.anomalies>0?'var(--red)':col},
+    ];
+    rows.forEach(r=>{
+      const d=document.createElement('div'); d.className='d5-stat-row';
+      d.innerHTML=`<span style="color:var(--cop-dim)">${r.l}</span><span style="color:${r.c}">${r.v}</span>`;
+      el.appendChild(d);
+    });
+    if(i<2){ const sep=document.createElement('div'); sep.style.height='4px'; el.appendChild(sep); }
+  });
+}
+
+function renderAnomalyLog() {
+  const el=document.getElementById('d5-anomaly-log'); if(!el) return;
+  el.innerHTML='';
+  anomalyLog.slice(0,40).forEach(a=>{
+    const d=document.createElement('div'); d.className='d5-anomaly-row';
+    d.innerHTML=`<span class="d5-anomaly-time">${a.time}</span><span class="d5-anomaly-msg">SPIKE ${a.band} ${a.val}</span>`;
+    el.appendChild(d);
   });
 }
 
@@ -749,88 +1157,100 @@ function drawTraffic(ctx) {
   const W=ctx.canvas._w, H=ctx.canvas._h;
   const PH=14;
   ctx.clearRect(0,0,W,H);
-
-  // Grid
   ctx.strokeStyle='#0c0a02'; ctx.lineWidth=1;
   for(let g=1;g<5;g++){const y=PH+(H-PH)*g/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  ['–120s','–90s','–60s','–30s','NOW'].forEach((l,i)=>{
+  const wLen = Math.min(trafficWindow, TLEN);
+  const labels = wLen<=30?['–30s','–20s','–10s','NOW']:wLen<=60?['–60s','–45s','–30s','–15s','NOW']:['–120s','–90s','–60s','–30s','NOW'];
+  labels.forEach((l,i)=>{
     ctx.fillStyle='#2a1e04';
     ctx.font=`${Math.round(7*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
-    ctx.textAlign=i===0?'left':i===4?'right':'center';
-    ctx.fillText(l,W*i/4,H-2);
+    const n=labels.length-1;
+    ctx.textAlign=i===0?'left':i===n?'right':'center';
+    ctx.fillText(l,W*i/n,H-2);
   });
-
-  const dx=W/(TLEN-1);
+  const slice = wLen;
+  const dx=W/(slice-1);
   bands.forEach(b=>{
+    if(!b.visible) return;
+    const dat = b.data.slice(TLEN-slice);
     ctx.save();
-    // Fill
-    ctx.beginPath();
-    ctx.moveTo(0,H-PH);
-    b.data.forEach((v,i)=>ctx.lineTo(i*dx,PH+(H-PH)*(1-v)));
-    ctx.lineTo((TLEN-1)*dx,H-PH);
-    ctx.closePath();
+    ctx.beginPath(); ctx.moveTo(0,H-PH);
+    dat.forEach((v,i)=>ctx.lineTo(i*dx,PH+(H-PH)*(1-v)));
+    ctx.lineTo((slice-1)*dx,H-PH); ctx.closePath();
     ctx.fillStyle=b.fill; ctx.fill();
-    // Line
     ctx.shadowColor=b.color; ctx.shadowBlur=4;
     ctx.beginPath();
-    b.data.forEach((v,i)=>{const x=i*dx,y=PH+(H-PH)*(1-v); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);});
+    dat.forEach((v,i)=>{const x=i*dx,y=PH+(H-PH)*(1-v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
     ctx.strokeStyle=b.color; ctx.lineWidth=1.4; ctx.stroke();
     ctx.restore();
-  });
-  // Tip dots
-  bands.forEach(b=>{
-    const v=b.data[TLEN-1];
-    ctx.beginPath(); ctx.arc((TLEN-1)*dx,PH+(H-PH)*(1-v),2.5,0,Math.PI*2);
+    const v=dat[slice-1];
+    ctx.beginPath(); ctx.arc((slice-1)*dx,PH+(H-PH)*(1-v),2.5,0,Math.PI*2);
     ctx.fillStyle=b.color; ctx.fill();
   });
 }
 
-// ── ELINT panel ───────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════ ELINT
 const ELINT_TYPES=['VOICE','CW','DIGI','BURST','BCAST','RADAR','NUMBERS','BEACON'];
 const ELINT_COLS=['#f0a830','#c87820','#18b0d0','#d03030','#9040c0','#28b860','#d4b020','#c87820'];
 let elintCounts=ELINT_TYPES.map(()=>ri(0,20));
-let elintMax=1;
 
 function updateElint() {
-  elintCounts=elintCounts.map((v,i)=>Math.max(0,v+ri(-2,3)));
-  elintMax=Math.max(1,...elintCounts);
-  const el=document.getElementById('elint-panel');
-  el.innerHTML='';
-  const sorted=[...elintCounts.map((c,i)=>({c,i}))].sort((a,b)=>b.c-a.c);
-  sorted.forEach(({c,i})=>{
-    const pct=c/elintMax*100;
-    const row=document.createElement('div');
-    row.className='elint-row';
-    row.innerHTML=`<span class="er-type" style="color:${ELINT_COLS[i]}">${ELINT_TYPES[i]}</span>
-      <div class="er-bar-wrap"><div class="er-bar" style="width:${pct}%;background:${ELINT_COLS[i]}"></div></div>
-      <span class="er-count" style="color:${ELINT_COLS[i]}">${c}</span>`;
-    el.appendChild(row);
-  });
-  const top=sorted[0];
-  document.getElementById('elint-last').textContent=`LAST: ${ELINT_TYPES[top.i]} (${top.c})`;
-}
-
-// ── System status ─────────────────────────────────────────────────────
-const SYS_ROWS=[
-  {l:'RX ARRAY',   v:'3/3 ONLINE',      cls:'ok'},
-  {l:'DF ELEMENTS',v:'5/5 ACTIVE',       cls:'ok'},
-  {l:'CRYPTO',     v:`KEY ${hex(4)} SYNC`,cls:'info'},
-  {l:'LINK QTY',   v:'94%',              cls:'ok'},
-  {l:'DISK',       v:'18.4 GB FREE',     cls:'ok'},
-  {l:'LOG',        v:'RECORDING',        cls:'ok'},
-];
-
-function renderStatus() {
-  const el=document.getElementById('sys-status');
-  el.innerHTML='';
-  SYS_ROWS.forEach(r=>{
-    const d=document.createElement('div'); d.className='status-row';
-    d.innerHTML=`<span class="sr-label">${r.l}</span><span class="sr-val ${r.cls}">${r.v}</span>`;
-    el.appendChild(d);
+  elintCounts=elintCounts.map((v)=>Math.max(0,v+ri(-2,3)));
+  const elintMax=Math.max(1,...elintCounts);
+  ['d1-elint-panel'].forEach(eid=>{
+    const el=document.getElementById(eid); if(!el) return;
+    el.innerHTML='';
+    const sorted=[...elintCounts.map((c,i)=>({c,i}))].sort((a,b)=>b.c-a.c);
+    sorted.forEach(({c,i})=>{
+      const pct=c/elintMax*100;
+      const row=document.createElement('div'); row.className='elint-row';
+      row.innerHTML=`<span class="er-type" style="color:${ELINT_COLS[i]}">${ELINT_TYPES[i]}</span>
+        <div class="er-bar-wrap"><div class="er-bar" style="width:${pct}%;background:${ELINT_COLS[i]}"></div></div>
+        <span class="er-count" style="color:${ELINT_COLS[i]}">${c}</span>`;
+      el.appendChild(row);
+    });
+    const top=sorted[0];
+    const lel=document.getElementById(eid.replace('panel','last'));
+    if(lel) lel.textContent=`LAST: ${ELINT_TYPES[top.i]} (${top.c})`;
   });
 }
 
-// ── Intercept feed ────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════ SYSTEM STATUS
+const SYS_STATE = {
+  recording: true,
+  dfScan: true,
+  freqScan: true,
+  rxArray: '3/3 ONLINE',
+  dfElements: '5/5 ACTIVE',
+  cryptoKey: hex(4),
+  linkQty: 94,
+  disk: 18.4,
+};
+
+function renderSysStatus() {
+  const rows=[
+    {l:'RX ARRAY',    v:SYS_STATE.rxArray,              cls:'ok'},
+    {l:'DF ELEMENTS', v:SYS_STATE.dfElements,             cls:'ok'},
+    {l:'CRYPTO',      v:`KEY ${SYS_STATE.cryptoKey} SYNC`, cls:'info'},
+    {l:'LINK QTY',    v:`${SYS_STATE.linkQty}%`,           cls:SYS_STATE.linkQty>70?'ok':SYS_STATE.linkQty>40?'warn':'error'},
+    {l:'DISK',        v:`${SYS_STATE.disk.toFixed(1)} GB FREE`, cls:'ok'},
+    {l:'RECORDING',   v:SYS_STATE.recording?'ACTIVE':'STOPPED', cls:SYS_STATE.recording?'ok':'warn'},
+    {l:'DF SCAN',     v:SYS_STATE.dfScan?'ACTIVE':'OFF',    cls:SYS_STATE.dfScan?'ok':'warn'},
+    {l:'FREQ SCAN',   v:SYS_STATE.freqScan?'ACTIVE':'OFF',  cls:SYS_STATE.freqScan?'ok':'warn'},
+  ];
+  ['d1-sys-status','d7-sys-panel'].forEach(eid=>{
+    const el=document.getElementById(eid); if(!el) return;
+    el.innerHTML='';
+    rows.forEach(r=>{
+      const d=document.createElement('div');
+      d.className = eid.startsWith('d7') ? 'd7-sys-row' : 'status-row';
+      d.innerHTML=`<span class="${eid.startsWith('d7')?'sr-label':'sr-label'}">${r.l}</span><span class="sr-val ${r.cls}">${r.v}</span>`;
+      el.appendChild(d);
+    });
+  });
+}
+
+// ════════════════════════════════════════════════════ INTERCEPT LOG
 const CS=['ALPHA-1','BRAVO-7','CHARLIE-3','DELTA-9','ECHO-4','FOXTROT-2',
   'GOLF-5','HOTEL-8','INDIA-6','KILO-2','LIMA-4','MIKE-9','NOVEMBER-3','OSCAR-7','PAPA-1','QUEBEC-8'];
 const TYPES_LIST=['VOICE','CW','DATA','BURST','BCAST'];
@@ -854,14 +1274,18 @@ const MSGS=[
   ()=>`NUMBERS STN ${freqMHz()} MHZ — ${ri(20,50)} GROUPS — SCHEDULE CHANGE`,
 ];
 
+const interceptLog = []; // {time, pri, type, msg}
 let intCount=0, alertCount=0;
-const MAX_LINES=30;
+let intPaused=false, intFilterPri='ALL', intFilterType='ALL';
+const MAX_LOG=300;
 
 function addIntercept() {
   intCount++;
   const now=new Date();
   const tf=`${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
   const pri=pick(PRIS), type=pick(TYPES_LIST), msg=pick(MSGS)();
+  interceptLog.unshift({time:tf+'Z',pri,type,msg,id:intCount});
+  if(interceptLog.length>MAX_LOG) interceptLog.pop();
 
   if(pri==='FLASH'){
     alertCount++;
@@ -869,70 +1293,228 @@ function addIntercept() {
     const ticker=document.getElementById('alert-ticker');
     ticker.classList.add('show');
     setTimeout(()=>ticker.classList.remove('show'),4000);
+    addOpLog(`FLASH INTERCEPT: ${msg}`, true);
   }
-
-  const feed=document.getElementById('int-feed');
-  const line=document.createElement('div'); line.className='il';
-
-  const priClass={FLASH:'pri-flash',PRIORITY:'pri-priority',ROUTINE:'pri-routine',ADMIN:'pri-admin'}[pri];
-  line.innerHTML=`<span class="il-time">${tf}Z</span><span class="il-pri ${priClass}">${pri[0]}</span><span class="il-type">[${type}]</span><span class="il-msg new">${msg}</span>`;
-  feed.prepend(line);
-  setTimeout(()=>line.querySelector('.il-msg')?.classList.remove('new'),2500);
-  while(feed.children.length>MAX_LINES) feed.removeChild(feed.lastChild);
-  document.getElementById('int-count').textContent=`${String(intCount).padStart(3,'0')} ENTRIES`;
+  if(!intPaused){ renderIntFeed('d1-int-feed', true); renderIntFeed('d3-feed', false); }
+  document.getElementById('d1-int-count').textContent=`${String(intCount).padStart(3,'0')} ENTRIES`;
 }
 
-// ── Active signals ────────────────────────────────────────────────────
+function makeIntLine(entry, compact) {
+  const priClass={FLASH:'pri-flash',PRIORITY:'pri-priority',ROUTINE:'pri-routine',ADMIN:'pri-admin'}[entry.pri];
+  const line=document.createElement('div');
+  line.className = compact ? 'il' : 'il il-d3';
+  line.innerHTML=`<span class="il-time">${entry.time}</span><span class="il-pri ${priClass}">${entry.pri[0]}</span><span class="il-type">[${entry.type}]</span><span class="il-msg new">${entry.msg}</span>`;
+  setTimeout(()=>line.querySelector('.il-msg')?.classList.remove('new'),2500);
+  return line;
+}
+
+function renderIntFeed(feedId, compact) {
+  const feed=document.getElementById(feedId); if(!feed) return;
+  feed.innerHTML='';
+  const filtered=interceptLog.filter(e=>{
+    if(intFilterPri!=='ALL'&&e.pri!==intFilterPri) return false;
+    if(intFilterType!=='ALL'&&e.type!==intFilterType) return false;
+    return true;
+  });
+  const limit = compact?30:200;
+  filtered.slice(0,limit).forEach(e=>{
+    feed.appendChild(makeIntLine(e,compact));
+  });
+}
+
+function setIntFilter(kind, val, btn) {
+  if(kind==='pri')  intFilterPri=val;
+  if(kind==='type') intFilterType=val;
+  // Deactivate siblings
+  const prefix = kind==='pri' ? ['d3-f-all','d3-f-flash','d3-f-priority','d3-f-routine'] : ['d3-t-all','d3-t-voice','d3-t-cw','d3-t-data','d3-t-burst'];
+  prefix.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.remove('on','on-r','on-c'); }});
+  if(btn){ btn.classList.add(val==='FLASH'?'on-r':val==='ALL'?'on':'on'); }
+  renderIntFeed('d3-feed', false);
+}
+
+function toggleIntPause() {
+  intPaused=!intPaused;
+  const btn=document.getElementById('d3-pause');
+  btn.classList.toggle('on-c', intPaused);
+  btn.textContent=intPaused?'RESUME':'PAUSE';
+}
+
+function ackAllAlerts() {
+  alertCount=0;
+  document.getElementById('alert-count').textContent='ALERTS: 000';
+  document.getElementById('alert-ticker').classList.remove('show');
+  addOpLog('ALL ALERTS ACKNOWLEDGED', true);
+}
+
+function clearIntLog() {
+  interceptLog.length=0; intCount=0;
+  renderIntFeed('d1-int-feed',true); renderIntFeed('d3-feed',false);
+  document.getElementById('d1-int-count').textContent='000 ENTRIES';
+}
+
+// ═══════════════════════════════════════════════════════ ACTIVE SIGNALS
 const MODS_LIST=['USB','LSB','CW','AM','FM','BPSK31','RTTY','WSPR','FT8','ALE','STANAG','FSK'];
 const STATS_LIST=['MONITORING','ANALYZING','TRACKING','QUEUED','LOCKED','SCANNING'];
 let activeSigs=[];
+let sigSort='freq', sigFilter='ALL';
 
 function refreshSigs() {
-  if(activeSigs.length<10&&Math.random()<0.45) {
-    const bearing=ri(0,359);
-    activeSigs.push({freq:freqMHz(),mod:pick(MODS_LIST),str:ri(2,9),status:pick(STATS_LIST),brg:bearing,ttl:ri(4,14)});
+  if(activeSigs.length<12&&Math.random()<0.45) {
+    activeSigs.push({
+      id: Date.now()+ri(0,9999),
+      freq:freqMHz(), mod:pick(MODS_LIST), str:ri(2,9),
+      status:pick(STATS_LIST), brg:ri(0,359), ttl:ri(4,14), age:0
+    });
   }
   activeSigs=activeSigs.filter(s=>{
-    s.ttl--; s.str=Math.max(1,Math.min(9,s.str+ri(-1,1)));
+    s.ttl--; s.age++;
+    s.str=Math.max(1,Math.min(9,s.str+ri(-1,1)));
     return s.ttl>0;
   });
+  renderSigList('d1-sig-list', true);
+  renderSigList('d6-sig-list', false);
+  const cnt=activeSigs.length;
+  document.getElementById('d1-sig-count').textContent=`${cnt} ACTIVE`;
+  document.getElementById('d6-sig-count').textContent=`${cnt} SIGNALS`;
+}
 
-  const list=document.getElementById('sig-list'); list.innerHTML='';
-  activeSigs.sort((a,b)=>b.str-a.str).forEach(s=>{
-    const div=document.createElement('div'); div.className='sig-row';
+function renderSigList(listId, compact) {
+  const list=document.getElementById(listId); if(!list) return;
+  list.innerHTML='';
+  let sigs=[...activeSigs];
+  if(sigFilter==='LOCKED')   sigs=sigs.filter(s=>s.status==='LOCKED');
+  if(sigFilter==='TRACKING') sigs=sigs.filter(s=>s.status==='TRACKING');
+  if(sigFilter==='HIGH')     sigs=sigs.filter(s=>s.str>=7);
+  if(sigSort==='freq')    sigs.sort((a,b)=>parseFloat(a.freq)-parseFloat(b.freq));
+  else if(sigSort==='str') sigs.sort((a,b)=>b.str-a.str);
+  else if(sigSort==='brg') sigs.sort((a,b)=>a.brg-b.brg);
+
+  sigs.forEach(s=>{
     const isLocked=s.status==='LOCKED', isTracking=s.status==='TRACKING', isAlert=s.str>=7;
     const cls=isLocked?'locked':isTracking?'tracking':isAlert?'alert':'default';
     const barW=s.str/9*100;
     const barCol=isLocked?'var(--green)':isAlert?'var(--red)':'var(--copper)';
-    div.innerHTML=`<span class="sf">${s.freq}</span><span class="sm">${s.mod}</span>
-      <div><div class="ss-bar-wrap"><div class="ss-bar" style="width:${barW}%;background:${barCol}"></div></div></div>
-      <span class="sd" style="color:var(--cop-dim)">${pad(Math.round(s.brg),3)}°</span>
-      <span class="sc ${cls}">${s.status}</span>`;
-    list.appendChild(div);
+    if(compact) {
+      const div=document.createElement('div'); div.className='sig-row';
+      div.style.gridTemplateColumns='5.2em 3.2em 52px 4.2em 4.2em';
+      div.innerHTML=`<span class="sf">${s.freq}</span><span class="sm">${s.mod}</span>
+        <div><div class="ss-bar-wrap"><div class="ss-bar" style="width:${barW}%;background:${barCol}"></div></div></div>
+        <span class="sd" style="color:var(--cop-dim)">${pad(Math.round(s.brg),3)}°</span>
+        <span class="sc ${cls}">${s.status}</span>`;
+      list.appendChild(div);
+    } else {
+      const div=document.createElement('div'); div.className='sig6-row';
+      div.innerHTML=`<span class="sf">${s.freq}</span><span class="sm">${s.mod}</span>
+        <div><div class="ss-bar-wrap"><div class="ss-bar" style="width:${barW}%;background:${barCol}"></div></div></div>
+        <span class="sd" style="color:var(--cop-dim)">${pad(Math.round(s.brg),3)}°</span>
+        <span style="color:var(--cop-dim);font-size:0.6rem">${s.age}s</span>
+        <span class="sc ${cls}">${s.status}</span>
+        <button class="cb" style="padding:2px 6px;font-size:0.52rem" onclick="ackSig(${s.id})">ACK</button>`;
+      list.appendChild(div);
+    }
   });
-  document.getElementById('sig-count').textContent=`${activeSigs.length} ACTIVE`;
 }
 
-// ── Clock ─────────────────────────────────────────────────────────────
+function ackSig(id) { activeSigs=activeSigs.filter(s=>s.id!==id); refreshSigs(); }
+function ackAllSigs() { activeSigs=[]; refreshSigs(); }
+function setSigSort(s, btn) {
+  sigSort=s;
+  ['d6-s-freq','d6-s-str','d6-s-brg'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
+  if(btn) btn.classList.add('on');
+  renderSigList('d6-sig-list',false);
+}
+function setSigFilter(f, btn) {
+  sigFilter=f;
+  ['d6-f-all','d6-f-locked','d6-f-track','d6-f-high'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
+  if(btn) btn.classList.add('on');
+  renderSigList('d6-sig-list',false);
+}
+
+// ═══════════════════════════════════════════════════════ OPERATOR LOG
+const opLog = [];
+function addOpLog(msg, isSys) {
+  opLog.unshift({time:ukTime(),msg,sys:isSys});
+  if(opLog.length>200) opLog.pop();
+  renderOpLog();
+}
+function renderOpLog() {
+  const el=document.getElementById('d7-op-log'); if(!el) return;
+  el.innerHTML='';
+  opLog.slice(0,100).forEach(e=>{
+    const d=document.createElement('div'); d.className='op-entry';
+    d.innerHTML=`<span class="op-time">${e.time}</span><span class="op-msg ${e.sys?'sys':''}">${e.sys?'[SYS] ':''}<span style="color:${e.sys?'':'var(--cop-br)'}${e.sys?'':''}">${e.msg}</span></span>`;
+    el.appendChild(d);
+  });
+}
+function addOpNote() {
+  const inp=document.getElementById('d7-op-input');
+  const val=inp.value.trim(); if(!val) return;
+  addOpLog(`[OPERATOR] ${val.toUpperCase()}`, false);
+  inp.value='';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp=document.getElementById('d7-op-input');
+  if(inp) inp.addEventListener('keydown',e=>{ if(e.key==='Enter') addOpNote(); });
+});
+
+// ═════════════════════════════════════════════════ OPERATIONS CONTROLS
+const opsState = { rec:true, df:true, freq:true };
+function toggleOpsControl(ctrl) {
+  opsState[ctrl] = !opsState[ctrl];
+  const map = { rec:'d7-rec-btn', df:'d7-df-btn', freq:'d7-freq-btn' };
+  const labels = { rec:['RECORDING ON','RECORDING OFF'], df:['DF SCAN ON','DF SCAN OFF'], freq:['FREQ SCAN ON','FREQ SCAN OFF'] };
+  const btn=document.getElementById(map[ctrl]);
+  if(btn){
+    btn.classList.toggle('on-g', opsState[ctrl]);
+    btn.textContent=opsState[ctrl]?labels[ctrl][0]:labels[ctrl][1];
+  }
+  SYS_STATE.recording = opsState.rec;
+  SYS_STATE.dfScan    = opsState.df;
+  SYS_STATE.freqScan  = opsState.freq;
+  const ctrlLabels={rec:'RECORDING',df:'DF SCAN',freq:'FREQ SCAN'};
+  addOpLog(`${ctrlLabels[ctrl]} ${opsState[ctrl]?'ENABLED':'DISABLED'} BY OPERATOR`, true);
+  renderSysStatus();
+  // Update header recording indicator
+  const indRec=document.getElementById('ind-rec');
+  if(indRec){
+    const dot=indRec.querySelector('.ind-dot');
+    if(dot) dot.className='ind-dot '+(opsState.rec?'g':'r');
+  }
+}
+
+let cryptoSyncTimer=null;
+function triggerCryptoSync() {
+  const btn=document.getElementById('d7-crypto-btn');
+  if(btn){ btn.textContent='SYNCING…'; btn.classList.add('on-c'); }
+  addOpLog('CRYPTO SYNC INITIATED', true);
+  if(cryptoSyncTimer) clearTimeout(cryptoSyncTimer);
+  cryptoSyncTimer=setTimeout(()=>{
+    SYS_STATE.cryptoKey=hex(4);
+    if(btn){ btn.textContent='CRYPTO SYNC'; btn.classList.remove('on-c'); }
+    addOpLog(`CRYPTO SYNC COMPLETE — KEY ${SYS_STATE.cryptoKey}`, true);
+    renderSysStatus();
+  }, 2500);
+}
+
+// ════════════════════════════════════════════════════════════════ CLOCK
 function updateClock() {
-  const n = new Date();
-  const timeStr = n.toLocaleTimeString('en-GB', {
-    timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-  });
-  const ukDate  = new Date(n.toLocaleString('en-US', { timeZone: 'Europe/London' }));
-  const utcDate = new Date(n.toLocaleString('en-US', { timeZone: 'UTC' }));
-  const tz = (ukDate - utcDate) > 0 ? 'BST' : 'GMT';
-  document.getElementById('hclock').textContent = timeStr;
-  document.getElementById('htz').textContent = tz;
+  const n=new Date();
+  const timeStr=n.toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  const ukDate=new Date(n.toLocaleString('en-US',{timeZone:'Europe/London'}));
+  const utcDate=new Date(n.toLocaleString('en-US',{timeZone:'UTC'}));
+  const tz=(ukDate-utcDate)>0?'BST':'GMT';
+  document.getElementById('hclock').textContent=timeStr;
+  document.getElementById('htz').textContent=tz;
 }
 
-// ── Main loop ─────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════ MAIN ANIMATION
 function frame() {
   tickSpectrum(); tickWave(); tickCompass();
-  drawSpectrum(canvases['spec-canvas']);
-  drawWaveform(canvases['wave-canvas']);
-  drawCompass(canvases['compass-canvas']);
-  drawTraffic(canvases['traffic-canvas']);
+  const d=currentDisplay;
+  if(d===1){ draw('d1-spec',drawSpectrum); draw('d1-wave',drawWaveform); draw('d1-compass',drawCompass); draw('d1-traffic',drawTraffic); }
+  else if(d===2){ draw('d2-spec',drawSpectrum); draw('d2-wave',drawWaveform); }
+  else if(d===4){ draw('d4-compass',drawCompass); renderBearingList(); }
+  else if(d===5){ draw('d5-traffic',drawTraffic); }
   requestAnimationFrame(frame);
 }
 
@@ -941,21 +1523,36 @@ function scheduleIntercept() {
   setTimeout(scheduleIntercept, ri(1500,5500));
 }
 
-// ── Boot ──────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════ BOOT
 window.addEventListener('load', ()=>{
-  allCanvases();
+  // Init canvases for display 1
+  ['d1-spec','d1-wave','d1-compass','d1-traffic'].forEach(id=>initCanvas(id));
+  initWaterfall('d1-spec');
+
   updateClock(); setInterval(updateClock,1000);
   setInterval(pushTraffic,1000);
   setInterval(refreshSigs,2000);
   setInterval(updateElint,3000);
-  renderStatus(); updateElint();
-  for(let i=0;i<10;i++) addIntercept();
-  refreshSigs();
+  setInterval(()=>{ SYS_STATE.linkQty=Math.max(60,Math.min(99,SYS_STATE.linkQty+ri(-2,2))); renderSysStatus(); },5000);
+
+  renderSysStatus(); updateElint();
+  for(let i=0;i<14;i++) { intCount++; const p=pick(PRIS),t=pick(TYPES_LIST),m=pick(MSGS)(); const n=new Date(); interceptLog.push({time:`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}Z`,pri:p,type:t,msg:m,id:intCount}); }
+  renderIntFeed('d1-int-feed',true); renderIntFeed('d3-feed',false);
+  document.getElementById('d1-int-count').textContent=`${String(intCount).padStart(3,'0')} ENTRIES`;
+  refreshSigs(); refreshSigs();
+
+  addOpLog('STATION ECHO-7 ONLINE — ALL SYSTEMS NOMINAL', true);
+  addOpLog(`CRYPTO KEY ${SYS_STATE.cryptoKey} LOADED`, true);
+  addOpLog('HF MONITORING ACTIVE 3.5–30.0 MHZ', true);
+
   scheduleIntercept();
   requestAnimationFrame(frame);
 });
 
-window.addEventListener('resize',()=>{ setTimeout(()=>{ allCanvases(); },120); });
+window.addEventListener('resize',()=>{ setTimeout(()=>{
+  const d=currentDisplay;
+  const ids=DISPLAY_CANVASES[d]; if(ids){ ids.forEach(id=>initCanvas(id)); if(d===1) initWaterfall('d1-spec'); if(d===2) initWaterfall('d2-spec'); }
+},120);});
 </script>
 </body>
 </html>
