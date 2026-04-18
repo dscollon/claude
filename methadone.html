@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methadone Supply Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1a1a;
+      --surface:   #242424;
+      --surface2:  #2e2e2e;
+      --border:    #3a3a3a;
+      --copper:    #c8763a;
+      --copper-lt: #e0924f;
+      --copper-dk: #9e5b28;
+      --text:      #e8e8e8;
+      --text-dim:  #888;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 40px 24px 60px;
+    }
+
+    .app { max-width: 560px; margin: 0 auto; }
+
+    header { margin-bottom: 28px; }
+
+    header h1 {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--copper);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+
+    thead th {
+      padding: 12px 0;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--copper-lt);
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    thead th:first-child {
+      text-align: left;
+      padding-left: 18px;
+      color: var(--text-dim);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody tr:hover { background: var(--surface2); }
+
+    td {
+      padding: 9px 0;
+      text-align: center;
+      font-size: 0.88rem;
+    }
+
+    td:first-child {
+      text-align: left;
+      padding-left: 18px;
+      color: var(--copper);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      width: 90px;
+    }
+
+    td.value {
+      color: var(--text);
+    }
+
+    /* Highlight column on hover via JS */
+    td.col-hover { background: rgba(200, 118, 58, 0.06); }
+    thead th.col-hover { background: rgba(200, 118, 58, 0.12); }
+
+    @media print {
+      body { background: white; color: black; padding: 16px; }
+      header h1 { color: #c8763a; }
+      header p { color: #555; }
+      .table-wrap { border: 1px solid #ccc; border-radius: 0; }
+      thead th { background: #f5f5f5; color: #333; border-bottom: 1px solid #ccc; }
+      thead th:first-child { color: #666; }
+      tbody tr { border-bottom: 1px solid #eee; }
+      td:first-child { color: #c8763a; }
+      td.value { color: black; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <h1>Methadone Supply Calculator</h1>
+    <p>Total quantity (mg) by daily dose and supply duration</p>
+  </header>
+
+  <div class="table-wrap">
+    <table id="grid">
+      <thead>
+        <tr>
+          <th>Dose (mg/day)</th>
+          <th data-col="0">7 days</th>
+          <th data-col="1">14 days</th>
+          <th data-col="2">21 days</th>
+          <th data-col="3">28 days</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+  const DAYS  = [7, 14, 21, 28];
+  const tbody = document.getElementById('tbody');
+
+  for (let dose = 5; dose <= 150; dose += 5) {
+    const tr = document.createElement('tr');
+    const doseCell = document.createElement('td');
+    doseCell.textContent = dose + ' mg';
+    tr.appendChild(doseCell);
+
+    DAYS.forEach((days, colIdx) => {
+      const td = document.createElement('td');
+      td.className = 'value';
+      td.dataset.col = colIdx;
+      td.textContent = (dose * days).toLocaleString();
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  }
+
+  // Column hover highlight
+  document.getElementById('grid').addEventListener('mouseover', e => {
+    const col = e.target.dataset.col;
+    document.querySelectorAll('[data-col]').forEach(el => {
+      el.classList.toggle('col-hover', el.dataset.col === col && col !== undefined);
+    });
+  });
+
+  document.getElementById('grid').addEventListener('mouseleave', () => {
+    document.querySelectorAll('[data-col]').forEach(el => el.classList.remove('col-hover'));
+  });
+</script>
+</body>
+</html>
