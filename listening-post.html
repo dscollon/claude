@@ -252,8 +252,8 @@
       <div class="indicator"><span class="ind-dot g">●</span><span class="hb-lbl">RECORD</span></div>
     </div>
     <div class="hb">
-      <span class="hb-lbl">UTC</span>
-      <span class="hb-clock" id="hclock">00:00:00Z</span>
+      <span class="hb-lbl" id="htz">GMT</span>
+      <span class="hb-clock" id="hclock">00:00:00</span>
     </div>
     <div class="hb" style="gap:12px">
       <span class="alert-ticker" id="alert-ticker">⚡ NEW FLASH INTERCEPT</span>
@@ -915,8 +915,15 @@ function refreshSigs() {
 
 // ── Clock ─────────────────────────────────────────────────────────────
 function updateClock() {
-  const n=new Date();
-  document.getElementById('hclock').textContent=`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}Z`;
+  const n = new Date();
+  const timeStr = n.toLocaleTimeString('en-GB', {
+    timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+  const ukDate  = new Date(n.toLocaleString('en-US', { timeZone: 'Europe/London' }));
+  const utcDate = new Date(n.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const tz = (ukDate - utcDate) > 0 ? 'BST' : 'GMT';
+  document.getElementById('hclock').textContent = timeStr;
+  document.getElementById('htz').textContent = tz;
 }
 
 // ── Main loop ─────────────────────────────────────────────────────────
