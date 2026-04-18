@@ -8,99 +8,108 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #040402;
-      --panel:  #060604;
-      --border: #1c1800;
-      --a:      #c89010;   /* amber main   */
-      --ab:     #f0b828;   /* amber bright */
-      --ad:     #5a4008;   /* amber dim    */
-      --av:     #1a1200;   /* amber very dim */
-      --red:    #c84030;
-      --green:  #3a9050;
-      --mono:   'Courier New', Courier, monospace;
+      --bg:      #030303;
+      --panel:   #070707;
+      --border:  #181408;
+      --copper:  #c87c20;
+      --cop-br:  #f0a030;
+      --cop-dim: #5c3a0a;
+      --cop-vd:  #180e02;
+      --green:   #28b860;
+      --grn-dim: #0e4820;
+      --red:     #d03030;
+      --red-dim: #4a0e0e;
+      --cyan:    #18b0d0;
+      --cyn-dim: #063840;
+      --yellow:  #d4b020;
+      --ylw-dim: #3a2c04;
+      --purple:  #9040c0;
+      --text:    #b08828;
+      --mono:    'Consolas', 'Courier New', monospace;
     }
 
     html, body {
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--a);
+      height: 100%; overflow: hidden;
+      background: var(--bg); color: var(--text);
       font-family: var(--mono);
     }
 
-    /* CRT overlay */
     .crt {
       position: fixed; inset: 0; pointer-events: none; z-index: 999;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
-      );
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
     }
     .crt::after {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0,0,0,0.55) 100%);
+      background: radial-gradient(ellipse at 50% 35%, transparent 50%, rgba(0,0,0,0.65) 100%);
     }
 
-    /* Station layout */
+    /* ── Layout ── */
     .station {
       height: 100vh;
       display: grid;
-      grid-template-rows: 40px 1fr 108px;
-      gap: 2px;
-      padding: 2px;
+      grid-template-rows: 42px 1fr 112px;
+      gap: 2px; padding: 2px;
     }
 
-    /* Header bar */
+    /* Header */
     .hbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
       background: var(--panel);
       border: 1px solid var(--border);
-      font-size: 0.65rem;
-      letter-spacing: 0.14em;
-      gap: 20px;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hbar-section { display: flex; align-items: center; gap: 10px; }
-
-    .hbar-id {
-      color: var(--ab);
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-shadow: 0 0 10px rgba(240,184,40,0.5);
+    .hbar::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--copper), transparent);
+      opacity: 0.4;
     }
 
-    .hbar-sep { color: var(--ad); }
-
-    .hbar-label { color: var(--ad); letter-spacing: 0.12em; }
-
-    .hbar-clock {
-      color: var(--ab);
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
+    .hb  { display: flex; align-items: center; gap: 8px; }
+    .hb-id {
+      color: var(--cop-br); font-size: 0.72rem; letter-spacing: 0.22em;
+      text-shadow: 0 0 12px rgba(240,160,48,0.5);
+    }
+    .hb-sep { color: var(--cop-dim); font-size: 0.65rem; }
+    .hb-lbl { color: var(--cop-dim); font-size: 0.6rem; letter-spacing: 0.12em; }
+    .hb-val { font-size: 0.68rem; letter-spacing: 0.1em; }
+    .hb-clock {
+      color: var(--cop-br); font-size: 0.9rem; letter-spacing: 0.14em;
       font-variant-numeric: tabular-nums;
-      text-shadow: 0 0 8px rgba(240,184,40,0.4);
+      text-shadow: 0 0 10px rgba(240,160,48,0.4);
     }
 
-    .dot { font-size: 0.7rem; }
-    .dot.green { color: var(--green); text-shadow: 0 0 6px var(--green); animation: blink 2s infinite; }
-    .dot.amber { color: var(--ab);   text-shadow: 0 0 6px var(--ab);    animation: blink 1.3s infinite; }
-    .dot.red   { color: var(--red);  text-shadow: 0 0 6px var(--red);   animation: blink 0.8s infinite; }
+    .indicator {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.58rem; letter-spacing: 0.1em;
+    }
+    .ind-dot { font-size: 0.6rem; }
+    .ind-dot.g { color: var(--green);  text-shadow: 0 0 6px var(--green);  animation: blink 2.8s infinite; }
+    .ind-dot.a { color: var(--cop-br); text-shadow: 0 0 6px var(--cop-br); animation: blink 1.8s infinite; }
+    .ind-dot.r { color: var(--red);    text-shadow: 0 0 6px var(--red);    animation: blink 0.7s infinite; }
+    .ind-dot.c { color: var(--cyan);   text-shadow: 0 0 6px var(--cyan);   animation: blink 2.2s infinite; }
 
-    @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0.2} }
+    @keyframes blink { 0%,48%{opacity:1} 50%,98%{opacity:0.15} 100%{opacity:1} }
+
+    .alert-ticker {
+      font-size: 0.6rem; color: var(--red); letter-spacing: 0.08em;
+      animation: flash 1.2s infinite;
+      display: none;
+    }
+    .alert-ticker.show { display: block; }
+    @keyframes flash { 0%,49%{opacity:1} 50%,100%{opacity:0} }
 
     /* Main grid */
     .mgrid {
       display: grid;
-      grid-template-columns: 27fr 46fr 27fr;
-      gap: 2px;
-      overflow: hidden;
-      min-height: 0;
+      grid-template-columns: 24fr 52fr 24fr;
+      gap: 2px; min-height: 0;
     }
-
     .center-col, .right-col {
       display: flex; flex-direction: column; gap: 2px; min-height: 0;
     }
@@ -109,698 +118,837 @@
     .panel {
       background: var(--panel);
       border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 0;
+      display: flex; flex-direction: column;
+      overflow: hidden; min-height: 0;
     }
 
-    .panel-hdr {
-      font-size: 0.58rem;
-      letter-spacing: 0.2em;
-      color: var(--ad);
-      padding: 4px 10px;
+    .ph {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 3px 10px;
       border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-shrink: 0; gap: 8px;
+    }
+    .ph::before {
+      content: ''; position: absolute;
+      height: 1px; left: 0; right: 0; top: 0;
     }
 
-    .panel-hdr .phdr-title { color: var(--a); }
+    .ph-title {
+      font-size: 0.58rem; letter-spacing: 0.18em; color: var(--copper);
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .ph-right {
+      font-size: 0.55rem; color: var(--cop-dim); letter-spacing: 0.08em;
+      white-space: nowrap; text-align: right;
+    }
+    .ph-right.live { color: var(--green); }
+    .ph-right.alert { color: var(--red); }
 
-    .panel-body {
-      flex: 1;
-      overflow: hidden;
-      padding: 6px 8px;
-      min-height: 0;
-      font-size: 0.64rem;
-      line-height: 1.6;
+    .pb {
+      flex: 1; overflow: hidden;
+      padding: 5px 8px; min-height: 0;
+      font-size: 0.62rem; line-height: 1.55;
     }
 
-    canvas {
-      display: block;
-      width: 100%;
-      flex: 1;
-      min-height: 0;
+    canvas { display: block; width: 100%; flex: 1; min-height: 0; }
+
+    /* ── Intercept feed ── */
+    #int-feed {
+      display: flex; flex-direction: column-reverse;
+      overflow: hidden; gap: 0;
     }
 
-    /* Intercept feed */
-    #intercept-feed {
-      display: flex;
-      flex-direction: column-reverse;
-      overflow: hidden;
-      gap: 1px;
-    }
-
-    .intercept-line {
-      display: flex;
-      gap: 6px;
-      animation: fadein 0.4s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    @keyframes fadein { from { opacity:0; transform: translateX(-6px); } to { opacity:1; transform: none; } }
-
-    .int-time { color: var(--ad); flex-shrink: 0; }
-    .int-freq { color: var(--ab); flex-shrink: 0; font-size: 0.6rem; }
-    .int-msg  { color: var(--a);  overflow: hidden; text-overflow: ellipsis; }
-    .int-msg.new { color: var(--ab); text-shadow: 0 0 8px rgba(240,184,40,0.3); }
-
-    /* Signals table */
-    .sig-row {
-      display: grid;
-      grid-template-columns: 5.5em 3.5em 2em 1fr;
-      gap: 4px;
+    .il {
+      display: flex; gap: 5px; align-items: flex-start;
       padding: 2px 0;
-      border-bottom: 1px solid var(--av);
-      font-size: 0.62rem;
-      animation: fadein 0.3s ease;
-      white-space: nowrap;
+      border-bottom: 1px solid rgba(24,20,8,0.6);
+      animation: slidein 0.35s ease;
+      white-space: nowrap; overflow: hidden;
     }
+    @keyframes slidein { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:none} }
 
-    .sig-row.hdr { color: var(--ad); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 2px; }
-    .sig-freq    { color: var(--ab); }
-    .sig-mod     { color: var(--ad); }
-    .sig-str     { color: var(--a); text-align: right; }
-    .sig-status  { color: var(--ad); font-size: 0.58rem; }
-    .sig-status.locked { color: var(--green); text-shadow: 0 0 6px rgba(58,144,80,0.4); }
-    .sig-status.alert  { color: var(--ab);    text-shadow: 0 0 6px rgba(240,184,40,0.4); }
+    .il-time { color: var(--cop-dim); flex-shrink: 0; font-size: 0.58rem; }
+    .il-pri  { font-size: 0.55rem; font-weight: bold; flex-shrink: 0; border-radius: 2px; padding: 0 3px; }
+    .pri-flash    { background: var(--red-dim);  color: var(--red);    animation: flash 0.8s infinite; }
+    .pri-priority { background: var(--ylw-dim);  color: var(--yellow); }
+    .pri-routine  { background: transparent;     color: var(--cop-dim); }
+    .pri-admin    { background: transparent;     color: #3a3020; }
 
-    /* Traffic panel */
-    .traffic-panel {
-      overflow: hidden;
+    .il-type { font-size: 0.55rem; color: var(--cyan); flex-shrink: 0; }
+    .il-msg  { color: var(--text); overflow: hidden; text-overflow: ellipsis; font-size: 0.61rem; }
+    .il-msg.new { color: var(--cop-br); text-shadow: 0 0 8px rgba(240,160,48,0.25); }
+
+    /* ── Signals table ── */
+    .sig-hdr, .sig-row {
+      display: grid;
+      grid-template-columns: 5.2em 3.2em 52px 4.2em 4.2em;
+      gap: 3px; padding: 2px 0;
+      border-bottom: 1px solid rgba(24,20,8,0.5);
+      font-size: 0.59rem; white-space: nowrap;
     }
+    .sig-hdr { color: var(--cop-dim); border-bottom: 1px solid var(--border); padding-bottom: 3px; margin-bottom: 1px; font-size: 0.56rem; letter-spacing: 0.08em; }
+    .sig-row { animation: slidein 0.3s ease; }
+    .sf { color: var(--cop-br); }
+    .sm { color: var(--cop-dim); }
+    .ss-bar-wrap { position: relative; height: 7px; margin-top: 3px; background: var(--cop-vd); border-radius: 1px; }
+    .ss-bar { height: 100%; border-radius: 1px; }
+    .sd { font-size: 0.57rem; }
+    .sc { font-size: 0.55rem; }
+    .sc.locked   { color: var(--green);  text-shadow: 0 0 6px rgba(40,184,96,0.4); }
+    .sc.tracking { color: var(--cyan);   text-shadow: 0 0 6px rgba(24,176,208,0.3); }
+    .sc.alert    { color: var(--yellow); }
+    .sc.default  { color: var(--cop-dim); }
 
-    .traffic-panel canvas { height: 100%; }
+    /* ── System status ── */
+    .status-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(24,20,8,0.4);
+      font-size: 0.58rem;
+    }
+    .sr-label { color: var(--cop-dim); letter-spacing: 0.06em; }
+    .sr-val   { font-size: 0.57rem; }
+    .sr-val.ok    { color: var(--green); }
+    .sr-val.warn  { color: var(--yellow); }
+    .sr-val.error { color: var(--red); }
+    .sr-val.info  { color: var(--cyan); }
 
-    /* Strength bar */
-    .str-bar {
-      display: inline-block;
-      height: 6px;
-      background: var(--a);
-      vertical-align: middle;
-      max-width: 40px;
+    /* ── ELINT panel ── */
+    .elint-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 2px 0; font-size: 0.59rem;
+      border-bottom: 1px solid rgba(24,20,8,0.4);
+    }
+    .er-type { width: 3.8em; color: var(--copper); flex-shrink: 0; }
+    .er-bar-wrap { flex: 1; height: 5px; background: var(--cop-vd); border-radius: 1px; }
+    .er-bar { height: 100%; border-radius: 1px; transition: width 0.8s ease; }
+    .er-count { width: 3em; text-align: right; color: var(--cop-dim); font-size: 0.56rem; }
+
+    /* Bottom row */
+    .bottom-row {
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      gap: 2px;
     }
   </style>
 </head>
 <body>
 <div class="crt"></div>
-
 <div class="station">
 
   <!-- HEADER -->
   <div class="hbar">
-    <div class="hbar-section">
-      <span class="hbar-id">◈ STATION ECHO-7</span>
-      <span class="hbar-sep">//</span>
-      <span class="hbar-label">HF SIGNALS INTELLIGENCE</span>
-      <span class="hbar-sep">//</span>
-      <span class="hbar-label">OPERATOR: WATCHKEEPER</span>
+    <div class="hb">
+      <span class="hb-id">◈ STATION ECHO-7</span>
+      <span class="hb-sep">//</span>
+      <span class="hb-lbl">HF SIGNALS INTELLIGENCE</span>
+      <span class="hb-sep">//</span>
+      <span class="hb-lbl">OP: WATCHKEEPER</span>
     </div>
-    <div class="hbar-section">
-      <span class="hbar-label">UTC</span>
-      <span class="hbar-clock" id="hclock">00:00:00</span>
+    <div class="hb" style="gap:14px">
+      <div class="indicator"><span class="ind-dot g">●</span><span class="hb-lbl">RCV ACTIVE</span></div>
+      <div class="indicator"><span class="ind-dot a">●</span><span class="hb-lbl">DF ARRAY</span></div>
+      <div class="indicator"><span class="ind-dot c">●</span><span class="hb-lbl">CRYPTO SYNC</span></div>
+      <div class="indicator"><span class="ind-dot g">●</span><span class="hb-lbl">RECORD</span></div>
     </div>
-    <div class="hbar-section">
-      <span class="dot green">●</span>
-      <span class="hbar-label">RECEIVE ACTIVE</span>
-      <span class="hbar-sep">//</span>
-      <span class="dot amber">●</span>
-      <span class="hbar-label">DF ONLINE</span>
-      <span class="hbar-sep">//</span>
-      <span class="hbar-label">UNCLASSIFIED // EXERCISE</span>
+    <div class="hb">
+      <span class="hb-lbl">UTC</span>
+      <span class="hb-clock" id="hclock">00:00:00Z</span>
+    </div>
+    <div class="hb" style="gap:12px">
+      <span class="alert-ticker" id="alert-ticker">⚡ NEW FLASH INTERCEPT</span>
+      <span class="hb-lbl" id="alert-count">ALERTS: 000</span>
+      <span class="hb-sep">//</span>
+      <span class="hb-lbl">UNCLASSIFIED // EXERCISE</span>
     </div>
   </div>
 
   <!-- MAIN GRID -->
   <div class="mgrid">
 
-    <!-- INTERCEPT FEED -->
+    <!-- LEFT: INTERCEPTS -->
     <div class="panel">
-      <div class="panel-hdr">
-        <span class="phdr-title">◈ INTERCEPT FEED</span>
-        <span id="int-count">000 ENTRIES</span>
+      <div class="ph">
+        <span class="ph-title">◈ INTERCEPT LOG</span>
+        <span class="ph-right live" id="int-count">000 ENTRIES</span>
       </div>
-      <div class="panel-body" id="intercept-feed"></div>
+      <div class="pb" style="padding:4px 6px">
+        <div id="int-feed"></div>
+      </div>
     </div>
 
-    <!-- CENTER: SPECTRUM + WAVEFORM -->
+    <!-- CENTER -->
     <div class="center-col">
-      <div class="panel" style="flex:3">
-        <div class="panel-hdr">
-          <span class="phdr-title">◈ SPECTRUM MONITOR</span>
-          <span id="spec-range">3.5 – 30.0 MHZ</span>
+      <div class="panel" style="flex:17">
+        <div class="ph">
+          <span class="ph-title">◈ SPECTRUM + WATERFALL — 3.5–30.0 MHZ</span>
+          <span class="ph-right" id="spec-peak">PEAK: — MHZ</span>
         </div>
         <canvas id="spec-canvas"></canvas>
       </div>
-      <div class="panel" style="flex:2">
-        <div class="panel-hdr">
-          <span class="phdr-title">◈ SIGNAL WAVEFORM</span>
-          <span id="wave-info">—</span>
+      <div class="panel" style="flex:10">
+        <div class="ph">
+          <span class="ph-title">◈ SIGNAL WAVEFORM</span>
+          <span class="ph-right live" id="wave-info">—</span>
         </div>
         <canvas id="wave-canvas"></canvas>
       </div>
     </div>
 
-    <!-- RIGHT: SIGNALS + COMPASS -->
+    <!-- RIGHT -->
     <div class="right-col">
-      <div class="panel" style="flex:3">
-        <div class="panel-hdr">
-          <span class="phdr-title">◈ ACTIVE SIGNALS</span>
-          <span id="sig-count">0 ACTIVE</span>
+      <div class="panel" style="flex:13">
+        <div class="ph">
+          <span class="ph-title">◈ ACTIVE SIGNALS</span>
+          <span class="ph-right" id="sig-count">0 ACTIVE</span>
         </div>
-        <div class="panel-body" style="padding:6px 8px 0;">
-          <div class="sig-row hdr">
-            <span>FREQ</span><span>MOD</span><span>STR</span><span>STATUS</span>
+        <div class="pb" style="padding:4px 8px 0">
+          <div class="sig-hdr">
+            <span>FREQ</span><span>MOD</span><span>STR</span><span>BRG</span><span>STATUS</span>
           </div>
-          <div id="signals-list"></div>
+          <div id="sig-list"></div>
         </div>
       </div>
-      <div class="panel" style="flex:2">
-        <div class="panel-hdr">
-          <span class="phdr-title">◈ DIRECTION FINDING</span>
-          <span id="df-bearing">BRG —°</span>
+      <div class="panel" style="flex:9">
+        <div class="ph">
+          <span class="ph-title">◈ DIRECTION FINDING</span>
+          <span class="ph-right" id="df-info">BRG —° // FIX QUALITY: —</span>
         </div>
         <canvas id="compass-canvas"></canvas>
+      </div>
+      <div class="panel" style="flex:5">
+        <div class="ph">
+          <span class="ph-title">◈ SYSTEM STATUS</span>
+          <span class="ph-right live">ALL SYSTEMS NOMINAL</span>
+        </div>
+        <div class="pb" style="padding:3px 8px" id="sys-status"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- TRAFFIC CHART -->
-  <div class="panel traffic-panel">
-    <div class="panel-hdr">
-      <span class="phdr-title">◈ TRAFFIC ANALYSIS</span>
-      <span id="traffic-stats">LAST 120s — MONITORING ALL BANDS</span>
+  <!-- BOTTOM ROW -->
+  <div class="bottom-row">
+    <div class="panel">
+      <div class="ph">
+        <span class="ph-title">◈ BAND TRAFFIC — LAST 120s</span>
+        <span class="ph-right">
+          <span style="color:var(--cop-br)">■</span> 7MHZ &nbsp;
+          <span style="color:var(--cyan)">■</span> 14MHZ &nbsp;
+          <span style="color:var(--green)">■</span> 21MHZ
+        </span>
+      </div>
+      <canvas id="traffic-canvas"></canvas>
     </div>
-    <canvas id="traffic-canvas"></canvas>
+    <div class="panel">
+      <div class="ph">
+        <span class="ph-title">◈ ELINT CLASSIFICATION</span>
+        <span class="ph-right" id="elint-last">LAST: —</span>
+      </div>
+      <div class="pb" style="padding:4px 8px" id="elint-panel"></div>
+    </div>
   </div>
 
 </div>
 
 <script>
 // ── Utilities ─────────────────────────────────────────────────────────
-function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
-function rnd(lo, hi) { return lo + Math.random() * (hi - lo); }
-function rndInt(lo, hi) { return Math.floor(rnd(lo, hi + 1)); }
-function pad(n, w=2) { return String(n).padStart(w, '0'); }
-function hex(n) { return Array.from({length:n},()=>Math.floor(Math.random()*16).toString(16).toUpperCase()).join(''); }
-function grid() {
-  const L='ABCDEFGHJKLMNPQRSTUVWX';
-  return L[rndInt(0,21)]+L[rndInt(0,21)]+pad(rndInt(0,99))+pad(rndInt(0,99));
-}
-function freq() {
-  const b=[3.5,7.0,10.1,14.0,18.1,21.0,24.9,28.0];
-  return (pick(b)+rnd(0,0.5)).toFixed(3);
-}
+const pick  = a => a[Math.floor(Math.random()*a.length)];
+const rnd   = (lo,hi) => lo + Math.random()*(hi-lo);
+const ri    = (lo,hi) => Math.floor(rnd(lo,hi+1));
+const pad   = (n,w=2) => String(n).padStart(w,'0');
+const hex   = n => Array.from({length:n},()=>ri(0,15).toString(16).toUpperCase()).join('');
+const grid  = () => { const L='ABCDEFGHJKLMNPQRSTUVWX'; return L[ri(0,21)]+L[ri(0,21)]+pad(ri(0,99))+pad(ri(0,99)); };
+const freqMHz = () => { const b=[3.5,7.0,10.1,14.0,18.1,21.0,24.9,28.0]; return (pick(b)+rnd(0,0.48)).toFixed(3); };
 
-// ── Canvas init ────────────────────────────────────────────────────────
+// ── Canvas setup ──────────────────────────────────────────────────────
+const canvases = {};
 function initCanvas(id) {
   const el = document.getElementById(id);
   const dpr = window.devicePixelRatio || 1;
-  const rect = el.getBoundingClientRect();
-  el.width  = rect.width  * dpr;
-  el.height = rect.height * dpr;
+  const r = el.getBoundingClientRect();
+  el.width  = r.width  * dpr;
+  el.height = r.height * dpr;
+  el.style.width  = r.width  + 'px';
+  el.style.height = r.height + 'px';
   const ctx = el.getContext('2d');
   ctx.scale(dpr, dpr);
-  el._w = rect.width;
-  el._h = rect.height;
+  el._w = r.width; el._h = r.height;
+  canvases[id] = ctx;
   return ctx;
 }
-
-let specCtx, waveCtx, compassCtx, trafficCtx;
-
-function initAllCanvases() {
-  specCtx    = initCanvas('spec-canvas');
-  waveCtx    = initCanvas('wave-canvas');
-  compassCtx = initCanvas('compass-canvas');
-  trafficCtx = initCanvas('traffic-canvas');
+function allCanvases() {
+  ['spec-canvas','wave-canvas','compass-canvas','traffic-canvas'].forEach(id => initCanvas(id));
+  initWaterfall();
 }
 
-// ── Spectrum data ─────────────────────────────────────────────────────
-const BINS = 80;
-const FIXED_SIGS = [
-  { bin: 9,  base: 0.72, var: 0.12 },  // 7 MHz CW
-  { bin: 28, base: 0.82, var: 0.28 },  // 14 MHz voice
-  { bin: 38, base: 0.55, var: 0.22 },  // 18 MHz digital
-  { bin: 51, base: 0.48, var: 0.18 },  // 21 MHz
-  { bin: 66, base: 0.38, var: 0.35 },  // 27 MHz burst
+// ── Spectrum + Waterfall ──────────────────────────────────────────────
+const BINS = 96;
+const FIXED = [
+  {bin:9,  base:0.78, v:0.15, label:'CW'},
+  {bin:21, base:0.45, v:0.2,  label:'DATA'},
+  {bin:30, base:0.85, v:0.28, label:'USB'},
+  {bin:44, base:0.52, v:0.22, label:'DIGI'},
+  {bin:55, base:0.62, v:0.18, label:'LSB'},
+  {bin:70, base:0.42, v:0.35, label:'BURST'},
+  {bin:82, base:0.35, v:0.3,  label:'UNK'},
 ];
+const specRaw    = new Float32Array(BINS).fill(0.04);
+const specSmooth = new Float32Array(BINS).fill(0.04);
+const specPeak   = new Float32Array(BINS).fill(0.04);
 
-const specSmooth = new Float32Array(BINS).fill(0.05);
-const specRaw    = new Float32Array(BINS).fill(0.05);
+let wfImageData = null;
+let wfW = 0, wfH = 0;
+const WF_ROW_H = 2;
+let wfFrameCount = 0;
+const WF_UPDATE_EVERY = 4;
+
+function initWaterfall() {
+  const ctx = canvases['spec-canvas'];
+  if (!ctx) return;
+  const W = ctx.canvas._w, H = ctx.canvas._h;
+  const specH = Math.floor(H * 0.42);
+  wfW = W; wfH = H - specH;
+  wfImageData = ctx.createImageData(Math.floor(wfW), Math.floor(wfH));
+  wfImageData.data.fill(3);
+}
+
+function vToRGB(v) {
+  const c = Math.min(v, 1);
+  if (c < 0.12) return [0, 0, ri(0,8)];
+  if (c < 0.28) { const t=(c-0.12)/0.16; return [Math.round(t*40),0,Math.round(8+t*30)]; }
+  if (c < 0.52) { const t=(c-0.28)/0.24; return [Math.round(40+t*160),Math.round(t*60),Math.round(38-t*38)]; }
+  if (c < 0.75) { const t=(c-0.52)/0.23; return [Math.round(200+t*30),Math.round(60+t*100),0]; }
+  if (c < 0.9)  { const t=(c-0.75)/0.15; return [230,Math.round(160+t*60),Math.round(t*60)]; }
+  const t=(c-0.9)/0.1; return [230+Math.round(t*25),220+Math.round(t*35),Math.round(60+t*195)];
+}
+
+function pushWaterfallRow() {
+  const rowBytes = wfImageData.width * 4 * WF_ROW_H;
+  const data = wfImageData.data;
+  data.copyWithin(rowBytes, 0, data.length - rowBytes);
+  for (let b = 0; b < BINS; b++) {
+    const v = specSmooth[b];
+    const [r,g,bl] = vToRGB(v);
+    const x0 = Math.floor(b / BINS * wfImageData.width);
+    const x1 = Math.floor((b+1) / BINS * wfImageData.width);
+    for (let x = x0; x < x1; x++) {
+      for (let row = 0; row < WF_ROW_H; row++) {
+        const i = (row * wfImageData.width + x) * 4;
+        data[i]=r; data[i+1]=g; data[i+2]=bl; data[i+3]=255;
+      }
+    }
+  }
+}
 
 function tickSpectrum() {
-  for (let i = 0; i < BINS; i++) specRaw[i] = 0.04 + Math.random() * 0.05;
-  FIXED_SIGS.forEach(s => {
-    const v = s.base + (Math.random() - 0.5) * s.var;
-    for (let d = -3; d <= 3; d++) {
-      const i = s.bin + d;
-      if (i >= 0 && i < BINS) specRaw[i] += v * Math.max(0, 1 - Math.abs(d) * 0.4);
+  for (let i=0;i<BINS;i++) specRaw[i] = 0.03 + Math.random()*0.04;
+  FIXED.forEach(s => {
+    const v = s.base + (Math.random()-0.5)*s.v;
+    for (let d=-3;d<=3;d++) {
+      const i=s.bin+d;
+      if (i>=0&&i<BINS) specRaw[i] += v * Math.max(0,1-Math.abs(d)*0.38);
     }
   });
-  if (Math.random() < 0.006) {
-    const sp = rndInt(0, BINS - 1);
-    specRaw[sp] = 0.9 + Math.random() * 0.1;
+  if (Math.random()<0.007) specRaw[ri(0,BINS-1)] = 0.9+Math.random()*0.1;
+  for (let i=0;i<BINS;i++) {
+    specSmooth[i] = specSmooth[i]*0.72 + specRaw[i]*0.28;
+    specPeak[i]   = Math.max(specPeak[i]*0.998, specSmooth[i]);
   }
-  for (let i = 0; i < BINS; i++) specSmooth[i] = specSmooth[i]*0.75 + specRaw[i]*0.25;
+  wfFrameCount++;
+  if (wfFrameCount >= WF_UPDATE_EVERY) { pushWaterfallRow(); wfFrameCount=0; }
+
+  // Update peak label
+  const maxBin = specSmooth.indexOf(Math.max(...specSmooth));
+  const mhz = (3.5 + maxBin/BINS*26.5).toFixed(2);
+  document.getElementById('spec-peak').textContent = `PEAK: ${mhz} MHZ`;
 }
 
 function drawSpectrum(ctx) {
-  const W = ctx.canvas._w, H = ctx.canvas._h;
-  ctx.clearRect(0, 0, W, H);
+  const W=ctx.canvas._w, H=ctx.canvas._h;
+  const specH = Math.floor(H*0.42);
+  const wfY   = specH;
 
-  // Grid lines
-  const gridLines = 5;
-  for (let g = 0; g <= gridLines; g++) {
-    const y = (H - 20) * (1 - g / gridLines) + 2;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y);
-    ctx.strokeStyle = '#1a1400'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.clearRect(0,0,W,H);
+
+  // Spectrum section grid
+  for (let g=1;g<5;g++) {
+    const y = specH*(1-g/5);
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y);
+    ctx.strokeStyle='#0e0a02'; ctx.lineWidth=1; ctx.stroke();
   }
 
-  const bw = W / BINS;
-  // Freq labels
-  const labelFreqs = ['3.5','7','10','14','18','21','25','28'];
-  labelFreqs.forEach((lf, li) => {
-    const x = (li / (labelFreqs.length - 1)) * W;
-    ctx.fillStyle = '#3a2c08';
-    ctx.font = `${Math.round(9 * (window.devicePixelRatio||1)) / (window.devicePixelRatio||1)}px Courier New`;
-    ctx.textAlign = 'center';
-    ctx.fillText(lf, x, H - 4);
+  // Band marker lines
+  [3.5,7,10.1,14,18.1,21,24.9,28].forEach((f,i) => {
+    const x = ((f-3.5)/26.5)*W;
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,specH-16);
+    ctx.strokeStyle='rgba(92,58,10,0.3)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle='#3a2808'; ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+    ctx.textAlign='center'; ctx.fillText(f,x,specH-4);
   });
 
-  // History ghost (previous frame faint)
+  // Peak hold line
   ctx.beginPath();
-  for (let i = 0; i < BINS; i++) {
-    const x = i * bw + bw / 2;
-    const y = (H - 20) * (1 - specSmooth[i]) + 2;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  for (let i=0;i<BINS;i++) {
+    const x=i/BINS*W+W/BINS/2, y=specH*(1-specPeak[i])+2;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
   }
-  ctx.strokeStyle = 'rgba(100,64,8,0.3)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
+  ctx.strokeStyle='rgba(200,100,30,0.25)'; ctx.lineWidth=1; ctx.stroke();
 
   // Bars
-  for (let i = 0; i < BINS; i++) {
-    const v = Math.min(specSmooth[i], 1);
-    const x = i * bw + 1;
-    const barH = (H - 22) * v;
-    const y = H - 20 - barH;
-    const bright = v > 0.6;
-
-    const grad = ctx.createLinearGradient(0, y, 0, H - 20);
-    grad.addColorStop(0, bright ? 'rgba(240,184,40,0.9)' : 'rgba(180,120,16,0.8)');
-    grad.addColorStop(1, 'rgba(80,52,8,0.4)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(x, y, Math.max(bw - 2, 1), barH);
-
+  const bw = W/BINS;
+  for (let i=0;i<BINS;i++) {
+    const v=Math.min(specSmooth[i],1);
+    const x=i*bw, h2=specH*v, y=specH-h2;
+    const bright=v>0.55;
+    const grad=ctx.createLinearGradient(0,y,0,specH);
+    grad.addColorStop(0, bright?'rgba(240,160,48,0.95)':'rgba(180,110,20,0.8)');
+    grad.addColorStop(0.5, bright?'rgba(200,100,16,0.7)':'rgba(100,60,8,0.5)');
+    grad.addColorStop(1,'rgba(40,20,2,0.3)');
+    ctx.fillStyle=grad;
+    ctx.fillRect(x+0.5,y,Math.max(bw-1,1),h2);
     if (bright) {
-      ctx.fillStyle = 'rgba(240,184,40,0.25)';
-      ctx.fillRect(x - 1, y - 2, bw + 1, barH + 4);
+      ctx.fillStyle='rgba(240,160,48,0.12)';
+      ctx.fillRect(x,y-1,bw,h2+2);
     }
   }
 
-  // Peak line
+  // Signal line
+  ctx.save(); ctx.shadowColor='rgba(240,160,48,0.5)'; ctx.shadowBlur=4;
   ctx.beginPath();
-  for (let i = 0; i < BINS; i++) {
-    const x = i * bw + bw / 2;
-    const y = (H - 20) * (1 - specSmooth[i]) + 2;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  for (let i=0;i<BINS;i++) {
+    const x=i*bw+bw/2, y=specH*(1-specSmooth[i])+2;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
   }
-  ctx.strokeStyle = 'rgba(240,184,40,0.6)';
-  ctx.lineWidth = 1.2;
-  ctx.stroke();
+  ctx.strokeStyle='rgba(240,160,48,0.7)'; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.restore();
+
+  // Waterfall
+  if (wfImageData) {
+    const tmp = document.createElement('canvas');
+    tmp.width = wfImageData.width; tmp.height = wfImageData.height;
+    tmp.getContext('2d').putImageData(wfImageData,0,0);
+    ctx.drawImage(tmp, 0, wfY, W, H-wfY);
+  }
+
+  // Waterfall label
+  ctx.fillStyle='rgba(92,58,10,0.5)';
+  ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+  ctx.textAlign='left';
+  ctx.fillText('▼ HISTORY',4,wfY+10);
+
+  // Fixed signal labels on spectrum
+  FIXED.forEach(s => {
+    if (specSmooth[s.bin] > 0.45) {
+      const x = s.bin/BINS*W;
+      ctx.fillStyle='rgba(240,160,48,0.7)';
+      ctx.textAlign='center';
+      ctx.fillText(s.label, x, 9);
+    }
+  });
 }
 
 // ── Waveform ──────────────────────────────────────────────────────────
-let wPhase = 0, wFreq = 3.2, wFreqT = 3.2, wAmp = 0.65, wAmpT = 0.65;
-const WAVE_MODES = ['USB','LSB','CW','AM','BPSK','RTTY'];
-let waveMode = 'USB';
-let waveModeTimer = 0;
+let wPhase=0, wFreq=3.2, wFreqT=3.2, wAmp=0.6, wAmpT=0.6;
+const WMODES=['USB','LSB','CW','AM','BPSK31','RTTY','FT8','WSPR'];
+let wMode='USB', wModeTimer=0, wFreqMHz=14.225;
 
 function tickWave() {
   wPhase += 0.07;
-  if (waveModeTimer-- <= 0) {
-    wFreqT = rnd(1.5, 9);
-    wAmpT  = rnd(0.35, 0.8);
-    waveMode = pick(WAVE_MODES);
-    waveModeTimer = rndInt(120, 400);
-    document.getElementById('wave-info').textContent = `${freq()} MHZ — ${waveMode}`;
+  if (wModeTimer-- <= 0) {
+    wFreqT=rnd(1.5,10); wAmpT=rnd(0.3,0.82);
+    wMode=pick(WMODES); wModeTimer=ri(100,380);
+    wFreqMHz=parseFloat(freqMHz());
+    document.getElementById('wave-info').textContent=`${wFreqMHz.toFixed(3)} MHZ — ${wMode} — SNR ${ri(8,28)}dB`;
   }
-  wFreq += (wFreqT - wFreq) * 0.015;
-  wAmp  += (wAmpT  - wAmp)  * 0.015;
+  wFreq+=(wFreqT-wFreq)*0.018;
+  wAmp +=(wAmpT -wAmp )*0.018;
 }
 
 function drawWaveform(ctx) {
-  const W = ctx.canvas._w, H = ctx.canvas._h;
-  ctx.clearRect(0, 0, W, H);
+  const W=ctx.canvas._w, H=ctx.canvas._h;
+  ctx.clearRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle = '#0e0c02';
-  ctx.lineWidth = 1;
-  for (let g = 1; g < 4; g++) {
-    const y = H * g / 4;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
-  for (let g = 1; g < 8; g++) {
-    const x = W * g / 8;
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-  }
+  ctx.strokeStyle='#0c0a02'; ctx.lineWidth=1;
+  for (let g=1;g<4;g++) { const y=H*g/4; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  for (let g=1;g<10;g++) { const x=W*g/10; ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  ctx.strokeStyle='#1a1404'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
 
-  // Centre zero line
-  ctx.strokeStyle = '#2a1e04';
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(0, H/2); ctx.lineTo(W, H/2); ctx.stroke();
+  // Time markers
+  ctx.fillStyle='#2a1e04';
+  ctx.font=`${Math.round(7*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+  ['0','10ms','20ms','30ms','40ms','50ms','60ms','70ms','80ms','90ms','100ms'].forEach((l,i)=>{
+    ctx.textAlign=i===0?'left':'center';
+    ctx.fillText(l,W*i/10,H-2);
+  });
 
-  // Glow pass (blurred)
+  const noise = wMode==='RTTY'?0.14:wMode==='CW'?0.03:0.07;
+
   ctx.save();
-  ctx.shadowColor = 'rgba(200,144,16,0.5)';
-  ctx.shadowBlur = 6;
+  ctx.shadowColor='rgba(200,128,20,0.5)'; ctx.shadowBlur=8;
 
-  const noise = waveMode === 'RTTY' ? 0.15 : waveMode === 'CW' ? 0.04 : 0.08;
-  const harmonics = waveMode === 'AM' ? 3 : waveMode === 'BPSK' ? 2 : 1;
-
+  // Faint ghost previous frame
+  ctx.globalAlpha=0.2;
   ctx.beginPath();
-  for (let px = 0; px < W; px++) {
-    const t = px / W;
-    let y = 0;
-    for (let h = 1; h <= harmonics; h++) {
-      y += Math.sin(t * wFreq * Math.PI * 2 * h + wPhase * (h === 1 ? 1 : 0.3)) * wAmp / h;
-    }
-    if (waveMode === 'CW') {
-      const burst = Math.abs(Math.sin(t * 2 + wPhase * 0.1)) > 0.6 ? 1 : 0.05;
-      y *= burst;
-    }
-    y += (Math.random() - 0.5) * noise;
-    const ypx = H / 2 - y * H / 2 * 0.85;
-    if (px === 0) ctx.moveTo(px, ypx); else ctx.lineTo(px, ypx);
+  for (let px=0;px<W;px++) {
+    const t=px/W;
+    let y=Math.sin(t*wFreq*Math.PI*2+(wPhase-0.5))*wAmp + (Math.random()-0.5)*noise*0.5;
+    if (wMode==='CW') y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.05;
+    const ypx=H/2-y*H/2*0.82;
+    if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
   }
-  ctx.strokeStyle = '#e8a820';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  ctx.strokeStyle='#c87820'; ctx.lineWidth=1; ctx.stroke();
+  ctx.globalAlpha=1;
+
+  // Main wave
+  ctx.beginPath();
+  for (let px=0;px<W;px++) {
+    const t=px/W;
+    let y=Math.sin(t*wFreq*Math.PI*2+wPhase)*wAmp;
+    if (wMode==='AM')     y*=(0.6+0.4*Math.sin(t*wFreq*0.3*Math.PI*2+wPhase*0.2));
+    if (wMode==='BPSK31') y =Math.sign(Math.sin(t*wFreq*Math.PI*2+wPhase))*wAmp;
+    if (wMode==='RTTY')   y =(Math.round(y/wAmp*2)/2)*wAmp;
+    if (wMode==='CW')     y*=Math.abs(Math.sin(t*1.5+wPhase*0.08))>0.55?1:0.02;
+    if (wMode==='FT8')    y+=Math.sin(t*wFreq*3*Math.PI*2+wPhase*0.7)*wAmp*0.25;
+    y += (Math.random()-0.5)*noise;
+    const ypx=H/2-y*H/2*0.82;
+    if(px===0) ctx.moveTo(px,ypx); else ctx.lineTo(px,ypx);
+  }
+  ctx.strokeStyle='#f0a830'; ctx.lineWidth=1.5; ctx.stroke();
   ctx.restore();
+
+  // Mode tag
+  ctx.fillStyle='rgba(200,124,32,0.6)';
+  ctx.font=`${Math.round(8*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+  ctx.textAlign='right';
+  ctx.fillText(wMode, W-4, 11);
 }
 
-// ── Direction finding ─────────────────────────────────────────────────
-const dfBearings = [
-  { bearing: 127, target: 127, strength: 0.85 },
-  { bearing: 243, target: 243, strength: 0.6 },
-  { bearing: 312, target: 312, strength: 0.4 },
+// ── Compass / DF ──────────────────────────────────────────────────────
+const DFB = [
+  {b:127,t:127,s:0.88,c:'rgba(240,160,48,0.9)',cone:8},
+  {b:243,t:243,s:0.6, c:'rgba(24,176,208,0.7)',cone:14},
+  {b:052,t:52, s:0.45,c:'rgba(40,184,96,0.6)', cone:20},
 ];
 
 function tickCompass() {
-  dfBearings.forEach(b => {
-    if (Math.random() < 0.004) b.target = rnd(0, 360);
-    b.bearing += (b.target - b.bearing) * 0.004;
-    b.strength = Math.max(0.2, Math.min(1, b.strength + (Math.random() - 0.5) * 0.02));
+  DFB.forEach(b=>{
+    if(Math.random()<0.003) b.t=rnd(0,360);
+    b.b += (b.t-b.b)*0.005;
+    b.s = Math.max(0.2,Math.min(1,b.s+(Math.random()-0.5)*0.015));
   });
-  const primary = dfBearings[0].bearing;
-  document.getElementById('df-bearing').textContent = `BRG ${String(Math.round(primary)).padStart(3,'0')}°`;
+  const p=DFB[0].b;
+  document.getElementById('df-info').textContent=`BRG ${String(Math.round(p)).padStart(3,'0')}° // FIX: ${DFB[0].s>0.7?'HIGH':DFB[0].s>0.4?'MED':'LOW'}`;
 }
 
 function drawCompass(ctx) {
-  const W = ctx.canvas._w, H = ctx.canvas._h;
-  const cx = W / 2, cy = H / 2;
-  const R = Math.min(W, H) / 2 - 10;
+  const W=ctx.canvas._w, H=ctx.canvas._h;
+  const cx=W/2, cy=H/2, R=Math.min(W,H)/2-8;
+  ctx.clearRect(0,0,W,H);
 
-  ctx.clearRect(0, 0, W, H);
-
-  // Outer ring
-  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
-  ctx.strokeStyle = '#1e1800'; ctx.lineWidth = 1; ctx.stroke();
+  // Outer shadow
+  ctx.save(); ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=16;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#050503'; ctx.fill();
+  ctx.restore();
 
   // Rings
-  [0.6, 0.35].forEach(f => {
-    ctx.beginPath(); ctx.arc(cx, cy, R * f, 0, Math.PI * 2);
-    ctx.strokeStyle = '#0e0c02'; ctx.lineWidth = 1; ctx.stroke();
+  [1,0.7,0.45].forEach(f=>{
+    ctx.beginPath(); ctx.arc(cx,cy,R*f,0,Math.PI*2);
+    ctx.strokeStyle=f===1?'#2a2008':'#0e0c04'; ctx.lineWidth=1; ctx.stroke();
   });
 
-  // Tick marks
-  for (let i = 0; i < 72; i++) {
-    const angle = (i / 72) * Math.PI * 2 - Math.PI / 2;
-    const isMajor = i % 9 === 0; // every 45°
-    const isMed   = i % 3 === 0; // every 15°
-    const len = isMajor ? 12 : isMed ? 7 : 4;
-    const col = isMajor ? '#c89010' : isMed ? '#3a2c08' : '#1a1400';
-    const ri = R - 1, ro = ri - len;
-    ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(angle) * ri, cy + Math.sin(angle) * ri);
-    ctx.lineTo(cx + Math.cos(angle) * ro, cy + Math.sin(angle) * ro);
-    ctx.strokeStyle = col; ctx.lineWidth = isMajor ? 1.5 : 1; ctx.stroke();
+  // Radials
+  for (let i=0;i<36;i++) {
+    const a=(i/36)*Math.PI*2-Math.PI/2;
+    const isMaj=i%9===0, isMed=i%3===0;
+    ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*R*(isMaj?0.72:isMed?0.8:0.88), cy+Math.sin(a)*R*(isMaj?0.72:isMed?0.8:0.88));
+    ctx.lineTo(cx+Math.cos(a)*(R-1),cy+Math.sin(a)*(R-1));
+    ctx.strokeStyle=isMaj?'#c87820':isMed?'#3a2808':'#161004';
+    ctx.lineWidth=isMaj?1.5:1; ctx.stroke();
   }
 
-  // Cardinal labels
-  const cardinals = [['N',0],['E',90],['S',180],['W',270]];
-  ctx.font = `${Math.round(10 * (window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Courier New`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  cardinals.forEach(([lbl, deg]) => {
-    const angle = (deg - 90) * Math.PI / 180;
-    const ri = R - 20;
-    ctx.fillStyle = '#c89010';
-    ctx.fillText(lbl, cx + Math.cos(angle) * ri, cy + Math.sin(angle) * ri);
+  // Cardinals
+  const fs=Math.round(9*(window.devicePixelRatio||1))/(window.devicePixelRatio||1);
+  ctx.font=`${fs}px Consolas`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  [['N',0,'#f0a830'],['E',90,'#c87820'],['S',180,'#c87820'],['W',270,'#c87820']].forEach(([l,d,c])=>{
+    const a=(d-90)*Math.PI/180, ri2=R*0.6;
+    ctx.fillStyle=c; ctx.fillText(l,cx+Math.cos(a)*ri2,cy+Math.sin(a)*ri2);
   });
 
-  // Bearing lines
-  dfBearings.forEach((b, idx) => {
-    const angle = (b.bearing - 90) * Math.PI / 180;
-    const alpha = b.strength * (idx === 0 ? 1 : 0.5);
+  // Uncertainty cones + bearing lines
+  DFB.forEach((b,idx)=>{
+    const a=(b.b-90)*Math.PI/180;
+    const halfCone=b.cone*Math.PI/180;
+
+    // Cone fill
     ctx.save();
-    ctx.shadowColor = idx === 0 ? 'rgba(240,184,40,0.6)' : 'rgba(200,144,16,0.3)';
-    ctx.shadowBlur = idx === 0 ? 8 : 4;
     ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(angle) * R * 0.9, cy + Math.sin(angle) * R * 0.9);
-    ctx.strokeStyle = idx === 0 ? `rgba(240,184,40,${alpha})` : `rgba(180,120,16,${alpha})`;
-    ctx.lineWidth = idx === 0 ? 1.5 : 1;
-    ctx.stroke();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,R*0.88,a-halfCone,a+halfCone);
+    ctx.closePath();
+    ctx.fillStyle=b.c.replace(/[\d.]+\)$/,'0.06)');
+    ctx.fill();
+
+    // Cone edges
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a-halfCone)*R*0.88,cy+Math.sin(a-halfCone)*R*0.88);
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a+halfCone)*R*0.88,cy+Math.sin(a+halfCone)*R*0.88);
+    ctx.strokeStyle=b.c.replace(/[\d.]+\)$/,'0.3)'); ctx.lineWidth=0.8; ctx.stroke();
+
+    // Main bearing line
+    ctx.shadowColor=b.c; ctx.shadowBlur=idx===0?8:4;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*R*0.86,cy+Math.sin(a)*R*0.86);
+    ctx.strokeStyle=b.c; ctx.lineWidth=idx===0?1.8:1.2; ctx.stroke();
     ctx.restore();
 
-    // Arrow
-    if (idx === 0) {
-      const tipX = cx + Math.cos(angle) * R * 0.88;
-      const tipY = cy + Math.sin(angle) * R * 0.88;
-      ctx.beginPath(); ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#f0b828'; ctx.fill();
+    // Tip dot
+    if(idx===0){
+      ctx.beginPath(); ctx.arc(cx+Math.cos(a)*R*0.84,cy+Math.sin(a)*R*0.84,2.5,0,Math.PI*2);
+      ctx.fillStyle='#f0a830'; ctx.fill();
     }
   });
 
-  // Centre dot
-  const capGrad = ctx.createRadialGradient(cx-1, cy-1, 0.5, cx, cy, 5);
-  capGrad.addColorStop(0, '#f0b828'); capGrad.addColorStop(1, '#5a3808');
-  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-  ctx.fillStyle = capGrad; ctx.fill();
+  // Fix intersection dot (center of DF triangle)
+  const avgX=cx+DFB.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.cos(a);}
+    ,0)/DFB.length*R*0.3;
+  const avgY=cy+DFB.reduce((s,b)=>{const a=(b.b-90)*Math.PI/180;return s+Math.sin(a);}
+    ,0)/DFB.length*R*0.3;
+  ctx.save(); ctx.shadowColor='rgba(40,184,96,0.6)'; ctx.shadowBlur=8;
+  ctx.beginPath(); ctx.arc(avgX,avgY,3,0,Math.PI*2);
+  ctx.fillStyle='#28b860'; ctx.fill();
+  ctx.restore();
+
+  // Centre cap
+  const cg=ctx.createRadialGradient(cx-1,cy-1,0.5,cx,cy,5);
+  cg.addColorStop(0,'#f0a830'); cg.addColorStop(1,'#5c3a0a');
+  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2); ctx.fillStyle=cg; ctx.fill();
 }
 
 // ── Traffic chart ─────────────────────────────────────────────────────
-const TRAFFIC_LEN = 120;
-const trafficData = new Array(TRAFFIC_LEN).fill(0).map(() => rnd(0.1, 0.4));
-let trafficTick = 0;
+const TLEN=120;
+const bands = [
+  {data: new Array(TLEN).fill(0).map(()=>rnd(0.1,0.35)), color:'rgba(240,160,48,0.9)', fill:'rgba(240,160,48,0.12)', label:'7MHZ',  spike:0.06},
+  {data: new Array(TLEN).fill(0).map(()=>rnd(0.15,0.5)), color:'rgba(24,176,208,0.85)', fill:'rgba(24,176,208,0.08)', label:'14MHZ', spike:0.08},
+  {data: new Array(TLEN).fill(0).map(()=>rnd(0.05,0.25)), color:'rgba(40,184,96,0.85)', fill:'rgba(40,184,96,0.08)', label:'21MHZ', spike:0.04},
+];
 
 function pushTraffic() {
-  const base = 0.25;
-  // Occasional spikes
-  const spike = Math.random() < 0.04 ? rnd(0.3, 0.7) : 0;
-  trafficData.push(Math.min(1, base + rnd(0, 0.25) + spike));
-  trafficData.shift();
+  bands.forEach(b=>{
+    const spk=Math.random()<0.05?rnd(0.3,0.65):0;
+    b.data.push(Math.min(1,rnd(0.05,0.35)+spk*(b.spike*10)));
+    b.data.shift();
+  });
 }
 
 function drawTraffic(ctx) {
-  const W = ctx.canvas._w, H = ctx.canvas._h;
-  const pH = 16; // padding
-  ctx.clearRect(0, 0, W, H);
-
-  const dH = H - pH;
+  const W=ctx.canvas._w, H=ctx.canvas._h;
+  const PH=14;
+  ctx.clearRect(0,0,W,H);
 
   // Grid
-  ctx.strokeStyle = '#0e0c02'; ctx.lineWidth = 1;
-  for (let g = 1; g < 4; g++) {
-    const y = pH + dH * g / 4;
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
-
-  // Time labels
-  ctx.fillStyle = '#3a2c08';
-  ctx.font = `${Math.round(8 * (window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Courier New`;
-  ctx.textAlign = 'center';
-  ['–120s','–90s','–60s','–30s','NOW'].forEach((lbl, i) => {
-    ctx.fillText(lbl, W * i / 4, H - 2);
+  ctx.strokeStyle='#0c0a02'; ctx.lineWidth=1;
+  for(let g=1;g<5;g++){const y=PH+(H-PH)*g/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ['–120s','–90s','–60s','–30s','NOW'].forEach((l,i)=>{
+    ctx.fillStyle='#2a1e04';
+    ctx.font=`${Math.round(7*(window.devicePixelRatio||1))/(window.devicePixelRatio||1)}px Consolas`;
+    ctx.textAlign=i===0?'left':i===4?'right':'center';
+    ctx.fillText(l,W*i/4,H-2);
   });
 
-  const dx = W / (TRAFFIC_LEN - 1);
-
-  // Fill under curve
-  ctx.beginPath();
-  ctx.moveTo(0, H - pH);
-  trafficData.forEach((v, i) => {
-    ctx.lineTo(i * dx, pH + dH * (1 - v));
+  const dx=W/(TLEN-1);
+  bands.forEach(b=>{
+    ctx.save();
+    // Fill
+    ctx.beginPath();
+    ctx.moveTo(0,H-PH);
+    b.data.forEach((v,i)=>ctx.lineTo(i*dx,PH+(H-PH)*(1-v)));
+    ctx.lineTo((TLEN-1)*dx,H-PH);
+    ctx.closePath();
+    ctx.fillStyle=b.fill; ctx.fill();
+    // Line
+    ctx.shadowColor=b.color; ctx.shadowBlur=4;
+    ctx.beginPath();
+    b.data.forEach((v,i)=>{const x=i*dx,y=PH+(H-PH)*(1-v); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);});
+    ctx.strokeStyle=b.color; ctx.lineWidth=1.4; ctx.stroke();
+    ctx.restore();
   });
-  ctx.lineTo((TRAFFIC_LEN - 1) * dx, H - pH);
-  ctx.closePath();
-  const fillGrad = ctx.createLinearGradient(0, pH, 0, H - pH);
-  fillGrad.addColorStop(0, 'rgba(200,144,16,0.25)');
-  fillGrad.addColorStop(1, 'rgba(200,144,16,0.02)');
-  ctx.fillStyle = fillGrad;
-  ctx.fill();
-
-  // Line
-  ctx.save();
-  ctx.shadowColor = 'rgba(240,184,40,0.4)';
-  ctx.shadowBlur  = 5;
-  ctx.beginPath();
-  trafficData.forEach((v, i) => {
-    const x = i * dx, y = pH + dH * (1 - v);
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  // Tip dots
+  bands.forEach(b=>{
+    const v=b.data[TLEN-1];
+    ctx.beginPath(); ctx.arc((TLEN-1)*dx,PH+(H-PH)*(1-v),2.5,0,Math.PI*2);
+    ctx.fillStyle=b.color; ctx.fill();
   });
-  ctx.strokeStyle = '#e8a820';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.restore();
+}
 
-  // Current value marker
-  const last = trafficData[TRAFFIC_LEN - 1];
-  const lx = (TRAFFIC_LEN - 1) * dx;
-  const ly = pH + dH * (1 - last);
-  ctx.beginPath(); ctx.arc(lx, ly, 3, 0, Math.PI * 2);
-  ctx.fillStyle = '#f0b828'; ctx.fill();
+// ── ELINT panel ───────────────────────────────────────────────────────
+const ELINT_TYPES=['VOICE','CW','DIGI','BURST','BCAST','RADAR','NUMBERS','BEACON'];
+const ELINT_COLS=['#f0a830','#c87820','#18b0d0','#d03030','#9040c0','#28b860','#d4b020','#c87820'];
+let elintCounts=ELINT_TYPES.map(()=>ri(0,20));
+let elintMax=1;
+
+function updateElint() {
+  elintCounts=elintCounts.map((v,i)=>Math.max(0,v+ri(-2,3)));
+  elintMax=Math.max(1,...elintCounts);
+  const el=document.getElementById('elint-panel');
+  el.innerHTML='';
+  const sorted=[...elintCounts.map((c,i)=>({c,i}))].sort((a,b)=>b.c-a.c);
+  sorted.forEach(({c,i})=>{
+    const pct=c/elintMax*100;
+    const row=document.createElement('div');
+    row.className='elint-row';
+    row.innerHTML=`<span class="er-type" style="color:${ELINT_COLS[i]}">${ELINT_TYPES[i]}</span>
+      <div class="er-bar-wrap"><div class="er-bar" style="width:${pct}%;background:${ELINT_COLS[i]}"></div></div>
+      <span class="er-count" style="color:${ELINT_COLS[i]}">${c}</span>`;
+    el.appendChild(row);
+  });
+  const top=sorted[0];
+  document.getElementById('elint-last').textContent=`LAST: ${ELINT_TYPES[top.i]} (${top.c})`;
+}
+
+// ── System status ─────────────────────────────────────────────────────
+const SYS_ROWS=[
+  {l:'RX ARRAY',   v:'3/3 ONLINE',      cls:'ok'},
+  {l:'DF ELEMENTS',v:'5/5 ACTIVE',       cls:'ok'},
+  {l:'CRYPTO',     v:`KEY ${hex(4)} SYNC`,cls:'info'},
+  {l:'LINK QTY',   v:'94%',              cls:'ok'},
+  {l:'DISK',       v:'18.4 GB FREE',     cls:'ok'},
+  {l:'LOG',        v:'RECORDING',        cls:'ok'},
+];
+
+function renderStatus() {
+  const el=document.getElementById('sys-status');
+  el.innerHTML='';
+  SYS_ROWS.forEach(r=>{
+    const d=document.createElement('div'); d.className='status-row';
+    d.innerHTML=`<span class="sr-label">${r.l}</span><span class="sr-val ${r.cls}">${r.v}</span>`;
+    el.appendChild(d);
+  });
 }
 
 // ── Intercept feed ────────────────────────────────────────────────────
-const CALLSIGNS = ['ALPHA-1','BRAVO-7','CHARLIE-3','DELTA-9','ECHO-4',
-  'FOXTROT-2','GOLF-5','HOTEL-8','INDIA-6','KILO-2','LIMA-4','MIKE-9',
-  'NOVEMBER-3','OSCAR-7','PAPA-1','QUEBEC-8'];
-
-const MSG_GEN = [
-  () => `${pick(CALLSIGNS)} THIS IS ${pick(CALLSIGNS)} — SIGNAL CHECK`,
-  () => `UNID STN ${freq()} MHZ — NUMBERS FORMAT`,
-  () => `DF FIX BRG ${pad(rndInt(0,359),3)}° ±${rndInt(1,5)}° — CONF ${pick(['HIGH','MEDIUM','LOW'])}`,
-  () => `INTERCEPT ${freq()} MHZ — ${rndInt(50,500)} GROUPS ENCR`,
-  () => `MOBILE UNIT GRID ${grid()} MOVING ${pick(['N','NE','E','SE','S','SW','W','NW'])}`,
-  () => `BURST TX ${freq()} MHZ DUR ${rnd(0.3,9.5).toFixed(1)}s`,
-  () => `AUTH ${hex(8)} — ${pick(['ACCEPTED','PENDING','FAILED'])}`,
-  () => `FREQ CHANGE ${freq()} → ${freq()} MHZ`,
-  () => `LINK QTY ${pick(CALLSIGNS)} ${rndInt(55,99)}%`,
-  () => `UNKNOWN SIGNAL ${freq()} MHZ — ${pick(['ANALYSIS PENDING','POSSIBLE NUMBERS STN','DIGITAL MODE UNK','VOICE ENCRYPTED'])}`,
-  () => `TRAFFIC ANOMALY ${pick(['14.0','7.0','21.0','3.5'])} MHZ — ${rndInt(110,380)}% ABOVE BASELINE`,
-  () => `CRYPTO SYNC ${pick(CALLSIGNS)} — KEY ${hex(4)}`,
-  () => `${pick(CALLSIGNS)} CONTACT REPORT — GRID ${grid()} — ${rndInt(1,3)} ELEMENTS`,
-  () => `RELAY ${pick(CALLSIGNS)} VIA ${pick(CALLSIGNS)} — MSG ${pad(rndInt(1,99))} OF ${rndInt(2,10)}`,
+const CS=['ALPHA-1','BRAVO-7','CHARLIE-3','DELTA-9','ECHO-4','FOXTROT-2',
+  'GOLF-5','HOTEL-8','INDIA-6','KILO-2','LIMA-4','MIKE-9','NOVEMBER-3','OSCAR-7','PAPA-1','QUEBEC-8'];
+const TYPES_LIST=['VOICE','CW','DATA','BURST','BCAST'];
+const PRIS=['FLASH','PRIORITY','ROUTINE','ROUTINE','ROUTINE','ADMIN'];
+const MSGS=[
+  ()=>`${pick(CS)} THIS IS ${pick(CS)} — SIGNAL CHECK`,
+  ()=>`UNID STN ${freqMHz()} MHZ — NUMBERS FORMAT`,
+  ()=>`DF FIX BRG ${pad(ri(0,359),3)}° ±${ri(1,5)}° CONF ${pick(['HIGH','MED','LOW'])}`,
+  ()=>`INTERCEPT ${freqMHz()} MHZ — ${ri(50,500)} GROUPS ENCR`,
+  ()=>`MOBILE UNIT GRID ${grid()} MOVING ${pick(['N','NE','E','SE','S','SW','W','NW'])}`,
+  ()=>`BURST TX ${freqMHz()} DUR ${rnd(0.3,9.5).toFixed(1)}s`,
+  ()=>`AUTH ${hex(8)} — ${pick(['ACCEPTED','PENDING','FAILED'])}`,
+  ()=>`FREQ CHANGE ${freqMHz()} → ${freqMHz()}`,
+  ()=>`LINK QTY ${pick(CS)} ${ri(55,99)}%`,
+  ()=>`UNKNOWN SIGNAL ${freqMHz()} — ${pick(['ANALYSIS PENDING','POSSIBLE NUMBERS STN','DIGITAL MODE UNK','VOICE ENCRYPTED'])}`,
+  ()=>`TRAFFIC ANOMALY ${pick(['14.0','7.0','21.0','3.5'])} MHZ — ${ri(110,380)}% ABOVE BASELINE`,
+  ()=>`CRYPTO SYNC ${pick(CS)} — KEY ${hex(4)}`,
+  ()=>`${pick(CS)} CONTACT RPT GRID ${grid()} — ${ri(1,4)} ELEMENTS`,
+  ()=>`RELAY ${pick(CS)} VIA ${pick(CS)} — MSG ${pad(ri(1,99))} OF ${ri(2,10)}`,
+  ()=>`FLASH: UNID RADAR ${freqMHz()} MHZ — HIGH POWER`,
+  ()=>`NUMBERS STN ${freqMHz()} MHZ — ${ri(20,50)} GROUPS — SCHEDULE CHANGE`,
 ];
 
-let interceptCount = 0;
-const MAX_LINES = 28;
+let intCount=0, alertCount=0;
+const MAX_LINES=30;
 
 function addIntercept() {
-  interceptCount++;
-  const now = new Date();
-  const tf = `${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
-  const fq = freq();
-  const msg = pick(MSG_GEN)();
+  intCount++;
+  const now=new Date();
+  const tf=`${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
+  const pri=pick(PRIS), type=pick(TYPES_LIST), msg=pick(MSGS)();
 
-  const feed = document.getElementById('intercept-feed');
-  const line = document.createElement('div');
-  line.className = 'intercept-line';
-  line.innerHTML = `
-    <span class="int-time">${tf}Z</span>
-    <span class="int-freq">${fq}</span>
-    <span class="int-msg new">${msg}</span>`;
+  if(pri==='FLASH'){
+    alertCount++;
+    document.getElementById('alert-count').textContent=`ALERTS: ${String(alertCount).padStart(3,'0')}`;
+    const ticker=document.getElementById('alert-ticker');
+    ticker.classList.add('show');
+    setTimeout(()=>ticker.classList.remove('show'),4000);
+  }
+
+  const feed=document.getElementById('int-feed');
+  const line=document.createElement('div'); line.className='il';
+
+  const priClass={FLASH:'pri-flash',PRIORITY:'pri-priority',ROUTINE:'pri-routine',ADMIN:'pri-admin'}[pri];
+  line.innerHTML=`<span class="il-time">${tf}Z</span><span class="il-pri ${priClass}">${pri[0]}</span><span class="il-type">[${type}]</span><span class="il-msg new">${msg}</span>`;
   feed.prepend(line);
-
-  // Remove new class after a beat
-  setTimeout(() => line.querySelector('.int-msg')?.classList.remove('new'), 2000);
-
-  // Trim
-  while (feed.children.length > MAX_LINES) feed.removeChild(feed.lastChild);
-
-  document.getElementById('int-count').textContent = `${String(interceptCount).padStart(3,'0')} ENTRIES`;
+  setTimeout(()=>line.querySelector('.il-msg')?.classList.remove('new'),2500);
+  while(feed.children.length>MAX_LINES) feed.removeChild(feed.lastChild);
+  document.getElementById('int-count').textContent=`${String(intCount).padStart(3,'0')} ENTRIES`;
 }
 
-// ── Active signals table ──────────────────────────────────────────────
-const MODS = ['USB','LSB','CW','AM','FM','BPSK31','RTTY','WSPR','FT8','ALE','STANAG'];
-const STATS = ['MONITORING','ANALYZING','TRACKING','QUEUED','LOCKED'];
+// ── Active signals ────────────────────────────────────────────────────
+const MODS_LIST=['USB','LSB','CW','AM','FM','BPSK31','RTTY','WSPR','FT8','ALE','STANAG','FSK'];
+const STATS_LIST=['MONITORING','ANALYZING','TRACKING','QUEUED','LOCKED','SCANNING'];
+let activeSigs=[];
 
-let activeSignals = [];
-
-function refreshSignals() {
-  // Add/remove signals randomly
-  if (activeSignals.length < 8 && Math.random() < 0.4) {
-    activeSignals.push({
-      freq: freq(), mod: pick(MODS),
-      strength: rndInt(2, 9),
-      status: pick(STATS),
-      ttl: rndInt(3, 10),
-    });
+function refreshSigs() {
+  if(activeSigs.length<10&&Math.random()<0.45) {
+    const bearing=ri(0,359);
+    activeSigs.push({freq:freqMHz(),mod:pick(MODS_LIST),str:ri(2,9),status:pick(STATS_LIST),brg:bearing,ttl:ri(4,14)});
   }
-  activeSignals = activeSignals.filter(s => {
-    s.ttl--;
-    s.strength = Math.max(1, Math.min(9, s.strength + rndInt(-1, 1)));
-    return s.ttl > 0;
+  activeSigs=activeSigs.filter(s=>{
+    s.ttl--; s.str=Math.max(1,Math.min(9,s.str+ri(-1,1)));
+    return s.ttl>0;
   });
 
-  const list = document.getElementById('signals-list');
-  list.innerHTML = '';
-  activeSignals.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'sig-row';
-    const isLocked = s.status === 'LOCKED';
-    const isAlert  = s.strength >= 7;
-    div.innerHTML = `
-      <span class="sig-freq">${s.freq}</span>
-      <span class="sig-mod">${s.mod}</span>
-      <span class="sig-str">${s.strength}/9</span>
-      <span class="sig-status ${isLocked?'locked':isAlert?'alert':''}">${s.status}</span>`;
+  const list=document.getElementById('sig-list'); list.innerHTML='';
+  activeSigs.sort((a,b)=>b.str-a.str).forEach(s=>{
+    const div=document.createElement('div'); div.className='sig-row';
+    const isLocked=s.status==='LOCKED', isTracking=s.status==='TRACKING', isAlert=s.str>=7;
+    const cls=isLocked?'locked':isTracking?'tracking':isAlert?'alert':'default';
+    const barW=s.str/9*100;
+    const barCol=isLocked?'var(--green)':isAlert?'var(--red)':'var(--copper)';
+    div.innerHTML=`<span class="sf">${s.freq}</span><span class="sm">${s.mod}</span>
+      <div><div class="ss-bar-wrap"><div class="ss-bar" style="width:${barW}%;background:${barCol}"></div></div></div>
+      <span class="sd" style="color:var(--cop-dim)">${pad(Math.round(s.brg),3)}°</span>
+      <span class="sc ${cls}">${s.status}</span>`;
     list.appendChild(div);
   });
-  document.getElementById('sig-count').textContent = `${activeSignals.length} ACTIVE`;
+  document.getElementById('sig-count').textContent=`${activeSigs.length} ACTIVE`;
 }
 
 // ── Clock ─────────────────────────────────────────────────────────────
 function updateClock() {
-  const n = new Date();
-  document.getElementById('hclock').textContent =
-    `${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}Z`;
+  const n=new Date();
+  document.getElementById('hclock').textContent=`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}Z`;
 }
 
-// ── Main animation loop ───────────────────────────────────────────────
+// ── Main loop ─────────────────────────────────────────────────────────
 function frame() {
-  tickSpectrum();
-  tickWave();
-  tickCompass();
-
-  drawSpectrum(specCtx);
-  drawWaveform(waveCtx);
-  drawCompass(compassCtx);
-  drawTraffic(trafficCtx);
-
+  tickSpectrum(); tickWave(); tickCompass();
+  drawSpectrum(canvases['spec-canvas']);
+  drawWaveform(canvases['wave-canvas']);
+  drawCompass(canvases['compass-canvas']);
+  drawTraffic(canvases['traffic-canvas']);
   requestAnimationFrame(frame);
 }
 
-// ── Intervals ─────────────────────────────────────────────────────────
 function scheduleIntercept() {
   addIntercept();
-  setTimeout(scheduleIntercept, rndInt(1800, 6000));
+  setTimeout(scheduleIntercept, ri(1500,5500));
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  initAllCanvases();
-  updateClock();
-  setInterval(updateClock, 1000);
-  setInterval(pushTraffic, 1000);
-  setInterval(refreshSignals, 2200);
+window.addEventListener('load', ()=>{
+  allCanvases();
+  updateClock(); setInterval(updateClock,1000);
+  setInterval(pushTraffic,1000);
+  setInterval(refreshSigs,2000);
+  setInterval(updateElint,3000);
+  renderStatus(); updateElint();
+  for(let i=0;i<10;i++) addIntercept();
+  refreshSigs();
   scheduleIntercept();
-  // Initial data
-  for (let i = 0; i < 8; i++) addIntercept();
-  refreshSignals();
-  document.getElementById('wave-info').textContent = `${freq()} MHZ — USB`;
   requestAnimationFrame(frame);
 });
 
-window.addEventListener('resize', () => {
-  setTimeout(initAllCanvases, 100);
-});
+window.addEventListener('resize',()=>{ setTimeout(()=>{ allCanvases(); },120); });
 </script>
 </body>
 </html>
