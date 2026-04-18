@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pages — dscollon</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1a1a;
+      --surface:   #242424;
+      --surface2:  #2e2e2e;
+      --border:    #3a3a3a;
+      --copper:    #c8763a;
+      --copper-lt: #e0924f;
+      --copper-dk: #9e5b28;
+      --text:      #e8e8e8;
+      --text-dim:  #888;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 60px 24px;
+    }
+
+    header {
+      max-width: 760px;
+      margin: 0 auto 48px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--copper);
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .grid {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    a.card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    a.card:hover {
+      border-color: var(--copper-dk);
+      background: var(--surface2);
+      box-shadow: 0 0 24px rgba(200, 118, 58, 0.1);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .card:hover .card-icon {
+      border-color: var(--copper-dk);
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card:hover .card-title {
+      color: var(--copper-lt);
+    }
+
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    footer {
+      max-width: 760px;
+      margin: 48px auto 0;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>dscollon / pages</h1>
+  <p>A collection of tools and references.</p>
+</header>
+
+<main class="grid">
+
+  <a class="card" href="pomodoro.html">
+    <div class="card-icon">⏱</div>
+    <div class="card-body">
+      <div class="card-title">Pomodoro Timer</div>
+      <div class="card-desc">Focus timer with configurable sessions, breaks, and progress ring.</div>
+    </div>
+  </a>
+
+  <a class="card" href="Product design.html">
+    <div class="card-icon">✏️</div>
+    <div class="card-body">
+      <div class="card-title">Product Design</div>
+      <div class="card-desc">Principles and practices of product design.</div>
+    </div>
+  </a>
+
+  <a class="card" href="History of Hong Kong.html">
+    <div class="card-icon">🏙</div>
+    <div class="card-body">
+      <div class="card-title">History of Hong Kong</div>
+      <div class="card-desc">A history of Hong Kong from earliest settlement to the present day.</div>
+    </div>
+  </a>
+
+  <a class="card" href="18650 power supply.html">
+    <div class="card-icon">🔋</div>
+    <div class="card-body">
+      <div class="card-title">18650 Power Supply</div>
+      <div class="card-desc">Technical reference for 18650 lithium cell power supply design.</div>
+    </div>
+  </a>
+
+</main>
+
+<footer>
+  hosted on github pages
+</footer>
+
+</body>
+</html>
