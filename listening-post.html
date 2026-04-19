@@ -77,110 +77,80 @@
     }
     .display.active { display: flex; flex-direction: column; }
 
-    /* ── Display selector button (in header) ── */
-    .disp-open-btn {
-      padding: 4px 12px; background: var(--cop-vd);
-      border: 1px solid var(--copper); border-radius: 4px;
-      color: var(--cop-br); font-family: var(--mono);
-      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.15s;
-      box-shadow: 0 0 8px rgba(200,124,32,0.15);
-    }
-    .disp-open-btn:hover {
-      background: rgba(200,124,32,0.15);
-      box-shadow: 0 0 14px rgba(240,160,48,0.3);
-      color: var(--cop-br);
-    }
-    .disp-open-btn .cur-disp { color: var(--cop-br); font-size: 0.62rem; }
-
-    /* ── Display selector panel overlay ── */
-    .disp-overlay {
-      display: none; position: fixed; inset: 0; z-index: 500;
-      background: rgba(0,0,0,0.75);
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(2px);
-    }
-    .disp-overlay.open { display: flex; }
-
-    .disp-panel {
-      background: #0a0a06;
-      border: 1px solid var(--copper);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 60px rgba(200,124,32,0.2), 0 20px 60px rgba(0,0,0,0.8);
-      display: flex; flex-direction: column; gap: 14px;
-      min-width: 560px;
-      position: relative;
-    }
-    .disp-panel::before {
-      content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--copper), transparent);
-      opacity: 0.5;
+    /* ── Display switcher strip ── */
+    .switcher {
+      height: 58px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 0 10px;
+      background: #050503;
+      border-top: 2px solid #0a0a08;
     }
 
-    .disp-panel-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border); padding-bottom: 10px;
-    }
-    .disp-panel-title {
-      font-size: 0.65rem; letter-spacing: 0.28em; color: var(--copper);
-      text-transform: uppercase;
-    }
-    .disp-close {
-      background: none; border: 1px solid var(--border); color: var(--cop-dim);
-      font-family: var(--mono); font-size: 0.58rem; cursor: pointer;
-      padding: 2px 8px; border-radius: 3px; letter-spacing: 0.1em;
-      transition: all 0.15s;
-    }
-    .disp-close:hover { border-color: var(--red); color: var(--red); }
-
-    .disp-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+    .sw-btn {
+      flex: 1; max-width: 148px; height: 40px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1px; position: relative; overflow: hidden;
+      font-family: var(--mono); cursor: pointer; border-radius: 4px;
+      /* Physical raised button base */
+      background: linear-gradient(180deg, #1c1a12 0%, #0e0c08 50%, #060504 100%);
+      border-top:    1px solid #2e2a1c;
+      border-left:   1px solid #252118;
+      border-right:  1px solid #100e08;
+      border-bottom: 2px solid #030201;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.03) inset;
+      transition: box-shadow 0.12s, border-color 0.12s, background 0.12s;
     }
 
-    .disp-btn {
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: 5px; padding: 12px 14px;
-      background: #0d0d08; border: 1px solid var(--border);
-      border-radius: 6px; cursor: pointer; text-align: left;
-      transition: all 0.18s; font-family: var(--mono);
+    /* Colour indicator strip along top edge of button face */
+    .sw-btn::before {
+      content: '';
+      position: absolute; top: 0; left: 12%; right: 12%; height: 2px;
+      background: var(--btn-dim);
+      border-radius: 0 0 3px 3px;
+      transition: background 0.12s, box-shadow 0.12s;
     }
-    .disp-btn:hover {
-      border-color: var(--copper);
-      background: var(--cop-vd);
-      box-shadow: 0 0 16px rgba(200,124,32,0.15);
-    }
-    .disp-btn.active {
-      border-color: var(--cop-br);
-      background: rgba(200,124,32,0.08);
-      box-shadow: 0 0 20px rgba(240,160,48,0.2);
-    }
-    .db-num {
-      font-size: 0.6rem; color: var(--cop-dim); letter-spacing: 0.12em;
-    }
-    .disp-btn.active .db-num { color: var(--cop-br); }
-    .db-name {
-      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text); line-height: 1.2;
-    }
-    .disp-btn.active .db-name { color: var(--cop-br); }
-    .db-desc {
-      font-size: 0.56rem; color: var(--cop-dim); line-height: 1.4;
-      letter-spacing: 0.04em;
-    }
-    .db-key {
-      font-size: 0.55rem; color: var(--border);
-      border: 1px solid var(--border); border-radius: 2px;
-      padding: 0 4px; margin-top: 2px;
-      letter-spacing: 0.06em;
-    }
-    .disp-btn.active .db-key { border-color: var(--cop-dim); color: var(--cop-dim); }
 
-    .disp-hint {
-      font-size: 0.55rem; color: var(--cop-dim); letter-spacing: 0.08em;
-      text-align: center; border-top: 1px solid var(--border); padding-top: 8px;
+    .sw-num {
+      font-size: 0.48rem; letter-spacing: 0.1em;
+      color: var(--btn-dim);
+      transition: color 0.12s;
+    }
+    .sw-label {
+      font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--btn-dim);
+      transition: color 0.12s, text-shadow 0.12s;
+    }
+
+    /* Hover — light up slightly */
+    .sw-btn:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.7), 0 0 10px var(--btn-glow), 0 1px 0 rgba(255,255,255,0.03) inset;
+    }
+    .sw-btn:hover::before { background: var(--btn-color); }
+    .sw-btn:hover .sw-num,
+    .sw-btn:hover .sw-label { color: var(--btn-color); opacity: 0.75; }
+
+    /* Active — fully lit and glowing */
+    .sw-btn.active {
+      background: linear-gradient(180deg, var(--btn-mid) 0%, var(--btn-dark) 60%, #060504 100%);
+      border-top-color:   var(--btn-color);
+      border-left-color:  var(--btn-mid);
+      border-right-color: var(--btn-dark);
+      border-bottom-color: #030201;
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.6),
+        0 0 18px var(--btn-glow),
+        0 0 48px var(--btn-glow2),
+        0 2px 4px rgba(0,0,0,0.5) inset;
+    }
+    .sw-btn.active::before {
+      background: var(--btn-color);
+      left: 8%; right: 8%;
+      box-shadow: 0 0 8px var(--btn-color), 0 0 20px var(--btn-glow);
+    }
+    .sw-btn.active .sw-num { color: var(--btn-color); opacity: 0.8; }
+    .sw-btn.active .sw-label {
+      color: var(--btn-color);
+      text-shadow: 0 0 8px var(--btn-glow), 0 0 20px var(--btn-glow);
     }
 
     /* Header elements */
@@ -418,9 +388,6 @@
       <span class="hb-lbl" id="alert-count">ALERTS: 000</span>
       <span class="hb-sep">//</span>
       <span class="hb-lbl">UNCLASSIFIED // EXERCISE</span>
-    </div>
-    <div class="hb">
-      <button class="disp-open-btn" id="disp-open-btn" onclick="toggleDispPanel()"><span class="cur-disp" id="cur-disp-label">1 OVERVIEW</span> ▤ DISPLAYS</button>
     </div>
   </div>
 
@@ -708,59 +675,36 @@
 
   </div>
 
-  <!-- DISPLAY SELECTOR OVERLAY -->
-  <div class="disp-overlay" id="disp-overlay" onclick="handleOverlayClick(event)">
-    <div class="disp-panel">
-      <div class="disp-panel-hdr">
-        <span class="disp-panel-title">◈ SELECT DISPLAY</span>
-        <button class="disp-close" onclick="closeDispPanel()">✕ CLOSE</button>
-      </div>
-      <div class="disp-grid">
-        <button class="disp-btn active" data-display="1" onclick="switchDisplay(1)">
-          <span class="db-num">DISPLAY 01</span>
-          <span class="db-name">Overview</span>
-          <span class="db-desc">Spectrum, waveform, intercepts, DF, signals</span>
-          <span class="db-key">KEY 1</span>
-        </button>
-        <button class="disp-btn" data-display="2" onclick="switchDisplay(2)">
-          <span class="db-num">DISPLAY 02</span>
-          <span class="db-name">Spectrum Analysis</span>
-          <span class="db-desc">Full-screen spectrum &amp; waveform with band controls</span>
-          <span class="db-key">KEY 2</span>
-        </button>
-        <button class="disp-btn" data-display="3" onclick="switchDisplay(3)">
-          <span class="db-num">DISPLAY 03</span>
-          <span class="db-name">Intercepts</span>
-          <span class="db-desc">Expanded intercept log with priority filtering</span>
-          <span class="db-key">KEY 3</span>
-        </button>
-        <button class="disp-btn" data-display="4" onclick="switchDisplay(4)">
-          <span class="db-num">DISPLAY 04</span>
-          <span class="db-name">Direction Finding</span>
-          <span class="db-desc">DF compass, bearing list and fix quality</span>
-          <span class="db-key">KEY 4</span>
-        </button>
-        <button class="disp-btn" data-display="5" onclick="switchDisplay(5)">
-          <span class="db-num">DISPLAY 05</span>
-          <span class="db-name">Band Traffic</span>
-          <span class="db-desc">Traffic analysis and anomaly detection</span>
-          <span class="db-key">KEY 5</span>
-        </button>
-        <button class="disp-btn" data-display="6" onclick="switchDisplay(6)">
-          <span class="db-num">DISPLAY 06</span>
-          <span class="db-name">Signals Database</span>
-          <span class="db-desc">Full signal catalogue with classification</span>
-          <span class="db-key">KEY 6</span>
-        </button>
-        <button class="disp-btn" data-display="7" onclick="switchDisplay(7)">
-          <span class="db-num">DISPLAY 07</span>
-          <span class="db-name">Operations</span>
-          <span class="db-desc">System status, controls and operator log</span>
-          <span class="db-key">KEY 7</span>
-        </button>
-      </div>
-      <div class="disp-hint">PRESS 1–7 TO SWITCH DISPLAY &nbsp;·&nbsp; ESC TO CLOSE</div>
-    </div>
+  <!-- SWITCHER STRIP -->
+  <div class="switcher">
+    <button class="sw-btn active" data-display="1" onclick="switchDisplay(1)"
+      style="--btn-color:#f0a030;--btn-mid:#1c1005;--btn-dark:#100904;--btn-dim:#4a2e0a;--btn-glow:rgba(240,160,48,0.35);--btn-glow2:rgba(240,160,48,0.08)">
+      <span class="sw-num">01</span><span class="sw-label">OVERVIEW</span>
+    </button>
+    <button class="sw-btn" data-display="2" onclick="switchDisplay(2)"
+      style="--btn-color:#20d8f0;--btn-mid:#051618;--btn-dark:#030c0e;--btn-dim:#0e3e48;--btn-glow:rgba(32,216,240,0.3);--btn-glow2:rgba(32,216,240,0.07)">
+      <span class="sw-num">02</span><span class="sw-label">SPECTRUM</span>
+    </button>
+    <button class="sw-btn" data-display="3" onclick="switchDisplay(3)"
+      style="--btn-color:#38e870;--btn-mid:#081a0c;--btn-dark:#040e06;--btn-dim:#143a1e;--btn-glow:rgba(56,232,112,0.3);--btn-glow2:rgba(56,232,112,0.07)">
+      <span class="sw-num">03</span><span class="sw-label">INTERCEPTS</span>
+    </button>
+    <button class="sw-btn" data-display="4" onclick="switchDisplay(4)"
+      style="--btn-color:#e8cc20;--btn-mid:#181408;--btn-dark:#0c0a04;--btn-dim:#3c3210;--btn-glow:rgba(232,204,32,0.3);--btn-glow2:rgba(232,204,32,0.07)">
+      <span class="sw-num">04</span><span class="sw-label">DIR FINDING</span>
+    </button>
+    <button class="sw-btn" data-display="5" onclick="switchDisplay(5)"
+      style="--btn-color:#f07020;--btn-mid:#1c0e04;--btn-dark:#100804;--btn-dim:#482010;--btn-glow:rgba(240,112,32,0.35);--btn-glow2:rgba(240,112,32,0.08)">
+      <span class="sw-num">05</span><span class="sw-label">TRAFFIC</span>
+    </button>
+    <button class="sw-btn" data-display="6" onclick="switchDisplay(6)"
+      style="--btn-color:#c060f0;--btn-mid:#140820;--btn-dark:#0c0610;--btn-dim:#380e50;--btn-glow:rgba(192,96,240,0.3);--btn-glow2:rgba(192,96,240,0.07)">
+      <span class="sw-num">06</span><span class="sw-label">SIGNALS</span>
+    </button>
+    <button class="sw-btn" data-display="7" onclick="switchDisplay(7)"
+      style="--btn-color:#f03838;--btn-mid:#200808;--btn-dark:#100404;--btn-dim:#481010;--btn-glow:rgba(240,56,56,0.3);--btn-glow2:rgba(240,56,56,0.08)">
+      <span class="sw-num">07</span><span class="sw-label">OPERATIONS</span>
+    </button>
   </div>
 
 </div>
@@ -788,33 +732,17 @@ const DISPLAY_CANVASES = {
   5: ['d5-traffic'],
 };
 
-const DISPLAY_NAMES = ['','1 OVERVIEW','2 SPECTRUM','3 INTERCEPTS','4 DF','5 TRAFFIC','6 SIGNALS','7 OPERATIONS'];
-
 function switchDisplay(n) {
   document.getElementById('d'+currentDisplay).classList.remove('active');
-  document.querySelectorAll('.disp-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.display)===n));
+  document.querySelectorAll('.sw-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.display)===n));
   currentDisplay = n;
   document.getElementById('d'+n).classList.add('active');
-  const label = document.getElementById('cur-disp-label');
-  if (label) label.textContent = DISPLAY_NAMES[n];
   const ids = DISPLAY_CANVASES[n];
   if (ids) setTimeout(()=>{ ids.forEach(id=>initCanvas(id)); if(n===1) initWaterfall('d1-spec'); if(n===2) initWaterfall('d2-spec'); }, 60);
-  closeDispPanel();
-}
-
-function toggleDispPanel() {
-  document.getElementById('disp-overlay').classList.toggle('open');
-}
-function closeDispPanel() {
-  document.getElementById('disp-overlay').classList.remove('open');
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('disp-overlay')) closeDispPanel();
 }
 
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;
-  if (e.key === 'Escape') { closeDispPanel(); return; }
   const n = parseInt(e.key);
   if (n >= 1 && n <= 7) switchDisplay(n);
 });
